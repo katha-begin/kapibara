@@ -1,5 +1,6 @@
 
 import type { FC } from 'react';
+import Link from 'next/link'; // Import Link
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Target, CheckCircle, Users, CalendarClock } from "lucide-react"; // Added CalendarClock
@@ -62,63 +63,69 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   const schedulePercentage = calculateSchedulePercentage(project.startDate, project.endDate);
 
   return (
-    <Card className="shadow-md transition-shadow hover:shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-primary">{project.name}</CardTitle>
-        {/* Display department array as comma-separated string */}
-        <p className="text-sm text-muted-foreground">{project.department.join(', ')}</p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-secondary-foreground">
-             <Target className="text-chart-1" />
-            <span>KPI Score Ratio</span>
-          </div>
-          <span className={cn("font-semibold text-lg", getKpiColor(project.kpiScore, targetKpi))}>
-            {(project.kpiScore / targetKpi).toFixed(2)}
-          </span>
-        </div>
+    // Wrap the Card with Link
+    <Link href={`/project/${project.id}`} passHref legacyBehavior>
+      <a className="block hover:no-underline"> {/* Use anchor tag for styling */}
+        <Card className="shadow-md transition-shadow hover:shadow-lg h-full cursor-pointer"> {/* Added h-full and cursor-pointer */}
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-primary">{project.name}</CardTitle>
+            {/* Display department array as comma-separated string */}
+            <p className="text-sm text-muted-foreground">{project.department.join(', ')}</p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                 <Target className="text-chart-1" />
+                <span>KPI Score Ratio</span>
+              </div>
+              <span className={cn("font-semibold text-lg", getKpiColor(project.kpiScore, targetKpi))}>
+                {(project.kpiScore / targetKpi).toFixed(2)}
+              </span>
+            </div>
 
-        {/* Project Schedule Percentage */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-secondary-foreground">
-            <CalendarClock className="text-chart-4" /> {/* New Icon */}
-            <span>Schedule</span>
-          </div>
-          <div className="w-1/2 flex items-center gap-2">
-            {schedulePercentage !== null ? (
-                <>
-                <Progress value={schedulePercentage} className="h-2 [&>div]:bg-chart-4" aria-label={`Project schedule ${schedulePercentage}% complete`}/>
-                <span className="text-sm font-medium text-primary">{schedulePercentage}%</span>
-                </>
-            ) : (
-                <span className="text-sm text-muted-foreground">N/A</span>
-            )}
-          </div>
-        </div>
+            {/* Project Schedule Percentage */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                <CalendarClock className="text-chart-4" /> {/* New Icon */}
+                <span>Schedule</span>
+              </div>
+              <div className="w-1/2 flex items-center gap-2">
+                {schedulePercentage !== null ? (
+                    <>
+                    <Progress value={schedulePercentage} className="h-2 [&>div]:bg-chart-4" aria-label={`Project schedule ${schedulePercentage}% complete`}/>
+                    <span className="text-sm font-medium text-primary">{schedulePercentage}%</span>
+                    </>
+                ) : (
+                    <span className="text-sm text-muted-foreground">N/A</span>
+                )}
+              </div>
+            </div>
 
 
-        <div className="flex items-center justify-between">
-           <div className="flex items-center gap-2 text-secondary-foreground">
-            <CheckCircle className="text-chart-2" />
-            <span>Completion</span>
-           </div>
-          <div className="w-1/2 flex items-center gap-2">
-            <Progress value={project.completion} className="h-2 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
-            <span className="text-sm font-medium text-primary">{project.completion}%</span>
-          </div>
-        </div>
+            <div className="flex items-center justify-between">
+               <div className="flex items-center gap-2 text-secondary-foreground">
+                <CheckCircle className="text-chart-2" />
+                <span>Completion</span>
+               </div>
+              <div className="w-1/2 flex items-center gap-2">
+                <Progress value={project.completion} className="h-2 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
+                <span className="text-sm font-medium text-primary">{project.completion}%</span>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-secondary-foreground">
-            <Users className="text-chart-3" />
-            <span>Cumulative Mandays</span>
-          </div>
-          <span className="font-semibold text-lg text-primary">{project.mandays ?? 'N/A'}</span>
-        </div>
-      </CardContent>
-    </Card>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-secondary-foreground">
+                <Users className="text-chart-3" />
+                <span>Cumulative Mandays</span>
+              </div>
+              <span className="font-semibold text-lg text-primary">{project.mandays ?? 'N/A'}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </a>
+    </Link>
   );
 };
 
 export default ProjectCard;
+

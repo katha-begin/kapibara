@@ -64,7 +64,8 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
               <TableHead>Project Name</TableHead>
               <TableHead>Start Date</TableHead>
               <TableHead>End Date</TableHead>
-              <TableHead className="text-right">Mandays</TableHead>
+              <TableHead className="text-right">Allocated Mandays</TableHead> {/* Added */}
+              <TableHead className="text-right">Actual Mandays</TableHead> {/* Renamed */}
               <TableHead className="text-right">Inhouse %</TableHead>
               <TableHead className="text-right">Outsource %</TableHead>
               <TableHead className="text-center">Actions</TableHead>
@@ -76,7 +77,8 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
                 <TableCell className="font-medium text-primary">{project.name}</TableCell>
                 <TableCell>{formatDate(project.startDate)}</TableCell>
                 <TableCell>{formatDate(project.endDate)}</TableCell>
-                <TableCell className="text-right">{project.mandays ?? 'N/A'}</TableCell>
+                <TableCell className="text-right">{project.allocatedMandays ?? 'N/A'}</TableCell> {/* Added */}
+                <TableCell className="text-right">{project.mandays ?? 'N/A'}</TableCell> {/* Renamed */}
                 <TableCell className="text-right">{formatPercentage(project.inhousePortion)}</TableCell>
                 <TableCell className="text-right">{formatPercentage(project.outsourcePortion)}</TableCell>
                 <TableCell className="text-center">

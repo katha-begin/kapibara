@@ -33,7 +33,8 @@ import type { Project } from '@/types/project';
 // Zod Schema for Validation
 const projectFormSchema = z.object({
   name: z.string().min(1, { message: "Project name is required." }), // Keep name for context, but likely read-only in form
-  mandays: z.coerce.number().int().positive({ message: "Mandays must be a positive number." }),
+  mandays: z.coerce.number().int().positive({ message: "Actual Mandays must be a positive number." }), // Renamed description slightly
+  allocatedMandays: z.coerce.number().int().positive({ message: "Allocated Mandays must be a positive number." }).nullable().optional(), // Added allocated mandays
   startDate: z.date().nullable().optional(),
   endDate: z.date().nullable().optional(),
   inhousePortion: z.coerce.number().min(0).max(100, { message: "Percentage must be between 0 and 100." }).nullable().optional(),
@@ -71,7 +72,8 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
       name: project.name,
-      mandays: project.mandays ?? 0, // Provide default 0 if null/undefined
+      mandays: project.mandays ?? 0, // Actual mandays consumed
+      allocatedMandays: project.allocatedMandays ?? null, // Allocated mandays
       startDate: project.startDate ?? null,
       endDate: project.endDate ?? null,
       inhousePortion: project.inhousePortion ?? null,
@@ -83,7 +85,8 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
   function handleFormSubmit(data: ProjectFormValues) {
      const updatedProject: Project = {
       ...project, // Spread existing project data
-      mandays: data.mandays,
+      mandays: data.mandays, // Actual consumed
+      allocatedMandays: data.allocatedMandays, // Allocated
       startDate: data.startDate,
       endDate: data.endDate,
       inhousePortion: data.inhousePortion,
@@ -105,18 +108,43 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
             <Input value={project.name} readOnly disabled className="bg-muted/50" />
         </div>
 
-        {/* Mandays */}
+         {/* Allocated Mandays */}
+         <FormField
+          control={form.control}
+          name="allocatedMandays"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Allocated Mandays</FormLabel>
+              <FormControl>
+                 <Input
+                    type="number"
+                    placeholder="Enter originally allocated mandays"
+                    {...field}
+                    value={field.value ?? ''}
+                    onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)} // Set to null if empty
+                 />
+              </FormControl>
+              <FormDescription>
+                Total mandays originally planned for the project.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+
+        {/* Actual Mandays Consumed */}
         <FormField
           control={form.control}
           name="mandays"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Manday Allocation</FormLabel>
+              <FormLabel>Actual Mandays Consumed</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Enter total mandays" {...field} />
+                <Input type="number" placeholder="Enter actual mandays used" {...field} />
               </FormControl>
               <FormDescription>
-                Total estimated mandays for the project.
+                Total mandays actually spent on the project so far.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -275,4 +303,3 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
 };
 
 export default ProjectEditForm;
-
