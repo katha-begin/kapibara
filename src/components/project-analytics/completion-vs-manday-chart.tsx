@@ -23,11 +23,11 @@ interface CompletionVsMandayChartProps {
 const chartConfig = {
   completion: {
     label: "Completion (%)",
-    color: "hsl(var(--chart-2))", // Example: Use chart-2 color (soft blue)
+    color: "hsl(140, 60%, 40%)", // Changed to a green color
   },
   mandays: {
     label: "Accum. Mandays",
-    color: "hsl(var(--chart-1))", // Example: Use chart-1 color (another soft blue)
+    color: "hsl(var(--chart-1))", // Example: Use chart-1 color (soft blue)
   },
 } satisfies Record<string, { label: string; color: string }>;
 
