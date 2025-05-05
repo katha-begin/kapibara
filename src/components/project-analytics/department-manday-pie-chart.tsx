@@ -33,12 +33,19 @@ const formatNumber = (num: number): string => {
     return num.toString();
 };
 
+// Generate colors dynamically using the theme's chart variables
+const generateChartColor = (index: number): string => {
+  return `hsl(var(--chart-${(index % 5) + 1}))`;
+};
+
+
 const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) => {
 
   // Check if data is valid and has entries
   const hasData = data && data.length > 0 && data.some(d => d.mandays > 0);
   // Calculate total mandays
   const totalMandaysValue = data.reduce((sum, entry) => sum + (entry.mandays || 0), 0);
+  const totalDepartments = data.length;
 
 
   return (
@@ -75,7 +82,7 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
                     label={false} // Disable default labels on segments
                   >
                      {data.map((entry, index) => (
-                        <Cell key={`cell-manday-${index}`} fill={chartConfig[entry.department]?.color || `hsl(var(--chart-${index % 5 + 1}))`} /> // Cycle through 5 chart colors
+                        <Cell key={`cell-manday-${index}`} fill={chartConfig[entry.department]?.color || generateChartColor(index)} /> // Cycle through chart colors
                      ))}
                      {/* Label in the center */}
                      <Label
@@ -117,11 +124,12 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
             <div className="w-full mt-4 space-y-2">
                {data.sort((a, b) => b.mandays - a.mandays).map((entry, index) => { // Sort by mandays descending
                  const percentage = totalMandaysValue > 0 ? ((entry.mandays / totalMandaysValue) * 100) : 0;
-                 const color = chartConfig[entry.department]?.color || `hsl(var(--chart-${index % 5 + 1}))`;
+                 const color = chartConfig[entry.department]?.color || generateChartColor(index); // Get the color for the progress bar
                  return (
                    <div key={entry.department} className="flex items-center gap-3 text-sm">
                      {/* <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} /> // Optional color dot */}
                      <span className="flex-1 text-muted-foreground truncate">{entry.department}</span>
+                     {/* Apply department color to the progress bar indicator */}
                      <Progress value={percentage} className="h-2 w-24" indicatorClassName={cn(`bg-[${color}]`)} />
                      <span className="w-10 text-right font-medium">{percentage.toFixed(0)}%</span>
                    </div>

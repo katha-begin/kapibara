@@ -26,7 +26,7 @@ const chartConfig = {
 } satisfies Record<string, { label?: string; color?: string }>;
 
 // Generate greenish color palette dynamically
-const generateGreenShade = (index: number, total: number) => {
+const generateGreenShade = (index: number, total: number): string => {
   const baseHue = 140; // Green base
   const hueShift = (index / total) * 40; // Shift hue slightly for variation
   const saturation = 60 + (index % 3) * 5; // Vary saturation
@@ -129,12 +129,12 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                 {data.sort((a, b) => b.completion - a.completion).map((entry, index) => { // Sort by completion descending
                   // Calculate the percentage *contribution* of this department to the total completion VALUE
                   const contributionPercentage = totalCompletionValue > 0 ? ((entry.completion / totalCompletionValue) * 100) : 0;
-                  const color = chartConfig[entry.department]?.color || generateGreenShade(index, totalDepartments);
+                  const color = chartConfig[entry.department]?.color || generateGreenShade(index, totalDepartments); // Get the color for the progress bar
                   return (
                     <div key={entry.department} className="flex items-center gap-3 text-sm">
                       {/* <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} /> // Optional color dot */}
                       <span className="flex-1 text-muted-foreground truncate">{entry.department}</span>
-                      {/* Progress bar shows the contribution percentage */}
+                      {/* Apply department color to the progress bar indicator */}
                       <Progress value={contributionPercentage} className="h-2 w-24" indicatorClassName={cn(`bg-[${color}]`)} />
                       {/* Label shows the contribution percentage */}
                       <span className="w-10 text-right font-medium">{contributionPercentage.toFixed(0)}%</span>
