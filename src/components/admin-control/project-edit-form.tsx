@@ -26,6 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label'; // Import the Label component
 import { toast } from '@/hooks/use-toast';
 import type { Project } from '@/types/project';
 
@@ -274,3 +275,4 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
 };
 
 export default ProjectEditForm;
+
