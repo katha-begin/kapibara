@@ -31,7 +31,25 @@ const UserKpiFilters: FC<UserKpiFiltersProps> = ({
 }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-card rounded-lg shadow">
-      {/* Department Filter */}
+       {/* Project Filter - Now First */}
+      <div className="flex-1 space-y-2">
+        <Label htmlFor="project-filter">Filter by Project</Label>
+        <Select value={selectedProject} onValueChange={onProjectChange}>
+          <SelectTrigger id="project-filter" className="w-full sm:w-64">
+            <SelectValue placeholder="All Projects" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Projects</SelectItem>
+            {availableProjects.map((proj) => (
+              <SelectItem key={proj} value={proj}>
+                {proj}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Department Filter - Now Second */}
       <div className="flex-1 space-y-2">
         <Label htmlFor="department-filter">Filter by Department</Label>
         <Select value={selectedDepartment} onValueChange={onDepartmentChange}>
@@ -49,23 +67,6 @@ const UserKpiFilters: FC<UserKpiFiltersProps> = ({
         </Select>
       </div>
 
-      {/* Project Filter */}
-      <div className="flex-1 space-y-2">
-        <Label htmlFor="project-filter">Filter by Project</Label>
-        <Select value={selectedProject} onValueChange={onProjectChange}>
-          <SelectTrigger id="project-filter" className="w-full sm:w-64">
-            <SelectValue placeholder="All Projects" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Projects</SelectItem>
-            {availableProjects.map((proj) => (
-              <SelectItem key={proj} value={proj}>
-                {proj}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
 
       {/* Add more filters here if needed in the future */}
     </div>

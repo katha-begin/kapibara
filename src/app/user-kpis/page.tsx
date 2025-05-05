@@ -42,15 +42,19 @@ const UserKpiPage: FC = () => {
 
 
   // Filter users based on selected department AND project
+  // The order of filtering (project then department or vice-versa) does not change the final result.
+  // The logic remains correct for filtering based on both criteria.
   const filteredUsers = useMemo(() => {
      let users = mockUserKpis;
 
-     if (selectedDepartment !== 'all') {
-       users = users.filter(user => user.department === selectedDepartment);
-     }
-
+     // Filter by Project
      if (selectedProject !== 'all') {
        users = users.filter(user => user.projects.includes(selectedProject));
+     }
+
+     // Filter by Department
+     if (selectedDepartment !== 'all') {
+       users = users.filter(user => user.department === selectedDepartment);
      }
 
      return users;
