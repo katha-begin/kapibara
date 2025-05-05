@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import type { FC } from 'react';
@@ -7,21 +6,7 @@ import { useState, useMemo } from 'react';
 import UserKpiFilters from '@/components/user-kpis/user-kpi-filters';
 import UserKpiTable from '@/components/user-kpis/user-kpi-table';
 import type { UserKpiData } from '@/types/user-kpi'; // Define this type
-
-
-// Mock Data for User KPIs - Added 'projects' array
-const mockUserKpis: UserKpiData[] = [
-  { id: 'user1', name: 'Alice Smith', department: 'Engineering', timeliness: 4, utilization: 5, contribution: 4, development: 3, projects: ['Project Alpha', 'Project Gamma'] },
-  { id: 'user2', name: 'Bob Johnson', department: 'Engineering', timeliness: 5, utilization: 4, contribution: 5, development: 4, projects: ['Project Alpha', 'Project Zeta'] },
-  { id: 'user3', name: 'Charlie Brown', department: 'Marketing', timeliness: 3, utilization: 4, contribution: 3, development: 5, projects: ['Project Beta', 'Project Delta', 'Project Epsilon'] },
-  { id: 'user4', name: 'Diana Prince', department: 'Sales', timeliness: 5, utilization: 5, contribution: 5, development: 4, projects: ['Project Delta', 'Project Zeta'] },
-  { id: 'user5', name: 'Ethan Hunt', department: 'Marketing', timeliness: 4, utilization: 3, contribution: 4, development: 3, projects: ['Project Epsilon'] },
-  { id: 'user6', name: 'Fiona Glenanne', department: 'Engineering', timeliness: 3, utilization: 5, contribution: 4, development: 5, projects: ['Project Gamma'] },
-  { id: 'user7', name: 'George Constanza', department: 'Sales', timeliness: 2, utilization: 3, contribution: 2, development: 3, projects: [] }, // User with no projects
-  { id: 'user8', name: 'Hannah Montana', department: 'Design', timeliness: 5, utilization: 4, contribution: 5, development: 4, projects: ['Project Gamma'] },
-  { id: 'user9', name: 'Ian Malcolm', department: 'Engineering', timeliness: 4, utilization: 4, contribution: 4, development: 4, projects: ['Project Alpha'] },
-  { id: 'user10', name: 'Jane Doe', department: 'Design', timeliness: 4, utilization: 5, contribution: 4, development: 3, projects: ['Project Gamma'] },
-];
+import mockUserKpis from '@/data/userKpis.json'; // Import mock data from JSON
 
 
 const UserKpiPage: FC = () => {
@@ -36,7 +21,8 @@ const UserKpiPage: FC = () => {
 
   // Get unique project names from mock data
   const availableProjects = useMemo(() => {
-    const projects = new Set(mockUserKpis.flatMap(user => user.projects));
+    // Ensure projects array exists and is not empty before flatMapping
+    const projects = new Set(mockUserKpis.flatMap(user => user.projects ?? []));
     return Array.from(projects);
   }, []);
 
@@ -45,11 +31,12 @@ const UserKpiPage: FC = () => {
   // The order of filtering (project then department or vice-versa) does not change the final result.
   // The logic remains correct for filtering based on both criteria.
   const filteredUsers = useMemo(() => {
-     let users = mockUserKpis;
+     let users = mockUserKpis as UserKpiData[]; // Cast to UserKpiData[]
 
      // Filter by Project
      if (selectedProject !== 'all') {
-       users = users.filter(user => user.projects.includes(selectedProject));
+       // Ensure user.projects exists before calling includes
+       users = users.filter(user => user.projects?.includes(selectedProject));
      }
 
      // Filter by Department

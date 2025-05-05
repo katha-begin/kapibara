@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button'; // Import Button
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'; // Import Tooltip components
 import { ThemeToggle } from './theme-toggle'; // Import ThemeToggle
+import DevelopmentStageIndicator from './development-stage-indicator'; // Import the new indicator
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -58,9 +59,10 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
                 <div key={item.href} className={cn('h-10 rounded-md px-3 py-2 bg-muted-foreground/10', isCollapsed ? 'w-10' : '')}></div>
             ))}
         </nav>
-         {/* Placeholder for Theme Toggle at the bottom */}
-         <div className="mt-auto p-2 flex items-center justify-center">
-             <div className="h-10 w-10 bg-muted-foreground/10 rounded-md"></div>
+         {/* Placeholder for Footer Items at the bottom */}
+         <div className="mt-auto p-2 border-t border-border flex items-center gap-2">
+             {!isCollapsed && <div className="h-6 w-12 bg-muted-foreground/10 rounded-md"></div>}
+             <div className="ml-auto h-10 w-10 bg-muted-foreground/10 rounded-md"></div>
          </div>
        </aside>
      );
@@ -130,12 +132,19 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
         </TooltipProvider>
       </nav>
 
-      {/* Footer section for Theme Toggle */}
+       {/* Footer section for Stage Indicator and Theme Toggle */}
       <div className={cn(
-         "mt-auto p-2 border-t border-sidebar-border", // Added border-t
-         isCollapsed ? "flex justify-center" : "flex justify-start" // Align left when expanded
+         "mt-auto p-2 border-t border-sidebar-border flex items-center gap-2",
+         isCollapsed ? "justify-center" : "justify-between" // Align left/right when expanded
          )}>
-         <ThemeToggle isCollapsed={isCollapsed} /> {/* Move Theme Toggle here */}
+         {/* Stage Indicator - Hide label when collapsed */}
+         {isCollapsed ? (
+             <DevelopmentStageIndicator />
+         ) : (
+             <DevelopmentStageIndicator /> // Render normally when expanded
+         )}
+         {/* Theme Toggle - Always visible */}
+         <ThemeToggle isCollapsed={isCollapsed} />
       </div>
     </aside>
   );

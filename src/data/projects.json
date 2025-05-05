@@ -1,0 +1,102 @@
+
+[
+  {
+    "id": "proj1",
+    "name": "Project Alpha",
+    "department": ["Engineering"],
+    "kpiScore": 85,
+    "completion": 70,
+    "mandays": 120,
+    "startDate": "2024-01-15",
+    "endDate": "2024-06-30",
+    "inhousePortion": 80,
+    "outsourcePortion": 20,
+    "allocatedMandays": 150,
+    "departmentContributions": [
+      { "department": "Engineering", "mandays": 120, "completion": 70 }
+    ]
+  },
+  {
+    "id": "proj2",
+    "name": "Project Beta",
+    "department": ["Marketing"],
+    "kpiScore": 92,
+    "completion": 95,
+    "mandays": 80,
+    "startDate": "2024-02-01",
+    "endDate": "2024-05-15",
+    "inhousePortion": 100,
+    "outsourcePortion": 0,
+    "allocatedMandays": 90,
+    "departmentContributions": [
+      { "department": "Marketing", "mandays": 80, "completion": 95 }
+    ]
+  },
+  {
+    "id": "proj3",
+    "name": "Project Gamma",
+    "department": ["Engineering", "Design"],
+    "kpiScore": 78,
+    "completion": 40,
+    "mandays": 200,
+    "startDate": "2024-01-05",
+    "endDate": "2024-07-30",
+    "inhousePortion": 50,
+    "outsourcePortion": 50,
+    "allocatedMandays": 250,
+    "departmentContributions": [
+      { "department": "Engineering", "mandays": 130, "completion": 25 },
+      { "department": "Design", "mandays": 70, "completion": 15 }
+    ]
+  },
+  {
+    "id": "proj4",
+    "name": "Project Delta",
+    "department": ["Sales", "Marketing"],
+    "kpiScore": 88,
+    "completion": 80,
+    "mandays": 50,
+    "startDate": "2024-03-10",
+    "endDate": "2024-05-20",
+    "inhousePortion": null,
+    "outsourcePortion": null,
+    "allocatedMandays": 60,
+    "departmentContributions": [
+      { "department": "Sales", "mandays": 20, "completion": 30 },
+      { "department": "Marketing", "mandays": 30, "completion": 50 }
+    ]
+   },
+  {
+    "id": "proj5",
+    "name": "Project Epsilon",
+    "department": ["Marketing"],
+    "kpiScore": 95,
+    "completion": 100,
+    "mandays": 65,
+    "startDate": "2023-12-01",
+    "endDate": "2024-03-28",
+    "inhousePortion": 90,
+    "outsourcePortion": 10,
+    "allocatedMandays": 70,
+    "departmentContributions": [
+      { "department": "Marketing", "mandays": 65, "completion": 100 }
+    ]
+  },
+  {
+    "id": "proj6",
+    "name": "Project Zeta",
+    "department": ["Engineering", "Sales"],
+    "kpiScore": 80,
+    "completion": 60,
+    "mandays": 150,
+    "startDate": "2024-04-01",
+    "endDate": "2024-10-01",
+    "inhousePortion": 70,
+    "outsourcePortion": 30,
+    "allocatedMandays": 180,
+    "departmentContributions": [
+      { "department": "Engineering", "mandays": 100, "completion": 40 },
+      { "department": "Sales", "mandays": 50, "completion": 20 }
+    ]
+  }
+]
