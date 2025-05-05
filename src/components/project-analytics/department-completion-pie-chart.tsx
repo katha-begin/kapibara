@@ -3,67 +3,110 @@
 
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-// Import chart components when ready:
-// import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// import { ChartContainer, ChartTooltipContent, ChartLegendContent } from "@/components/ui/chart";
-
-interface DepartmentContributionData {
-    department: string;
-    mandays: number;
-    completion: number;
-}
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartTooltipContent, ChartLegendContent } from "@/components/ui/chart";
+import type { DepartmentContribution } from '@/types/project'; // Import type
 
 interface DepartmentCompletionPieChartProps {
-  data: DepartmentContributionData[];
+  data: DepartmentContribution[];
 }
 
-// Placeholder chart config (adjust when implementing)
-// const chartConfig = {
-//   completion: {
-//     label: "Completion",
-//   },
-//   // Add colors per department dynamically or define a palette
-// } satisfies ChartConfig;
+// Define chart configuration for colors and labels
+const chartConfig = {
+  completion: {
+    label: "Completion",
+  },
+  // Example: Add specific colors per department if needed, otherwise uses default palette
+  // Engineering: { label: "Engineering", color: "hsl(140, 60%, 40%)" }, // Greenish for completion
+  // Design: { label: "Design", color: "hsl(160, 60%, 40%)" },
+  // Marketing: { label: "Marketing", color: "hsl(180, 60%, 40%)" },
+  // Sales: { label: "Sales", color: "hsl(200, 60%, 40%)" },
+} satisfies Record<string, { label?: string; color?: string }>;
+
+// Generate greenish color palette dynamically if needed
+const generateGreenShade = (index: number, total: number) => {
+  const baseHue = 140; // Green base
+  const hueShift = (index / total) * 40; // Shift hue slightly for variation
+  const saturation = 60 + (index % 3) * 5; // Vary saturation
+  const lightness = 40 + (index % 4) * 5; // Vary lightness
+  return `hsl(${baseHue + hueShift}, ${saturation}%, ${lightness}%)`;
+};
+
 
 const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ data }) => {
 
-  // Placeholder rendering until actual chart implementation
+  // Check if data is valid and has entries
+  const hasData = data && data.length > 0 && data.some(d => d.completion > 0);
+  const totalDepartments = data.length;
+
   return (
     <Card className="shadow-md">
       <CardHeader>
         <CardTitle>Department Completion Contribution</CardTitle>
-        <CardDescription>Percentage of total completion per department.</CardDescription>
+        <CardDescription>Percentage contribution to total completion per department.</CardDescription>
       </CardHeader>
       <CardContent className="flex items-center justify-center h-[350px]">
-        <p className="text-muted-foreground text-center">
-           Chart data not available.<br />
-           (Requires per-department completion data)
-         </p>
-        {/*
-        // Actual Chart Implementation (when data structure supports it):
-        <ChartContainer config={chartConfig} className="h-[350px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Tooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-              <Pie
-                data={data}
-                dataKey="completion" // Use completion data key
-                nameKey="department"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#82ca9d" // Base fill, use Cells for specific colors (e.g., greenish)
-                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-              >
-                 {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={chartConfig[entry.department]?.color || `hsl(var(--chart-${index + 1}))`} />
-                 ))}
-              </Pie>
-              <Legend content={<ChartLegendContent nameKey="department" />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-        */}
+         {hasData ? (
+            <ChartContainer config={chartConfig} className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                   <Tooltip
+                     cursor={false}
+                     content={
+                        <ChartTooltipContent
+                          hideLabel // Hide the default label line
+                          formatter={(value, name) => `${value.toFixed(1)}% completion`} // Format tooltip value
+                        />
+                      }
+                   />
+                  <Pie
+                    data={data}
+                    dataKey="completion" // Use completion data key
+                    nameKey="department"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    innerRadius={40} // Make it a donut chart
+                    fill="#82ca9d" // Base fill, overridden by Cells
+                    labelLine={false} // Hide label lines
+                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, department }) => {
+                        const RADIAN = Math.PI / 180;
+                        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+                        const x = cx + (radius + 15) * Math.cos(-midAngle * RADIAN); // Adjust label position
+                        const y = cy + (radius + 15) * Math.sin(-midAngle * RADIAN);
+                        const percentage = (percent * 100).toFixed(0);
+
+                        // Don't render label if percentage is too small
+                        if (parseFloat(percentage) < 3) return null;
+
+                        return (
+                          <text
+                            x={x}
+                            y={y}
+                            fill="hsl(var(--foreground))" // Use theme foreground color
+                            textAnchor={x > cx ? 'start' : 'end'}
+                            dominantBaseline="central"
+                            style={{ fontSize: '12px', fontWeight: '500' }}
+                          >
+                             {`${department} (${percentage}%)`}
+                          </text>
+                        );
+                      }}
+                  >
+                     {data.map((entry, index) => (
+                        <Cell key={`cell-completion-${index}`} fill={chartConfig[entry.department]?.color || generateGreenShade(index, totalDepartments)} />
+                     ))}
+                  </Pie>
+                  <Legend content={<ChartLegendContent nameKey="department" />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+         ) : (
+           <p className="text-muted-foreground text-center">
+             No completion data available for the selected project<br />
+             or department contributions are zero.
+           </p>
+         )}
       </CardContent>
     </Card>
   );
