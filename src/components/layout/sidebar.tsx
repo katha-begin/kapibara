@@ -45,20 +45,23 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
        >
         {/* Minimal placeholder content mirroring structure */}
         <div className={cn("flex items-center h-16 px-2 border-b border-border", isCollapsed ? "justify-center" : "justify-between")}>
-            {/* Placeholder for header content */}
-             <div className="flex items-center gap-1">
-                {/* Placeholder for ThemeToggle */}
-                <div className="h-10 w-10"></div>
-                {/* Placeholder for Collapse Button */}
+             {/* Placeholder for App Name */}
+             {!isCollapsed && <div className="h-6 w-24 bg-muted-foreground/20 rounded"></div>}
+            {/* Placeholder for Collapse Button */}
+             <div className={cn("flex items-center", isCollapsed ? "" : "ml-auto")}>
                 <div className="h-10 w-10"></div>
              </div>
         </div>
         <nav className="flex-1 space-y-1 p-2">
             {/* Placeholder for nav items */}
             {navItems.map((item) => (
-                <div key={item.href} className={cn('h-10 rounded-md px-3 py-2', isCollapsed ? 'w-10' : '')}></div>
+                <div key={item.href} className={cn('h-10 rounded-md px-3 py-2 bg-muted-foreground/10', isCollapsed ? 'w-10' : '')}></div>
             ))}
         </nav>
+         {/* Placeholder for Theme Toggle at the bottom */}
+         <div className="mt-auto p-2 flex items-center justify-center">
+             <div className="h-10 w-10 bg-muted-foreground/10 rounded-md"></div>
+         </div>
        </aside>
      );
    }
@@ -82,8 +85,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
         {!isCollapsed && (
           <h2 className="text-lg font-semibold text-foreground ml-2">Kapibara</h2> // Added ml-2 for spacing
         )}
-         <div className="flex items-center gap-1"> {/* Wrapper for buttons */}
-            <ThemeToggle isCollapsed={isCollapsed} /> {/* Add Theme Toggle */}
+         {/* Wrapper for Collapse button - moved ThemeToggle out */}
+         <div className={cn("flex items-center", isCollapsed ? "" : "ml-auto")}> {/* Use ml-auto only when expanded */}
             {/* Toggle Button - Adjusted style */}
             <Button
                 variant="ghost"
@@ -127,11 +130,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
         </TooltipProvider>
       </nav>
 
-      {/* Optional: Add footer or user profile section here */}
-      {/* Removed footer for cleaner look */}
-      {/* <div className="mt-auto p-4"> */}
-        {/* Example Footer Content */}
-      {/* </div> */}
+      {/* Footer section for Theme Toggle */}
+      <div className={cn(
+         "mt-auto p-2 border-t border-sidebar-border", // Added border-t
+         isCollapsed ? "flex justify-center" : "flex justify-start" // Align left when expanded
+         )}>
+         <ThemeToggle isCollapsed={isCollapsed} /> {/* Move Theme Toggle here */}
+      </div>
     </aside>
   );
 };
