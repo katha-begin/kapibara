@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import type { FC } from 'react';
@@ -35,8 +36,19 @@ const UserKpiTable: FC<UserKpiTableProps> = ({ users }) => {
 
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
-      const aValue = a[sortColumn];
-      const bValue = b[sortColumn];
+      let aValue: string | number;
+      let bValue: string | number;
+
+      // Handle sorting by project count specifically
+      if (sortColumn === 'projectCount') {
+        aValue = a.projects.length;
+        bValue = b.projects.length;
+      } else {
+        // Type assertion needed because 'projectCount' isn't directly on UserKpiData
+        aValue = a[sortColumn as keyof Omit<UserKpiData, 'id' | 'projects'>];
+        bValue = b[sortColumn as keyof Omit<UserKpiData, 'id' | 'projects'>];
+      }
+
 
       if (aValue < bValue) {
         return sortDirection === 'asc' ? -1 : 1;
@@ -57,9 +69,11 @@ const UserKpiTable: FC<UserKpiTableProps> = ({ users }) => {
       <ArrowUpDown className="ml-2 h-4 w-4 transform rotate-180" />; // Simple visual toggle
   };
 
+  // Add 'Project Count' to columns
   const columns: { key: SortableColumn; label: string; isNumeric?: boolean }[] = [
     { key: 'name', label: 'User Name' },
     { key: 'department', label: 'Department' },
+    { key: 'projectCount', label: 'Project Count', isNumeric: true }, // Added Project Count column
     { key: 'timeliness', label: 'Timeliness', isNumeric: true },
     { key: 'utilization', label: 'Utilization', isNumeric: true },
     { key: 'contribution', label: 'Contribution', isNumeric: true },
@@ -90,6 +104,7 @@ const UserKpiTable: FC<UserKpiTableProps> = ({ users }) => {
             <TableRow key={user.id}>
               <TableCell className="font-medium text-primary">{user.name}</TableCell>
               <TableCell className="text-muted-foreground">{user.department}</TableCell>
+              <TableCell className="text-right">{user.projects.length}</TableCell> {/* Display project count */}
               <TableCell className="text-right">{user.timeliness}</TableCell>
               <TableCell className="text-right">{user.utilization}</TableCell>
               <TableCell className="text-right">{user.contribution}</TableCell>
