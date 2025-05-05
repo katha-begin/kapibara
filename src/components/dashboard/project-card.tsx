@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Target, CheckCircle, Users } from "lucide-react";
+import { cn } from "@/lib/utils"; // Import cn for conditional classes
 
 interface ProjectCardProps {
   project: {
@@ -15,7 +16,21 @@ interface ProjectCardProps {
   };
 }
 
+// Function to determine KPI color based on score relative to target (same as in ProjectTable)
+const getKpiColor = (kpiScore: number, targetKpi: number): string => {
+  const ratio = kpiScore / targetKpi;
+  if (ratio < 0.95) { // Significantly below target (Bad)
+    return "text-destructive";
+  } else if (ratio > 1.05) { // Significantly above target (Better)
+    return "text-green-600";
+  } else { // Close to target (Good)
+    return "text-amber-600";
+  }
+};
+
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
+  const targetKpi = 85; // Define the target KPI
+
   return (
     <Card className="shadow-md transition-shadow hover:shadow-lg">
       <CardHeader>
@@ -27,9 +42,13 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-secondary-foreground">
              <Target className="text-chart-1" />
-            <span>Avg. KPI Score</span>
+            <span>KPI Score</span> {/* Changed label */}
           </div>
-          <span className="font-semibold text-lg text-primary">{project.kpiScore}%</span>
+          {/* Apply color coding to the KPI score ratio */}
+          <span className={cn("font-semibold text-lg", getKpiColor(project.kpiScore, targetKpi))}>
+            {/* Display KPI as ratio */}
+            {(project.kpiScore / targetKpi).toFixed(2)}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">

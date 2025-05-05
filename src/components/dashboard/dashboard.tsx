@@ -130,7 +130,10 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
                     ))}
                   </div>
                 ) : (
-                  <ProjectTable projects={filteredProjects} />
+                  <ProjectTable
+                    projects={filteredProjects}
+                    selectedProject={selectedProject} // Pass selectedProject down
+                  />
                 )}
               </div>
             ) : (

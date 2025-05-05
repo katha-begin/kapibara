@@ -1,3 +1,4 @@
+
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, Target, CheckCircle, Users } from "lucide-react";
@@ -5,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface SummaryMetrics {
   totalProjects: number;
-  avgKpiScore: number;
+  avgKpiScore: number; // This is still the average raw score (0-100)
   avgCompletion: number;
   totalMandays: number;
 }
@@ -15,7 +16,22 @@ interface SummaryCardProps {
   className?: string;
 }
 
+// Function to determine KPI color based on score relative to target (same as in ProjectTable/Card)
+const getKpiColor = (avgKpiScore: number, targetKpi: number): string => {
+  // Calculate average ratio based on the average raw score
+  const avgRatio = avgKpiScore / targetKpi;
+  if (avgRatio < 0.95) { // Significantly below target (Bad)
+    return "text-destructive";
+  } else if (avgRatio > 1.05) { // Significantly above target (Better)
+    return "text-green-600";
+  } else { // Close to target (Good)
+    return "text-amber-600";
+  }
+};
+
 const SummaryCard: FC<SummaryCardProps> = ({ metrics, className }) => {
+  const targetKpi = 85; // Define the target KPI
+
   return (
     <Card className={cn("shadow-md", className)}>
       <CardHeader>
@@ -30,8 +46,12 @@ const SummaryCard: FC<SummaryCardProps> = ({ metrics, className }) => {
         </div>
         <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
           <Target className="h-6 w-6 text-chart-1 mb-2" />
-          <span className="text-sm text-muted-foreground">Avg. KPI</span>
-          <span className="text-xl font-semibold text-primary">{metrics.avgKpiScore}%</span>
+          <span className="text-sm text-muted-foreground">Avg. KPI Score</span> {/* Changed label */}
+           {/* Apply color coding to the average KPI score ratio */}
+          <span className={cn("text-xl font-semibold", getKpiColor(metrics.avgKpiScore, targetKpi))}>
+             {/* Display average KPI as ratio */}
+            {metrics.totalProjects > 0 ? (metrics.avgKpiScore / targetKpi).toFixed(2) : 'N/A'}
+          </span>
         </div>
         <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
           <CheckCircle className="h-6 w-6 text-chart-2 mb-2" />
