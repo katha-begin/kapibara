@@ -1,7 +1,7 @@
 
 import type { FC } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Briefcase, Users, CheckCircle, TrendingUp, TrendingDown, Percent } from "lucide-react"; // Added TrendingUp, TrendingDown, Percent
+import { Briefcase, Users, CheckCircle, TrendingUp, TrendingDown, Percent, Clock } from "lucide-react"; // Added Clock icon
 import type { Project } from '@/types/project';
 import { calculateMandayPercentage } from '@/lib/project-utils'; // Import utility function
 import { cn } from '@/lib/utils';
@@ -36,9 +36,9 @@ const getVarianceColor = (variance: number | null): string => {
 
 const ProjectStatsSummary: FC<ProjectStatsSummaryProps> = ({ project }) => {
   const allocatedMandays = project.allocatedMandays ?? 0;
-  const accumulatedMandays = project.mandays ?? 0;
+  const accumulatedMandaysValue = project.mandays ?? 0; // Raw value
   const totalCompletion = project.completion ?? 0;
-  const mandayPercentage = calculateMandayPercentage(accumulatedMandays, allocatedMandays);
+  const mandayPercentage = calculateMandayPercentage(accumulatedMandaysValue, allocatedMandays); // Calculate percentage
   const completionVariance = mandayPercentage !== null ? totalCompletion - mandayPercentage : null;
   const avgHeadcount = calculateAvgHeadcount(project);
 
@@ -56,11 +56,16 @@ const ProjectStatsSummary: FC<ProjectStatsSummaryProps> = ({ project }) => {
           <span className="text-lg font-semibold text-primary">{allocatedMandays.toLocaleString()}</span>
         </div>
 
-         {/* Accumulate Manday */}
+         {/* Accumulate Manday Percentage */}
         <div className="flex flex-col items-center p-3 bg-secondary/50 rounded-lg">
-          <Users className="h-5 w-5 text-chart-3 mb-1" /> {/* Kept Users icon for mandays */}
-          <span className="text-xs text-muted-foreground text-center">Accumulated Mandays</span>
-          <span className="text-lg font-semibold text-primary">{accumulatedMandays.toLocaleString()}</span>
+          <Clock className="h-5 w-5 text-chart-3 mb-1" /> {/* Changed icon to Clock */}
+          <span className="text-xs text-muted-foreground text-center">Manday Usage (%)</span> {/* Updated Label */}
+           <span className={cn(
+              "text-lg font-semibold",
+              mandayPercentage === null ? "text-muted-foreground" : "text-primary"
+            )}>
+              {mandayPercentage !== null ? `${mandayPercentage}%` : 'N/A'} {/* Display Percentage */}
+           </span>
         </div>
 
         {/* Average Headcount */}
