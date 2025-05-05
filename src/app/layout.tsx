@@ -30,7 +30,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning> {/* Added suppressHydrationWarning */}
+    <html lang="en" suppressHydrationWarning>{/* Added suppressHydrationWarning */}
       <head>
          {/* Add metadata tags here directly if needed */}
          <title>Kapibara Dashboard</title>
