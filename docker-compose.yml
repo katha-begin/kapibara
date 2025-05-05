@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  bizflow-dashboard:
+    build: .
+    ports:
+      - "4321:3000"
+    restart: unless-stopped
+    volumes:
+      - ./src/data:/app/src/data
