@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -15,6 +16,19 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 export function ThemeToggle({ isCollapsed }: { isCollapsed: boolean }) {
   const { setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  // Ensure the component is mounted on the client before rendering theme-dependent UI
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Render a placeholder or null during SSR and initial client render
+  if (!mounted) {
+    // Return a button of the same size to prevent layout shifts
+    return <Button variant="ghost" size="icon" className="h-10 w-10" disabled aria-label="Loading theme toggle" />;
+  }
+
 
   const buttonContent = (
      <Button variant="ghost" size="icon" className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
@@ -56,3 +70,4 @@ export function ThemeToggle({ isCollapsed }: { isCollapsed: boolean }) {
     </DropdownMenu>
   );
 }
+
