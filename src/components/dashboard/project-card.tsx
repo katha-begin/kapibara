@@ -4,16 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Target, CheckCircle, Users } from "lucide-react";
 import { cn } from "@/lib/utils"; // Import cn for conditional classes
+import type { Project } from '@/types/project'; // Import the Project type
+
 
 interface ProjectCardProps {
-  project: {
-    id: string;
-    name: string;
-    department: string[]; // Updated to array
-    kpiScore: number;
-    completion: number;
-    mandays: number;
-  };
+  project: Project;
 }
 
 // Function to determine KPI color based on score relative to target (1 is ideal - green, deviation scales to red)
@@ -71,7 +66,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
             <Users className="text-chart-3" />
             <span>Cumulative Mandays</span>
           </div>
-          <span className="font-semibold text-lg text-primary">{project.mandays}</span>
+          <span className="font-semibold text-lg text-primary">{project.mandays ?? 'N/A'}</span>
         </div>
       </CardContent>
     </Card>

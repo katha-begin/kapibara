@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users } from 'lucide-react';
+import { LayoutDashboard, Users, Settings } from 'lucide-react'; // Added Settings icon
 import { cn } from '@/lib/utils';
 
 const Sidebar = () => {
@@ -12,6 +12,7 @@ const Sidebar = () => {
   const navItems = [
     { href: '/', label: 'Project Dashboard', icon: LayoutDashboard },
     { href: '/user-kpis', label: 'User KPIs', icon: Users },
+    { href: '/admin-control', label: 'Admin Control', icon: Settings }, // Added Admin Control
   ];
 
   return (

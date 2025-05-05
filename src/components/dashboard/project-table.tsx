@@ -11,18 +11,10 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils"; // Import cn for conditional classes
-
-interface ProjectData {
-  id: string;
-  name: string;
-  department: string[]; // Updated to array
-  kpiScore: number;
-  completion: number;
-  mandays: number;
-}
+import type { Project } from '@/types/project'; // Import the Project type
 
 interface ProjectTableProps {
-  projects: ProjectData[];
+  projects: Project[];
   selectedProject: string; // Receive selected project state
 }
 
@@ -84,7 +76,7 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
                     ) : ""}
                   </TableCell>
                    <TableCell className={cn("text-right font-semibold text-primary", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
-                    {index === 0 ? project.mandays : ""}
+                    {index === 0 ? project.mandays ?? 'N/A' : ""}
                    </TableCell>
                 </TableRow>
               ));
@@ -104,7 +96,7 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
                       <span className="text-sm font-medium text-primary">{project.completion}%</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right font-semibold text-primary">{project.mandays}</TableCell>
+                  <TableCell className="text-right font-semibold text-primary">{project.mandays ?? 'N/A'}</TableCell>
                 </TableRow>
               );
             }

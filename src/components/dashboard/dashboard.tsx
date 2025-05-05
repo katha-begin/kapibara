@@ -6,21 +6,13 @@ import DashboardFilters from './dashboard-filters';
 import ProjectCard from './project-card';
 import ProjectTable from './project-table';
 import SummaryCard from './summary-card';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, List } from 'lucide-react';
+import type { Project } from '@/types/project'; // Import the Project type
 
-interface ProjectData {
-  id: string;
-  name: string;
-  department: string[]; // Updated to array
-  kpiScore: number;
-  completion: number;
-  mandays: number;
-}
 
 interface DashboardProps {
-    projectsData: ProjectData[];
+    projectsData: Project[];
     departments: string[]; // All unique departments passed initially
     projectNames: string[];
 }
@@ -76,7 +68,7 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
     }
     const totalKpiScore = filteredProjects.reduce((sum, p) => sum + p.kpiScore, 0);
     const totalCompletion = filteredProjects.reduce((sum, p) => sum + p.completion, 0);
-    const totalMandays = filteredProjects.reduce((sum, p) => sum + p.mandays, 0);
+    const totalMandays = filteredProjects.reduce((sum, p) => sum + (p.mandays ?? 0), 0); // Handle potential null mandays
 
     return {
         totalProjects,
