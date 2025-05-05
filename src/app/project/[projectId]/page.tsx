@@ -223,8 +223,8 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 
         {/* Grid for Pie Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <DepartmentMandayPieChart data={departmentContributionData} />
-          <DepartmentCompletionPieChart data={departmentContributionData} />
+          <DepartmentMandayPieChart data={departmentContributionData} departments={project.department} />
+          <DepartmentCompletionPieChart data={departmentContributionData} departments={project.department} />
         </div>
 
     </div>
@@ -232,4 +232,3 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 };
 
 export default ProjectAnalyticsPage;
-

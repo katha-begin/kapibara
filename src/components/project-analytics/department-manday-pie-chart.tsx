@@ -11,6 +11,7 @@ import type { DepartmentContribution } from '@/types/project'; // Import type
 
 interface DepartmentMandayPieChartProps {
   data: DepartmentContribution[];
+  departments: string[]; // Pass all project departments for consistent coloring
 }
 
 // Define chart configuration for colors and labels
@@ -18,11 +19,7 @@ const chartConfig = {
   mandays: {
     label: "Mandays",
   },
-  // Example: Add specific colors per department if needed, otherwise uses default palette
-  // Engineering: { label: "Engineering", color: "hsl(var(--chart-1))" },
-  // Design: { label: "Design", color: "hsl(var(--chart-2))" },
-  // Marketing: { label: "Marketing", color: "hsl(var(--chart-3))" },
-  // Sales: { label: "Sales", color: "hsl(var(--chart-4))" },
+  // Colors will be generated dynamically based on the full department list
 } satisfies Record<string, { label?: string; color?: string }>;
 
 // Function to format large numbers (e.g., 1200 -> 1.2k)
@@ -33,19 +30,20 @@ const formatNumber = (num: number): string => {
     return num.toString();
 };
 
-// Generate colors dynamically using the theme's chart variables
-const generateChartColor = (index: number): string => {
-  return `hsl(var(--chart-${(index % 5) + 1}))`;
+// Generate colors dynamically using the theme's chart variables based on a consistent index
+const generateChartColor = (department: string, allDepartments: string[]): string => {
+  const index = allDepartments.indexOf(department);
+  if (index === -1) return `hsl(var(--muted))`; // Fallback color
+  return `hsl(var(--chart-${(index % 5) + 1}))`; // Cycle through chart-1 to chart-5
 };
 
 
-const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) => {
+const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, departments }) => {
 
   // Check if data is valid and has entries
   const hasData = data && data.length > 0 && data.some(d => d.mandays > 0);
   // Calculate total mandays
   const totalMandaysValue = data.reduce((sum, entry) => sum + (entry.mandays || 0), 0);
-  const totalDepartments = data.length;
 
 
   return (
@@ -81,9 +79,10 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
                     labelLine={false} // Hide label lines
                     label={false} // Disable default labels on segments
                   >
-                     {data.map((entry, index) => (
-                        <Cell key={`cell-manday-${index}`} fill={chartConfig[entry.department]?.color || generateChartColor(index)} /> // Cycle through chart colors
-                     ))}
+                     {data.map((entry, index) => {
+                        const color = generateChartColor(entry.department, departments);
+                        return <Cell key={`cell-manday-${index}`} fill={color} />
+                     })}
                      {/* Label in the center */}
                      <Label
                         content={({ viewBox }) => {
@@ -124,13 +123,13 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
             <div className="w-full mt-4 space-y-2">
                {data.sort((a, b) => b.mandays - a.mandays).map((entry, index) => { // Sort by mandays descending
                  const percentage = totalMandaysValue > 0 ? ((entry.mandays / totalMandaysValue) * 100) : 0;
-                 const color = chartConfig[entry.department]?.color || generateChartColor(index); // Get the color for the progress bar
+                 const color = generateChartColor(entry.department, departments); // Get the consistent color
                  return (
                    <div key={entry.department} className="flex items-center gap-3 text-sm">
-                     {/* <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} /> // Optional color dot */}
                      <span className="flex-1 text-muted-foreground truncate">{entry.department}</span>
                      {/* Apply department color to the progress bar indicator */}
-                     <Progress value={percentage} className="h-2 w-24" indicatorClassName={cn(`bg-[${color}]`)} />
+                     {/* Ensure color string is directly usable by Tailwind JIT */}
+                     <Progress value={percentage} className="h-2 w-24" indicatorClassName={`bg-[${color}]`} />
                      <span className="w-10 text-right font-medium">{percentage.toFixed(0)}%</span>
                    </div>
                  );

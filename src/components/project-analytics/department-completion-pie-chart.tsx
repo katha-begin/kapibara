@@ -11,6 +11,7 @@ import type { DepartmentContribution } from '@/types/project'; // Import type
 
 interface DepartmentCompletionPieChartProps {
   data: DepartmentContribution[];
+  departments: string[]; // Pass all project departments for consistent coloring
 }
 
 // Define chart configuration for colors and labels
@@ -18,36 +19,32 @@ const chartConfig = {
   completion: {
     label: "Completion",
   },
-  // Use greenish colors
-  // Engineering: { label: "Engineering", color: "hsl(140, 60%, 40%)" }, // Greenish for completion
-  // Design: { label: "Design", color: "hsl(160, 60%, 40%)" },
-  // Marketing: { label: "Marketing", color: "hsl(180, 60%, 40%)" },
-  // Sales: { label: "Sales", color: "hsl(200, 60%, 40%)" },
+  // Colors will be generated dynamically based on the full department list
 } satisfies Record<string, { label?: string; color?: string }>;
 
-// Generate greenish color palette dynamically
-const generateGreenShade = (index: number, total: number): string => {
-  const baseHue = 140; // Green base
-  const hueShift = (index / total) * 40; // Shift hue slightly for variation
-  const saturation = 60 + (index % 3) * 5; // Vary saturation
-  const lightness = 40 + (index % 4) * 5; // Vary lightness
-  return `hsl(${baseHue + hueShift}, ${saturation}%, ${lightness}%)`;
+// Generate colors dynamically using the theme's chart variables based on a consistent index
+const generateChartColor = (department: string, allDepartments: string[]): string => {
+  const index = allDepartments.indexOf(department);
+   if (index === -1) return `hsl(var(--muted))`; // Fallback color
+  // Use chart colors 1-5 from the theme
+  return `hsl(var(--chart-${(index % 5) + 1}))`;
 };
 
 
-const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ data }) => {
+const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ data, departments }) => {
 
   // Check if data is valid and has entries
   const hasData = data && data.length > 0 && data.some(d => d.completion > 0);
-  const totalDepartments = data.length;
 
   // Calculate total actual completion value (sum of department contributions)
-  // This represents the portion of the project completed, distributed among departments
   const totalCompletionValue = data.reduce((sum, entry) => sum + (entry.completion || 0), 0);
-   // Calculate the *overall* project completion percentage (average or specific value if available)
-   // Assuming the average for now if a direct overall project completion isn't passed/calculated here
-   const overallProjectCompletion = totalDepartments > 0
-     ? data.reduce((sum, entry) => sum + (entry.completion || 0), 0) / totalDepartments // Simple average, might need refinement
+
+   // Calculate the *overall* project completion percentage
+   // Find the highest completion value among departments as a proxy for overall,
+   // or assume average if needed. Let's try taking the max reported completion.
+   // This might need refinement based on how 'overall project completion' should be calculated.
+   const overallProjectCompletion = data.length > 0
+     ? Math.max(...data.map(d => d.completion || 0)) // Max completion from contributions
      : 0;
 
 
@@ -68,7 +65,7 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                      content={
                         <ChartTooltipContent
                           hideLabel // Hide the default label line
-                          formatter={(value, name, props) => `${props.payload.completion.toFixed(1)}% completion`} // Format tooltip value - Use payload.completion
+                          formatter={(value, name, props) => `${value.toFixed(1)}% completion`} // Format tooltip value - Use actual value
                         />
                       }
                    />
@@ -84,10 +81,11 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                     labelLine={false} // Hide label lines
                     label={false} // Disable default labels
                   >
-                     {data.map((entry, index) => (
-                        <Cell key={`cell-completion-${index}`} fill={chartConfig[entry.department]?.color || generateGreenShade(index, totalDepartments)} />
-                     ))}
-                     {/* Label in the center - showing average completion */}
+                     {data.map((entry, index) => {
+                        const color = generateChartColor(entry.department, departments);
+                        return <Cell key={`cell-completion-${index}`} fill={color} />
+                     })}
+                     {/* Label in the center - showing overall completion */}
                       <Label
                         content={({ viewBox }) => {
                           if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -100,7 +98,6 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                                   dominantBaseline="middle"
                                   className="fill-foreground text-3xl font-bold"
                                 >
-                                  {/* Displaying average or overall completion - adjust logic if needed */}
                                   {overallProjectCompletion.toFixed(1)}%
                                 </text>
                                 <text
@@ -110,7 +107,7 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                                      dominantBaseline="middle"
                                      className="fill-muted-foreground text-sm"
                                 >
-                                     Total Complete
+                                     Overall Complete
                                  </text>
                               </>
                             );
@@ -119,7 +116,6 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                         }}
                      />
                   </Pie>
-                  {/* Remove default Legend: <Legend content={<ChartLegendContent nameKey="department" />} /> */}
                 </PieChart>
               </ResponsiveContainer>
             </ChartContainer>
@@ -129,14 +125,13 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                 {data.sort((a, b) => b.completion - a.completion).map((entry, index) => { // Sort by completion descending
                   // Calculate the percentage *contribution* of this department to the total completion VALUE
                   const contributionPercentage = totalCompletionValue > 0 ? ((entry.completion / totalCompletionValue) * 100) : 0;
-                  const color = chartConfig[entry.department]?.color || generateGreenShade(index, totalDepartments); // Get the color for the progress bar
+                   const color = generateChartColor(entry.department, departments); // Get the consistent color
                   return (
                     <div key={entry.department} className="flex items-center gap-3 text-sm">
-                      {/* <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} /> // Optional color dot */}
                       <span className="flex-1 text-muted-foreground truncate">{entry.department}</span>
                       {/* Apply department color to the progress bar indicator */}
-                      <Progress value={contributionPercentage} className="h-2 w-24" indicatorClassName={cn(`bg-[${color}]`)} />
-                      {/* Label shows the contribution percentage */}
+                      {/* Ensure color string is directly usable by Tailwind JIT */}
+                      <Progress value={contributionPercentage} className="h-2 w-24" indicatorClassName={`bg-[${color}]`} />
                       <span className="w-10 text-right font-medium">{contributionPercentage.toFixed(0)}%</span>
                     </div>
                   );
