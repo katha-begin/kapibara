@@ -7,6 +7,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import UserKpiFilters from '@/components/user-kpis/user-kpi-filters';
 import UserKpiTable from '@/components/user-kpis/user-kpi-table';
 import type { UserKpiData } from '@/types/user-kpi'; // Define this type
+import type { Metadata } from "next";
+
 
 // Mock Data for User KPIs
 const mockUserKpis: UserKpiData[] = [
@@ -21,6 +23,12 @@ const mockUserKpis: UserKpiData[] = [
   { id: 'user9', name: 'Ian Malcolm', department: 'Engineering', timeliness: 4, utilization: 4, contribution: 4, development: 4 },
   { id: 'user10', name: 'Jane Doe', department: 'Design', timeliness: 4, utilization: 5, contribution: 4, development: 3 },
 ];
+
+// It's generally better to define metadata statically if possible
+// export const metadata: Metadata = {
+//   title: "BizFlow - User KPIs",
+//   description: "User Key Performance Indicators",
+// };
 
 
 const UserKpiPage: FC = () => {
@@ -41,27 +49,24 @@ const UserKpiPage: FC = () => {
   }, [selectedDepartment]);
 
   return (
-    <div className="flex h-screen bg-background">
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-card border-b p-4 shadow-sm flex justify-between items-center">
+    <div className="flex flex-col p-4 md:p-6"> {/* Removed h-screen and other layout classes */}
+        <header className="mb-6 flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-primary">User KPIs Dashboard</h1>
           {/* Add any header elements like navigation or user info here if needed */}
         </header>
-        <ScrollArea className="flex-1 p-4 md:p-6">
-          <UserKpiFilters
-            availableDepartments={availableDepartments}
-            selectedDepartment={selectedDepartment}
-            onDepartmentChange={setSelectedDepartment}
-          />
-          {filteredUsers.length > 0 ? (
-            <UserKpiTable users={filteredUsers} />
-          ) : (
-            <div className="flex justify-center items-center h-64">
-              <p className="text-muted-foreground">No users match the selected filters.</p>
-            </div>
-          )}
-        </ScrollArea>
-      </div>
+        {/* No need for ScrollArea here if main content area scrolls */}
+        <UserKpiFilters
+          availableDepartments={availableDepartments}
+          selectedDepartment={selectedDepartment}
+          onDepartmentChange={setSelectedDepartment}
+        />
+        {filteredUsers.length > 0 ? (
+          <UserKpiTable users={filteredUsers} />
+        ) : (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-muted-foreground">No users match the selected filters.</p>
+          </div>
+        )}
     </div>
   );
 };

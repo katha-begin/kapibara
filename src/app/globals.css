@@ -33,14 +33,16 @@ body {
     --chart-4: 210 50% 85%; /* Soft Blue 4 */
     --chart-5: 215 75% 45%; /* Soft Blue 5 */
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Sidebar Light Theme */
+    --sidebar-background: 210 20% 98%; /* Same as main background */
+    --sidebar-foreground: 220 10% 30%; /* Darker gray text */
+    --sidebar-primary: 180 80% 30%; /* Teal (Accent) for active item */
+    --sidebar-primary-foreground: 0 0% 100%; /* White text on active item */
+    --sidebar-accent: 210 20% 94%; /* Lighter gray for hover */
+    --sidebar-accent-foreground: 220 10% 20%; /* Dark text on hover */
+    --sidebar-border: 210 15% 88%; /* Light gray border */
+    --sidebar-ring: 180 80% 40%; /* Teal focus ring */
   }
   .dark {
     --background: 220 15% 10%; /* Dark cool gray */
@@ -67,14 +69,16 @@ body {
     --chart-3: 220 80% 65%; /* Soft Blue 3 (Dark) */
     --chart-4: 210 50% 75%; /* Soft Blue 4 (Dark) */
     --chart-5: 215 75% 35%; /* Soft Blue 5 (Dark) */
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Sidebar Dark Theme */
+    --sidebar-background: 220 15% 10%; /* Same as main dark background */
+    --sidebar-foreground: 210 15% 85%; /* Lighter gray text */
+    --sidebar-primary: 180 70% 40%; /* Lighter Teal (Accent) for active item */
+    --sidebar-primary-foreground: 0 0% 100%; /* White text on active item */
+    --sidebar-accent: 220 15% 20%; /* Darker gray for hover */
+    --sidebar-accent-foreground: 210 15% 95%; /* Light text on hover */
+    --sidebar-border: 220 15% 25%; /* Dark gray border */
+    --sidebar-ring: 180 70% 50%; /* Lighter Teal focus ring */
   }
 }
 

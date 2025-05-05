@@ -87,63 +87,60 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
   }, [filteredProjects]);
 
   return (
-    <div className="flex h-screen bg-background">
-      <div className="flex-1 flex flex-col overflow-hidden">
-         <header className="bg-card border-b p-4 shadow-sm flex justify-between items-center">
-            <h1 className="text-2xl font-semibold text-primary">BizFlow Dashboard</h1>
-            <div className="flex gap-2">
-                <Button
-                    variant={viewMode === 'card' ? 'default' : 'outline'}
-                    size="icon"
-                    onClick={() => setViewMode('card')}
-                    aria-label="Card View"
-                >
-                    <LayoutGrid />
-                </Button>
-                <Button
-                    variant={viewMode === 'table' ? 'default' : 'outline'}
-                    size="icon"
-                    onClick={() => setViewMode('table')}
-                    aria-label="Table View"
-                >
-                    <List />
-                </Button>
-            </div>
-         </header>
-         <ScrollArea className="flex-1 p-4 md:p-6">
-           <DashboardFilters
-              availableDepartments={availableDepartments} // Pass dynamic list
-              projectNames={projectNames}
-              selectedDepartment={selectedDepartment}
-              selectedProject={selectedProject}
-              onDepartmentChange={setSelectedDepartment}
-              onProjectChange={setSelectedProject}
-            />
-            <SummaryCard metrics={summaryMetrics} className="mb-6" />
+    <div className="flex flex-col p-4 md:p-6"> {/* Removed h-screen and overflow */}
+        <div className="flex justify-between items-center mb-6">
+           <h1 className="text-2xl font-semibold text-primary">Project Dashboard</h1>
+           <div className="flex gap-2">
+               <Button
+                   variant={viewMode === 'card' ? 'default' : 'outline'}
+                   size="icon"
+                   onClick={() => setViewMode('card')}
+                   aria-label="Card View"
+               >
+                   <LayoutGrid />
+               </Button>
+               <Button
+                   variant={viewMode === 'table' ? 'default' : 'outline'}
+                   size="icon"
+                   onClick={() => setViewMode('table')}
+                   aria-label="Table View"
+               >
+                   <List />
+               </Button>
+           </div>
+        </div>
 
-            {filteredProjects.length > 0 ? (
-              <div>
-                {viewMode === 'card' ? (
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    {filteredProjects.map((project) => (
-                      <ProjectCard key={project.id} project={project} />
-                    ))}
-                  </div>
-                ) : (
-                  <ProjectTable
-                    projects={filteredProjects}
-                    selectedProject={selectedProject} // Pass selectedProject down
-                  />
-                )}
-              </div>
-            ) : (
-                <div className="flex justify-center items-center h-64">
-                    <p className="text-muted-foreground">No projects match the selected filters.</p>
-                </div>
-            )}
-         </ScrollArea>
-       </div>
-    </div>
+        <DashboardFilters
+         availableDepartments={availableDepartments} // Pass dynamic list
+         projectNames={projectNames}
+         selectedDepartment={selectedDepartment}
+         selectedProject={selectedProject}
+         onDepartmentChange={setSelectedDepartment}
+         onProjectChange={setSelectedProject}
+       />
+       <SummaryCard metrics={summaryMetrics} className="mb-6" />
+
+       {filteredProjects.length > 0 ? (
+         <div>
+           {viewMode === 'card' ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+               {filteredProjects.map((project) => (
+                 <ProjectCard key={project.id} project={project} />
+               ))}
+             </div>
+           ) : (
+             <ProjectTable
+               projects={filteredProjects}
+               selectedProject={selectedProject} // Pass selectedProject down
+             />
+           )}
+         </div>
+       ) : (
+           <div className="flex justify-center items-center h-64">
+               <p className="text-muted-foreground">No projects match the selected filters.</p>
+           </div>
+       )}
+     </div>
   );
 };
 
