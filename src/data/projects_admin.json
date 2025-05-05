@@ -1,0 +1,20 @@
+[
+  {
+    "project_name": "twh",
+    "startDate": "2024-05-01",
+    "endDate": "2024-09-30",
+    "allocatedMandays": 200
+  },
+  {
+    "project_name": "lfgs",
+    "startDate": "2024-01-15",
+    "endDate": "2024-07-31",
+    "allocatedMandays": 150
+  },
+  {
+    "project_name": "Project C",
+    "startDate": "2024-03-10",
+    "endDate": "2024-11-20",
+    "allocatedMandays": 300
+  }
+]

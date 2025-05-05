@@ -1,0 +1,30 @@
+csv
+USERNAME,DATE,RAW_PROJECT,PROJECT,HOURS,WEEK(month),WEEK(year),YEAR,MONTH,Department,Cost_contributions,MONTH_YEAR,WORKING_DAY
+user_a,2024-01-01,proj_x,proj_x,8,1,1,2024,Jan,Art,"4,000.00",Jan 2024,1.00
+user_a,2024-01-02,proj_x,proj_x,8,1,1,2024,Jan,Art,"4,000.00",Jan 2024,1.00
+user_a,2024-01-08,proj_x,proj_x,6,2,2,2024,Jan,Art,"3,000.00",Jan 2024,0.75
+user_b,2024-01-01,proj_y,proj_y,7,1,1,2024,Jan,Animation,"3,500.00",Jan 2024,0.88
+user_b,2024-01-03,proj_y,proj_y,8,1,1,2024,Jan,Animation,"4,000.00",Jan 2024,1.00
+user_b,2024-01-10,proj_y,proj_y,8,2,2,2024,Jan,Animation,"4,000.00",Jan 2024,1.00
+user_c,2024-01-05,proj_z,proj_z,8,1,1,2024,Jan,VFX,"4,000.00",Jan 2024,1.00
+user_c,2024-01-12,proj_z,proj_z,8,2,2,2024,Jan,VFX,"4,000.00",Jan 2024,1.00
+user_a,2024-01-15,proj_x,proj_x,8,3,3,2024,Jan,Art,"4,000.00",Jan 2024,1.00
+user_b,2024-01-17,proj_y,proj_y,8,3,3,2024,Jan,Animation,"4,000.00",Jan 2024,1.00
+user_a,2024-01-22,proj_x,proj_x,8,4,4,2024,Jan,Art,"4,000.00",Jan 2024,1.00
+user_b,2024-01-24,proj_y,proj_y,8,4,4,2024,Jan,Animation,"4,000.00",Jan 2024,1.00
+user_c,2024-01-26,proj_z,proj_z,8,4,4,2024,Jan,VFX,"4,000.00",Jan 2024,1.00
+user_a,2024-02-01,proj_x,proj_x,8,1,5,2024,Feb,Art,"4,000.00",Feb 2024,1.00
+user_a,2024-02-08,proj_x,proj_x,7,2,6,2024,Feb,Art,"3,500.00",Feb 2024,0.88
+user_b,2024-02-05,proj_y,proj_y,8,1,5,2024,Feb,Animation,"4,000.00",Feb 2024,1.00
+user_b,2024-02-12,proj_y,proj_y,8,2,6,2024,Feb,Animation,"4,000.00",Feb 2024,1.00
+user_c,2024-02-03,proj_z,proj_z,8,1,5,2024,Feb,VFX,"4,000.00",Feb 2024,1.00
+user_c,2024-02-10,proj_z,proj_z,8,2,6,2024,Feb,VFX,"4,000.00",Feb 2024,1.00
+user_a,2024-02-15,proj_x,proj_x,8,3,7,2024,Feb,Art,"4,000.00",Feb 2024,1.00
+user_b,2024-02-19,proj_y,proj_y,8,3,8,2024,Feb,Animation,"4,000.00",Feb 2024,1.00
+user_a,2024-02-22,proj_x,proj_x,8,4,8,2024,Feb,Art,"4,000.00",Feb 2024,1.00
+user_b,2024-02-26,proj_y,proj_y,8,4,9,2024,Feb,Animation,"4,000.00",Feb 2024,1.00
+user_c,2024-02-29,proj_z,proj_z,8,4,9,2024,Feb,VFX,"4,000.00",Feb 2024,1.00
+user_d,2024-01-01,proj_x,proj_x,8,1,1,2024,Jan,Modeling,"4,000.00",Jan 2024,1.00
+user_d,2024-01-08,proj_x,proj_x,8,2,2,2024,Jan,Modeling,"4,000.00",Jan 2024,1.00
+user_e,2024-01-01,proj_y,proj_y,8,1,1,2024,Jan,Rigging,"4,000.00",Jan 2024,1.00
+user_e,2024-01-10,proj_y,proj_y,8,2,2,2024,Jan,Rigging,"4,000.00",Jan 2024,1.00

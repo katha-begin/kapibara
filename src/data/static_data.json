@@ -1,0 +1,22 @@
+{
+    "default": {
+      "not start": 0.0,
+      "ready to start": 0.0,
+      "work in progress": 0.25,
+      "publish failed": 0.25,
+      "submit": 0.30,
+      "need fixing": 0.40,
+      "publishing on queue": 0.40,
+      "hold": 0.50,
+      "wait for internal review": 0.60,
+      "publishing": 0.60,
+      "publish success": 0.65,
+      "app pending": 0.80,
+      "wait for external review": 0.80,
+      "wait for client review": 0.95,
+      "ready to publish": 0.95,
+      "approve": 1.0,
+      "drop": 1.0,
+      "no work": 1.0
+    }
+}
