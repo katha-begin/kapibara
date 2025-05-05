@@ -89,7 +89,7 @@ const fetchProjectData = (
   if (project && project.startDate && project.endDate) {
     let currentDate = new Date(project.startDate);
     let week = 1;
-    let accumulatedMandaysOverall = 0;
+    let accumulatedMandaysOverall = 0; // Initialize before the loop
     let currentCompletion = 0;
     const actualProjectCompletion = project.completion ?? 100;
 
@@ -97,11 +97,12 @@ const fetchProjectData = (
     project.department.forEach(dept => { currentDeptMandaysAccumulator[dept] = 0; });
 
     while (currentDate <= project.endDate && currentDate <= new Date()) {
-        const weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10));
+        let weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Use 'let' to allow modification
         // Ensure accumulated mandays doesn't exceed allocated unless project is complete or past due
-        if (project.mandays && allocatedMandaysOverall + weeklyMandaysOverall > project.mandays && new Date() <= project.endDate && project.completion < 100) {
+        if (project.mandays && accumulatedMandaysOverall + weeklyMandaysOverall > project.mandays && new Date() <= project.endDate && project.completion < 100) {
             // Cap weekly mandays if approaching total mandays prematurely
             // This logic might need refinement based on how over-budget should be handled visually
+             weeklyMandaysOverall = Math.max(0, project.mandays - accumulatedMandaysOverall); // Cap to remaining mandays
         }
         accumulatedMandaysOverall += weeklyMandaysOverall;
         const roundedAccumulatedMandays = Math.round(accumulatedMandaysOverall);
@@ -117,6 +118,8 @@ const fetchProjectData = (
         weeklyCompletionIncrement = Math.max(0, weeklyCompletionIncrement); // Ensure non-negative
 
         currentCompletion += weeklyCompletionIncrement;
+        // Ensure currentCompletion does not exceed actualProjectCompletion due to floating point issues
+        currentCompletion = Math.min(currentCompletion, actualProjectCompletion);
         const roundedCurrentCompletion = Math.round(currentCompletion);
 
         const mandayPercentage = calculateMandayPercentage(roundedAccumulatedMandays, project.allocatedMandays);
@@ -158,7 +161,7 @@ const fetchProjectData = (
         });
 
         // Adjust last department if rounding caused mismatch
-         if (Math.abs(distributedWeeklyMandays - weeklyMandaysOverall) > 0.5 && project.department.length > 0) {
+         if (Math.abs(distributedWeeklyMandays - Math.round(weeklyMandaysOverall)) > 0.5 && project.department.length > 0) {
              const lastDept = project.department[project.department.length - 1];
              const diff = Math.round(weeklyMandaysOverall - distributedWeeklyMandays);
              weeklyDeptIncrementData[lastDept] = Math.max(0, (weeklyDeptIncrementData[lastDept] as number || 0) + diff);
@@ -187,11 +190,20 @@ const fetchProjectData = (
         // Adjust final department increments to match actual contributions if available
         if(project.departmentContributions && weeklyDepartmentIncrements.length > 0) {
             const lastDeptWeek = weeklyDepartmentIncrements[weeklyDepartmentIncrements.length -1];
+             // Calculate total simulated mandays per department up to the *second to last* week
+             let simulatedTotalMandaysPerDeptBeforeLastWeek: Record<string, number> = {};
+             project.department.forEach(dept => { simulatedTotalMandaysPerDeptBeforeLastWeek[dept] = 0; });
+             weeklyDepartmentIncrements.slice(0, -1).forEach(weekData => {
+                 project.department.forEach(dept => {
+                     simulatedTotalMandaysPerDeptBeforeLastWeek[dept] += (weekData[dept] as number || 0);
+                 });
+             });
+
+             // Set the last week's increment to make the total match the actual contribution
              project.departmentContributions.forEach(contrib => {
-                const accumulatedForDept = Object.values(currentDeptMandaysAccumulator)[project.department.indexOf(contrib.department)];
-                const requiredAdjustment = Math.round(contrib.mandays - accumulatedForDept);
-                lastDeptWeek[contrib.department] = Math.max(0, (lastDeptWeek[contrib.department] as number || 0) + requiredAdjustment);
-            });
+                 const requiredLastWeekIncrement = Math.max(0, contrib.mandays - simulatedTotalMandaysPerDeptBeforeLastWeek[contrib.department]);
+                 lastDeptWeek[contrib.department] = requiredLastWeekIncrement;
+             });
         }
 
     } else if (lastWeekOverall && lastWeekOverall.completionPercentage > project.completion) {
@@ -230,13 +242,13 @@ const fetchProjectData = (
 
 interface ProjectAnalyticsPageProps {
   // params is now expected to be a Promise in Client Components under Suspense
-  params: Promise<{ projectId: string }>;
+  params: { projectId: string }; // No longer a promise after applying React.use
 }
 
 const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
-  // Unwrap the params Promise using React.use()
-  const resolvedParams = use(params);
-  const { projectId } = resolvedParams; // Access projectId after unwrapping
+  // Unwrap the params Promise using React.use() - Removed as it's no longer needed after fixing the type
+  // const resolvedParams = use(params);
+  const { projectId } = params; // Access projectId directly
 
   const [projectData, setProjectData] = useState<{ project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -316,5 +328,3 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 };
 
 export default ProjectAnalyticsPage;
-
-    
