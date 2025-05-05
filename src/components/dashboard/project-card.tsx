@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import Link from 'next/link'; // Import Link
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
 import { Progress } from "@/components/ui/progress";
-import { Target, CheckCircle, Users, CalendarClock } from "lucide-react"; // Added CalendarClock
+import { Target, CheckCircle, Users, CalendarClock, Clock } from "lucide-react"; // Added CalendarClock, Clock
 import { cn } from "@/lib/utils";
 import type { Project } from '@/types/project';
 
@@ -57,10 +57,33 @@ const calculateSchedulePercentage = (startDate: Date | null | undefined, endDate
   return Math.min(100, Math.max(0, percentage)); // Clamp between 0 and 100
 };
 
+// Function to calculate manday cumulative percentage
+const calculateMandayPercentage = (actualMandays: number | null | undefined, allocatedMandays: number | null | undefined): number | null => {
+    const actual = actualMandays ?? 0;
+    const allocated = allocatedMandays ?? 0;
+
+    if (allocated <= 0) {
+        return null; // Cannot calculate if allocated is zero or less, or missing
+    }
+
+    const percentage = Math.round((actual / allocated) * 100);
+    return Math.max(0, percentage); // Percentage can exceed 100, don't clamp upper bound
+};
+
+// Function to determine manday progress bar color based on percentage
+const getMandayProgressColor = (percentage: number | null): string => {
+  if (percentage === null) return "[&>div]:bg-muted"; // Muted color if N/A
+  if (percentage <= 80) return "[&>div]:bg-green-500";
+  if (percentage <= 100) return "[&>div]:bg-yellow-500";
+  return "[&>div]:bg-destructive"; // Red if over 100%
+};
+
 
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   const targetKpi = 85; // Define the target KPI
   const schedulePercentage = calculateSchedulePercentage(project.startDate, project.endDate);
+  const mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
+
 
   return (
     // Wrap the Card with Link
@@ -118,11 +141,31 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
               </div>
             </div>
 
-            {/* Cumulative Mandays */}
+            {/* Manday Cumulative Percentage */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                 <Clock className="h-4 w-4" /> {/* Smaller Icon */}
+                <span>Manday Usage</span>
+              </div>
+               <div className="w-1/2 flex items-center gap-2">
+                 {mandayPercentage !== null ? (
+                     <>
+                      {/* Use a smaller progress bar, potentially capping visual at 100% but showing actual % */}
+                      <Progress value={Math.min(mandayPercentage, 100)} className={cn("h-1.5 flex-1", getMandayProgressColor(mandayPercentage))} aria-label={`Manday usage ${mandayPercentage}%`}/>
+                     <span className="text-xs font-medium text-muted-foreground">{mandayPercentage}%</span> {/* Smaller percentage text */}
+                     </>
+                 ) : (
+                     <span className="text-xs text-muted-foreground">N/A</span>
+                 )}
+               </div>
+            </div>
+
+
+            {/* Cumulative Mandays (Actual) */}
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Users className="h-4 w-4" /> {/* Smaller Icon */}
-                <span>Mandays</span>
+                <span>Actual Mandays</span>
               </div>
               <span className="font-medium text-foreground">{project.mandays ?? 'N/A'}</span>
             </div>

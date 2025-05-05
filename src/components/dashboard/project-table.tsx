@@ -24,15 +24,37 @@ const getKpiColor = (kpiScore: number, targetKpi: number): string => {
   if (ratio === 1) {
     return "text-green-600"; // Perfect score
   } else if (ratio > 0.97 && ratio < 1.03) {
-     return "text-lime-600"; // Slightly off
+     return "text-lime-600"; // Slightly off (closer to green)
   } else if (ratio > 0.95 && ratio < 1.05) {
-    return "text-yellow-600"; // Moderately off
+    return "text-yellow-600"; // Moderately off (closer to green)
   } else if (ratio > 0.90 && ratio < 1.10) {
-    return "text-orange-600"; // Significantly off
+    return "text-orange-600"; // Significantly off (closer to red)
   } else {
-    return "text-destructive"; // Very far off (bad)
+    return "text-destructive"; // Very far off (bad - red)
   }
 };
+
+// Function to calculate manday cumulative percentage
+const calculateMandayPercentage = (actualMandays: number | null | undefined, allocatedMandays: number | null | undefined): number | null => {
+    const actual = actualMandays ?? 0;
+    const allocated = allocatedMandays ?? 0;
+
+    if (allocated <= 0) {
+        return null; // Cannot calculate if allocated is zero or less, or missing
+    }
+
+    const percentage = Math.round((actual / allocated) * 100);
+    return Math.max(0, percentage); // Can exceed 100%
+};
+
+// Function to determine manday progress bar color based on percentage
+const getMandayProgressColor = (percentage: number | null): string => {
+  if (percentage === null) return "[&>div]:bg-muted"; // Muted color if N/A
+  if (percentage <= 80) return "[&>div]:bg-green-500";
+  if (percentage <= 100) return "[&>div]:bg-yellow-500";
+  return "[&>div]:bg-destructive"; // Red if over 100%
+};
+
 
 const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
   const isSingleProjectSelected = selectedProject !== 'all' && projects.length > 0;
@@ -45,39 +67,46 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
           <TableRow>
             <TableHead>Project Name</TableHead>
             <TableHead>Department(s)</TableHead>
-            <TableHead className="text-right">KPI Score Ratio</TableHead> {/* Changed label */}
+            <TableHead className="text-right">KPI Ratio</TableHead> {/* Changed label */}
             <TableHead>Completion</TableHead>
-            <TableHead className="text-right">Mandays</TableHead>
+            <TableHead>Manday Usage</TableHead> {/* New Column */}
+            <TableHead className="text-right">Actual Mandays</TableHead> {/* Renamed */}
           </TableRow>
         </TableHeader>
         <TableBody>
           {projects.flatMap((project) => {
+             const mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
             // If a single project is selected, create a row for each department
             if (isSingleProjectSelected && project.department.length > 1) { // Only break down if multiple departments
               return project.department.map((dept, index) => (
                 <TableRow key={`${project.id}-${dept}-${index}`}>
                   {/* Show project name only for the first department row */}
-                  <TableCell className={cn("font-medium text-primary", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
-                     {index === 0 ? project.name : ""}
-                  </TableCell>
-                  <TableCell className={cn("text-muted-foreground", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
-                    {dept}
-                  </TableCell>
+                  <TableCell className={cn("font-medium text-primary", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>{index === 0 ? project.name : ""}</TableCell>
+                  <TableCell className={cn("text-muted-foreground", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>{dept}</TableCell>
                   {/* Shared values only shown for the first row */}
-                  <TableCell className={cn("text-right font-semibold", getKpiColor(project.kpiScore, targetKpi), index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
-                    {index === 0 ? (project.kpiScore / targetKpi).toFixed(2) : ""}
-                  </TableCell>
+                  <TableCell className={cn("text-right font-semibold", getKpiColor(project.kpiScore, targetKpi), index > 0 ? "border-t-0 pt-1 pb-1" : "")}>{index === 0 ? (project.kpiScore / targetKpi).toFixed(2) : ""}</TableCell>
                   <TableCell className={cn(index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
                     {index === 0 ? (
                       <div className="flex items-center gap-2">
-                        <Progress value={project.completion} className="h-2 w-24 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
-                        <span className="text-sm font-medium text-primary">{project.completion}%</span>
+                        <Progress value={project.completion} className="h-2 w-16 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
+                        <span className="text-xs font-medium text-primary">{project.completion}%</span>
                       </div>
                     ) : ""}
                   </TableCell>
-                   <TableCell className={cn("text-right font-semibold text-primary", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
-                    {index === 0 ? project.mandays ?? 'N/A' : ""}
+                   {/* Manday Percentage - show only for first row */}
+                   <TableCell className={cn(index > 0 ? "border-t-0 pt-1 pb-1" : "")}>
+                     {index === 0 ? (
+                       mandayPercentage !== null ? (
+                         <div className="flex items-center gap-2">
+                           <Progress value={Math.min(mandayPercentage, 100)} className={cn("h-2 w-16", getMandayProgressColor(mandayPercentage))} aria-label={`Manday usage ${mandayPercentage}%`}/>
+                           <span className="text-xs font-medium text-primary">{mandayPercentage}%</span>
+                         </div>
+                       ) : (
+                         <span className="text-xs text-muted-foreground">N/A</span>
+                       )
+                     ) : ""}
                    </TableCell>
+                   <TableCell className={cn("text-right font-semibold text-primary", index > 0 ? "border-t-0 pt-1 pb-1" : "")}>{index === 0 ? project.mandays ?? 'N/A' : ""}</TableCell>
                 </TableRow>
               ));
             } else {
@@ -92,10 +121,21 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Progress value={project.completion} className="h-2 w-24 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
-                      <span className="text-sm font-medium text-primary">{project.completion}%</span>
+                      <Progress value={project.completion} className="h-2 w-16 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
+                      <span className="text-xs font-medium text-primary">{project.completion}%</span>
                     </div>
                   </TableCell>
+                   {/* Manday Percentage */}
+                   <TableCell>
+                     {mandayPercentage !== null ? (
+                       <div className="flex items-center gap-2">
+                         <Progress value={Math.min(mandayPercentage, 100)} className={cn("h-2 w-16", getMandayProgressColor(mandayPercentage))} aria-label={`Manday usage ${mandayPercentage}%`}/>
+                         <span className="text-xs font-medium text-primary">{mandayPercentage}%</span>
+                       </div>
+                     ) : (
+                       <span className="text-xs text-muted-foreground">N/A</span>
+                     )}
+                   </TableCell>
                   <TableCell className="text-right font-semibold text-primary">{project.mandays ?? 'N/A'}</TableCell>
                 </TableRow>
               );
