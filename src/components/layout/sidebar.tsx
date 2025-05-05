@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react'; // Import useState and useEffect
 import { LayoutDashboard, Users, Settings, ChevronsLeft, ChevronsRight } from 'lucide-react'; // Added Settings, ChevronsLeft, ChevronsRight icons
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button'; // Import Button
@@ -16,6 +17,13 @@ interface SidebarProps {
 
 const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false); // Add mounted state
+
+  // Use effect to set mounted to true only on the client side after initial render
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
 
   const navItems = [
     { href: '/', label: 'Project Dashboard', icon: LayoutDashboard },
@@ -23,6 +31,40 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
     { href: '/admin-control', label: 'Admin Control', icon: Settings }, // Added Admin Control
   ];
 
+  // Render a placeholder or null during SSR and initial client render before mounted
+   if (!mounted) {
+     // Render a simple placeholder matching the collapsed/expanded width to minimize layout shift
+     // Use neutral background colors initially
+     return (
+       <aside
+         className={cn(
+           'border-r border-border flex flex-col transition-all duration-300 ease-in-out bg-muted', // Use neutral colors
+           isCollapsed ? 'w-16' : 'w-60'
+         )}
+         aria-hidden="true" // Hide from accessibility tree initially
+       >
+        {/* Minimal placeholder content mirroring structure */}
+        <div className={cn("flex items-center h-16 px-2 border-b border-border", isCollapsed ? "justify-center" : "justify-between")}>
+            {/* Placeholder for header content */}
+             <div className="flex items-center gap-1">
+                {/* Placeholder for ThemeToggle */}
+                <div className="h-10 w-10"></div>
+                {/* Placeholder for Collapse Button */}
+                <div className="h-10 w-10"></div>
+             </div>
+        </div>
+        <nav className="flex-1 space-y-1 p-2">
+            {/* Placeholder for nav items */}
+            {navItems.map((item) => (
+                <div key={item.href} className={cn('h-10 rounded-md px-3 py-2', isCollapsed ? 'w-10' : '')}></div>
+            ))}
+        </nav>
+       </aside>
+     );
+   }
+
+
+  // Original return when mounted
   return (
     <aside
       className={cn(
