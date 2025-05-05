@@ -29,12 +29,9 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects }) => {
     <Card className="shadow-md">
       <Table>
         <TableHeader>
+          {/* Removed potential whitespace causing hydration error */}
           <TableRow>
-            <TableHead>Project Name</TableHead>
-            <TableHead>Department(s)</TableHead> {/* Updated header */}
-            <TableHead className="text-right">Avg. KPI</TableHead>
-            <TableHead>Completion</TableHead>
-            <TableHead className="text-right">Mandays</TableHead>
+            <TableHead>Project Name</TableHead><TableHead>Department(s)</TableHead><TableHead className="text-right">Avg. KPI</TableHead><TableHead>Completion</TableHead><TableHead className="text-right">Mandays</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
