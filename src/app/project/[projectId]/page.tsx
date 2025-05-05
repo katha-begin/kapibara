@@ -69,6 +69,7 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
     let week = 1;
     let accumulatedMandaysOverall = 0;
     let currentCompletion = 0;
+    const actualProjectCompletion = project.completion ?? 100; // Use actual completion or default to 100
 
     // Keep track of accumulated mandays per department for calculation purposes
     let currentDeptMandaysAccumulator: Record<string, number> = {};
@@ -78,14 +79,17 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
         // Simulate overall progress for the week
         const weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Total mandays this week
         accumulatedMandaysOverall += weeklyMandaysOverall;
-        const weeklyCompletion = Math.max(0, Math.min(100 - currentCompletion, Math.random() * 7));
-        currentCompletion += weeklyCompletion;
+        // Ensure weekly completion doesn't push the total beyond the actual project completion
+        const remainingCompletion = actualProjectCompletion - currentCompletion;
+        const weeklyCompletionIncrement = Math.max(0, Math.min(remainingCompletion, Math.random() * 7));
+        currentCompletion += weeklyCompletionIncrement;
 
         // Store overall weekly progress (accumulated)
         weeklyProgress.push({
             week: week,
             weekEnding: new Date(currentDate),
-            completionPercentage: Math.round(currentCompletion),
+            // Cap the stored completion percentage at the actual project completion
+            completionPercentage: Math.min(Math.round(currentCompletion), actualProjectCompletion),
             accumulatedMandays: Math.round(accumulatedMandaysOverall),
         });
 
@@ -137,11 +141,12 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
     // Adjust last recorded overall progress to match actuals if project finished/ongoing
     const lastWeekOverall = weeklyProgress[weeklyProgress.length -1];
     if(lastWeekOverall && project.mandays != null && project.completion != null) {
-        // Use actuals if they are higher than the last simulated week
-        if (lastWeekOverall.accumulatedMandays < project.mandays) {
+        // Ensure the last week's mandays matches the total actual mandays
+        if (lastWeekOverall.accumulatedMandays !== project.mandays) {
            lastWeekOverall.accumulatedMandays = project.mandays;
         }
-        if(lastWeekOverall.completionPercentage < project.completion) {
+        // Ensure the last week's completion matches the total actual completion
+        if(lastWeekOverall.completionPercentage !== project.completion) {
             lastWeekOverall.completionPercentage = project.completion;
         }
      } else if (!lastWeekOverall && project.mandays != null && project.completion != null) {
