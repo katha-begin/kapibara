@@ -23,7 +23,7 @@ export interface Project {
   departmentContributions?: DepartmentContribution[] | null; // New: Department-specific contributions
 }
 
-// Type for weekly progress data (remains the same)
+// Type for overall weekly progress data
 export interface ProjectWeeklyProgress {
   week: number;
   weekEnding: Date;
@@ -31,3 +31,9 @@ export interface ProjectWeeklyProgress {
   accumulatedMandays: number; // Overall weekly mandays
 }
 
+// New type for weekly progress broken down by department
+// Used for the stacked bar chart
+export interface WeeklyDepartmentProgressData {
+  weekEnding: string; // Formatted date string for X-axis
+  [department: string]: number | string; // Dynamic keys for each department's mandays (or completion) + weekEnding
+}

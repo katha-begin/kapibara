@@ -28,6 +28,9 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
 
   // Check if data is valid and has entries
   const hasData = data && data.length > 0 && data.some(d => d.mandays > 0);
+  // Calculate total mandays to determine percentages accurately for labels
+  const totalMandaysValue = data.reduce((sum, entry) => sum + (entry.mandays || 0), 0);
+
 
   return (
     <Card className="shadow-md">
@@ -58,15 +61,17 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data }) =
                   outerRadius={100}
                   innerRadius={40} // Make it a donut chart
                   labelLine={false} // Hide label lines
-                  label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, department }) => {
+                  label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index, department }) => {
                     const RADIAN = Math.PI / 180;
-                    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                    const x = cx + (radius + 15) * Math.cos(-midAngle * RADIAN); // Adjust label position slightly outwards
-                    const y = cy + (radius + 15) * Math.sin(-midAngle * RADIAN);
-                    const percentage = (percent * 100).toFixed(0);
+                     // Calculate radius for label placement (slightly outside the outer radius)
+                    const radius = outerRadius + 15; // Adjusted position outwards
+                    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                    const percentage = totalMandaysValue > 0 ? ((value / totalMandaysValue) * 100).toFixed(0) : 0;
+
 
                     // Don't render label if percentage is too small
-                    if (parseFloat(percentage) < 3) return null;
+                    if (parseFloat(percentage as string) < 3) return null;
 
                     return (
                       <text

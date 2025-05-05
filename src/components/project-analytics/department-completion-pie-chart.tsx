@@ -39,6 +39,10 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
   const hasData = data && data.length > 0 && data.some(d => d.completion > 0);
   const totalDepartments = data.length;
 
+  // Calculate total completion to determine percentages accurately for labels
+  const totalCompletionValue = data.reduce((sum, entry) => sum + (entry.completion || 0), 0);
+
+
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -69,15 +73,17 @@ const DepartmentCompletionPieChart: FC<DepartmentCompletionPieChartProps> = ({ d
                     innerRadius={40} // Make it a donut chart
                     fill="#82ca9d" // Base fill, overridden by Cells
                     labelLine={false} // Hide label lines
-                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, department }) => {
+                    label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index, department }) => {
                         const RADIAN = Math.PI / 180;
-                        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                        const x = cx + (radius + 15) * Math.cos(-midAngle * RADIAN); // Adjust label position
-                        const y = cy + (radius + 15) * Math.sin(-midAngle * RADIAN);
-                        const percentage = (percent * 100).toFixed(0);
+                        // Calculate radius for label placement (slightly outside the outer radius)
+                        const radius = outerRadius + 15;
+                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                        const percentage = totalCompletionValue > 0 ? ((value / totalCompletionValue) * 100).toFixed(0) : 0;
+
 
                         // Don't render label if percentage is too small
-                        if (parseFloat(percentage) < 3) return null;
+                        if (parseFloat(percentage as string) < 3) return null;
 
                         return (
                           <text
