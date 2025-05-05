@@ -6,84 +6,22 @@ import { Progress } from "@/components/ui/progress";
 import { Target, CheckCircle, Users, CalendarClock, Clock } from "lucide-react"; // Added CalendarClock, Clock
 import { cn } from "@/lib/utils";
 import type { Project } from '@/types/project';
-
+import {
+  calculateMandayPercentage,
+  getMandayProgressColorClass, // Use class-based color utility
+  calculateSchedulePercentage,
+  getKpiColor,
+} from '@/lib/project-utils'; // Import utility functions
 
 interface ProjectCardProps {
   project: Project;
 }
 
-// Function to determine KPI color based on score relative to target (1 is ideal - green, deviation scales to red)
-const getKpiColor = (kpiScore: number, targetKpi: number): string => {
-  const ratio = kpiScore / targetKpi;
-  if (ratio === 1) {
-    return "text-green-600"; // Perfect score
-  } else if (ratio > 0.97 && ratio < 1.03) {
-     return "text-lime-600"; // Slightly off (closer to green)
-  } else if (ratio > 0.95 && ratio < 1.05) {
-    return "text-yellow-600"; // Moderately off (closer to green)
-  } else if (ratio > 0.90 && ratio < 1.10) {
-    return "text-orange-600"; // Significantly off (closer to red)
-  } else {
-    return "text-destructive"; // Very far off (bad - red)
-  }
-};
-
-// Function to calculate schedule percentage
-const calculateSchedulePercentage = (startDate: Date | null | undefined, endDate: Date | null | undefined): number | null => {
-  if (!startDate || !endDate || startDate >= endDate) {
-    return null; // Cannot calculate if dates are invalid or missing
-  }
-
-  const today = new Date();
-  // Set time to 00:00:00 to compare dates only
-  today.setHours(0, 0, 0, 0);
-  const start = new Date(startDate);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(endDate);
-  end.setHours(0, 0, 0, 0);
-
-
-  const totalDuration = end.getTime() - start.getTime();
-  if (totalDuration <= 0) return 0; // Avoid division by zero or negative duration
-
-  // If today is before the start date, schedule % is 0
-  if (today < start) return 0;
-  // If today is after the end date, schedule % is 100
-  if (today > end) return 100;
-
-  const elapsedTime = today.getTime() - start.getTime();
-  const percentage = Math.round((elapsedTime / totalDuration) * 100);
-
-  return Math.min(100, Math.max(0, percentage)); // Clamp between 0 and 100
-};
-
-// Function to calculate manday cumulative percentage
-const calculateMandayPercentage = (actualMandays: number | null | undefined, allocatedMandays: number | null | undefined): number | null => {
-    const actual = actualMandays ?? 0;
-    const allocated = allocatedMandays ?? 0;
-
-    if (allocated <= 0) {
-        return null; // Cannot calculate if allocated is zero or less, or missing
-    }
-
-    const percentage = Math.round((actual / allocated) * 100);
-    return Math.max(0, percentage); // Percentage can exceed 100, don't clamp upper bound
-};
-
-// Function to determine manday progress bar color based on percentage
-const getMandayProgressColor = (percentage: number | null): string => {
-  if (percentage === null) return "[&>div]:bg-muted"; // Muted color if N/A
-  if (percentage <= 80) return "[&>div]:bg-green-500";
-  if (percentage <= 100) return "[&>div]:bg-yellow-500";
-  return "[&>div]:bg-destructive"; // Red if over 100%
-};
-
-
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   const targetKpi = 85; // Define the target KPI
   const schedulePercentage = calculateSchedulePercentage(project.startDate, project.endDate);
   const mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
-
+  const mandayProgressColorClass = getMandayProgressColorClass(mandayPercentage); // Get color class
 
   return (
     // Wrap the Card with Link
@@ -106,7 +44,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
                 <span>KPI Ratio</span>
               </div>
               <span className={cn("font-medium", getKpiColor(project.kpiScore, targetKpi))}>
-                {(project.kpiScore / targetKpi).toFixed(2)}
+                {targetKpi > 0 ? (project.kpiScore / targetKpi).toFixed(2) : 'N/A'} {/* Avoid division by zero */}
               </span>
             </div>
 
@@ -136,7 +74,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
                 <span>Completion</span>
                </div>
               <div className="w-1/2 flex items-center gap-2">
-                <Progress value={project.completion} className="h-1.5 flex-1 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/> {/* Smaller progress bar */}
+                <Progress value={project.completion} className="h-1.5 flex-1" indicatorClassName="bg-chart-2" aria-label={`Project completion ${project.completion}%`}/> {/* Use indicatorClassName */}
                 <span className="text-xs font-medium text-muted-foreground">{project.completion}%</span> {/* Smaller percentage text */}
               </div>
             </div>
@@ -150,8 +88,8 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
                <div className="w-1/2 flex items-center gap-2">
                  {mandayPercentage !== null ? (
                      <>
-                      {/* Use a smaller progress bar, potentially capping visual at 100% but showing actual % */}
-                      <Progress value={Math.min(mandayPercentage, 100)} className={cn("h-1.5 flex-1", getMandayProgressColor(mandayPercentage))} aria-label={`Manday usage ${mandayPercentage}%`}/>
+                      {/* Use a smaller progress bar, capping visual at 100% but showing actual % */}
+                      <Progress value={Math.min(mandayPercentage, 100)} className="h-1.5 flex-1" indicatorClassName={mandayProgressColorClass} aria-label={`Manday usage ${mandayPercentage}%`}/> {/* Use indicatorClassName */}
                      <span className="text-xs font-medium text-muted-foreground">{mandayPercentage}%</span> {/* Smaller percentage text */}
                      </>
                  ) : (

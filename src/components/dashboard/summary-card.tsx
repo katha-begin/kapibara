@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, Target, CheckCircle, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getKpiColor } from '@/lib/project-utils'; // Import utility function
 
 interface SummaryMetrics {
   totalProjects: number;
@@ -15,26 +16,6 @@ interface SummaryCardProps {
   metrics: SummaryMetrics;
   className?: string;
 }
-
-// Function to determine KPI color based on score relative to target (1 is ideal - green, deviation scales to red)
-const getKpiColor = (avgKpiScore: number, targetKpi: number): string => {
-  // Calculate average ratio based on the average raw score
-  if (targetKpi === 0 || avgKpiScore === 0) return "text-muted-foreground"; // Handle division by zero or no data
-
-  const avgRatio = avgKpiScore / targetKpi;
-
-  if (avgRatio === 1) {
-    return "text-green-600"; // Perfect score
-  } else if (avgRatio > 0.97 && avgRatio < 1.03) {
-     return "text-lime-600"; // Slightly off (closer to green)
-  } else if (avgRatio > 0.95 && avgRatio < 1.05) {
-    return "text-yellow-600"; // Moderately off (closer to green)
-  } else if (avgRatio > 0.90 && avgRatio < 1.10) {
-    return "text-orange-600"; // Significantly off (closer to red)
-  } else {
-    return "text-destructive"; // Very far off (bad - red)
-  }
-};
 
 const SummaryCard: FC<SummaryCardProps> = ({ metrics, className }) => {
   const targetKpi = 85; // Define the target KPI
@@ -65,7 +46,10 @@ const SummaryCard: FC<SummaryCardProps> = ({ metrics, className }) => {
               <Target className="h-4 w-4 text-muted-foreground" />
              <span className="text-xs text-muted-foreground">Avg. KPI Ratio</span>
            </div>
-           <span className={cn("text-xl font-semibold", getKpiColor(metrics.avgKpiScore, targetKpi))}>
+           <span className={cn(
+               "text-xl font-semibold",
+                metrics.totalProjects > 0 && targetKpi > 0 ? getKpiColor(metrics.avgKpiScore, targetKpi) : 'text-muted-foreground'
+               )}>
              {metrics.totalProjects > 0 && targetKpi > 0 ? (metrics.avgKpiScore / targetKpi).toFixed(2) : 'N/A'}
           </span>
         </div>
