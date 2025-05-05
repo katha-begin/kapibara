@@ -7,6 +7,7 @@ import DepartmentMandayPieChart from '@/components/project-analytics/department-
 import DepartmentCompletionPieChart from '@/components/project-analytics/department-completion-pie-chart'; // Import Completion Pie Chart
 import WeeklyDepartmentProgressChart from '@/components/project-analytics/weekly-department-progress-chart'; // Import Stacked Bar Chart
 import type { Project, ProjectWeeklyProgress, DepartmentContribution, WeeklyDepartmentProgressData } from '@/types/project'; // Import types
+import { calculateMandayPercentage } from '@/lib/project-utils'; // Import utility
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -79,18 +80,25 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
         // Simulate overall progress for the week
         const weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Total mandays this week
         accumulatedMandaysOverall += weeklyMandaysOverall;
+        const roundedAccumulatedMandays = Math.round(accumulatedMandaysOverall);
+
         // Ensure weekly completion doesn't push the total beyond the actual project completion
         const remainingCompletion = actualProjectCompletion - currentCompletion;
         const weeklyCompletionIncrement = Math.max(0, Math.min(remainingCompletion, Math.random() * 7));
         currentCompletion += weeklyCompletionIncrement;
+        const roundedCurrentCompletion = Math.min(Math.round(currentCompletion), actualProjectCompletion);
+
+        // Calculate accumulated manday percentage
+        const mandayPercentage = calculateMandayPercentage(roundedAccumulatedMandays, project.allocatedMandays);
+
 
         // Store overall weekly progress (accumulated)
         weeklyProgress.push({
             week: week,
             weekEnding: new Date(currentDate),
-            // Cap the stored completion percentage at the actual project completion
-            completionPercentage: Math.min(Math.round(currentCompletion), actualProjectCompletion),
-            accumulatedMandays: Math.round(accumulatedMandaysOverall),
+            completionPercentage: roundedCurrentCompletion,
+            accumulatedMandays: roundedAccumulatedMandays,
+            mandayPercentage: mandayPercentage, // Add calculated percentage
         });
 
         // Simulate and store weekly department INCREMENTS for stacked bar chart
@@ -144,6 +152,8 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
         // Ensure the last week's mandays matches the total actual mandays
         if (lastWeekOverall.accumulatedMandays !== project.mandays) {
            lastWeekOverall.accumulatedMandays = project.mandays;
+           // Recalculate last week's manday percentage based on actual total mandays
+           lastWeekOverall.mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
         }
         // Ensure the last week's completion matches the total actual completion
         if(lastWeekOverall.completionPercentage !== project.completion) {
@@ -151,11 +161,13 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
         }
      } else if (!lastWeekOverall && project.mandays != null && project.completion != null) {
         // Handle case where project finished before first week or no progress yet
+        const finalMandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
         weeklyProgress.push({
              week: 1,
              weekEnding: project.startDate || new Date(), // Use start date or fallback
              completionPercentage: project.completion,
              accumulatedMandays: project.mandays,
+             mandayPercentage: finalMandayPercentage, // Add percentage
         })
      }
 

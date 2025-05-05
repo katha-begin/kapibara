@@ -28,7 +28,8 @@ export interface ProjectWeeklyProgress {
   week: number;
   weekEnding: Date;
   completionPercentage: number; // Overall weekly completion
-  accumulatedMandays: number; // Overall weekly mandays
+  accumulatedMandays: number; // Overall weekly mandays (absolute)
+  mandayPercentage: number | null; // Overall weekly manday usage percentage
 }
 
 // New type for weekly progress broken down by department

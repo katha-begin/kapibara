@@ -11,6 +11,7 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartStyle, // Import ChartStyle if needed for custom colors
+  ChartConfig // Import ChartConfig type
 } from "@/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 import type { ProjectWeeklyProgress } from '@/types/project';
@@ -23,20 +24,20 @@ interface CompletionVsMandayChartProps {
 const chartConfig = {
   completion: {
     label: "Completion (%)",
-    color: "hsl(140, 60%, 40%)", // Changed to a green color
+    color: "hsl(140, 60%, 40%)", // Green color
   },
-  mandays: {
-    label: "Accum. Mandays",
-    color: "hsl(var(--chart-1))", // Example: Use chart-1 color (soft blue)
+  mandays: { // Renamed to mandayPercentage
+    label: "Manday Usage (%)", // Changed label
+    color: "hsl(var(--chart-1))", // Use chart-1 color
   },
-} satisfies Record<string, { label: string; color: string }>;
+} satisfies ChartConfig; // Use ChartConfig type
 
 const CompletionVsMandayChart: FC<CompletionVsMandayChartProps> = ({ weeklyProgress }) => {
   // Format data for the chart
   const chartData = weeklyProgress.map(item => ({
     weekEnding: format(item.weekEnding, 'MMM d'), // Format date for X-axis
     completion: item.completionPercentage,
-    mandays: item.accumulatedMandays,
+    mandays: item.mandayPercentage, // Use mandayPercentage for this area
     weekNumber: item.week, // Keep week number if needed for tooltip or labels
   }));
 
@@ -44,7 +45,7 @@ const CompletionVsMandayChart: FC<CompletionVsMandayChartProps> = ({ weeklyProgr
     <Card className="shadow-md">
       <CardHeader>
         <CardTitle>Project Progress Over Time</CardTitle>
-        <CardDescription>Weekly Completion Percentage vs. Accumulated Mandays</CardDescription>
+        <CardDescription>Weekly Completion Percentage vs. Manday Usage Percentage</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[350px] w-full">
@@ -79,21 +80,34 @@ const CompletionVsMandayChart: FC<CompletionVsMandayChartProps> = ({ weeklyProgr
                 style={{ fontSize: '12px', fill: 'hsl(var(--muted-foreground))' }}
                  domain={[0, 100]} // Percentage scale
               />
-              {/* Y Axis for Accumulated Mandays */}
+              {/* Y Axis for Manday Usage Percentage */}
               <YAxis
                  yAxisId="right"
                  orientation="right"
-                 dataKey="mandays"
+                 dataKey="mandays" // This now refers to mandayPercentage from chartData
                  tickLine={false}
                  axisLine={false}
                  tickMargin={8}
-                 tickFormatter={(value) => value.toLocaleString()} // Format large numbers
+                 tickFormatter={(value) => `${value}%`} // Format as percentage
                  style={{ fontSize: '12px', fill: 'hsl(var(--muted-foreground))' }}
-                 domain={['auto', 'auto']} // Auto scale based on data
+                 domain={[0, 'auto']} // Start at 0, allow exceeding 100%
               />
               <Tooltip
                  cursor={{ fill: 'hsl(var(--muted)/0.3)' }} // Light background on hover
-                 content={<ChartTooltipContent indicator="line" />} // Use ShadCN tooltip style
+                 content={
+                    <ChartTooltipContent
+                      indicator="line"
+                      formatter={(value, name, props) => {
+                        if (props.dataKey === 'completion') {
+                          return `${value}% Completion`;
+                        }
+                        if (props.dataKey === 'mandays') { // This is mandayPercentage now
+                           return `${value}% Manday Usage`;
+                        }
+                        return `${value}`;
+                      }}
+                    />
+                 }
               />
               <ChartLegend content={<ChartLegendContent />} />
               {/* Area for Completion Percentage */}
@@ -109,10 +123,10 @@ const CompletionVsMandayChart: FC<CompletionVsMandayChartProps> = ({ weeklyProgr
                 name={chartConfig.completion.label} // Name for legend/tooltip
                 dot={false}
               />
-               {/* Area for Accumulated Mandays */}
+               {/* Area for Manday Usage Percentage */}
                <Area
                  yAxisId="right"
-                 dataKey="mandays"
+                 dataKey="mandays" // This is mandayPercentage
                  type="monotone"
                  fill={chartConfig.mandays.color}
                  fillOpacity={0.2} // Slightly different opacity
