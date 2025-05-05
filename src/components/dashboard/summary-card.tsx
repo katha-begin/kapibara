@@ -16,14 +16,14 @@ interface SummaryCardProps {
   className?: string;
 }
 
-// Function to determine KPI color based on score relative to target (same as in ProjectTable/Card)
+// Function to determine KPI color based on score relative to target (lower is better)
 const getKpiColor = (avgKpiScore: number, targetKpi: number): string => {
   // Calculate average ratio based on the average raw score
   const avgRatio = avgKpiScore / targetKpi;
-  if (avgRatio < 0.95) { // Significantly below target (Bad)
-    return "text-destructive";
-  } else if (avgRatio > 1.05) { // Significantly above target (Better)
+  if (avgRatio < 0.95) { // Significantly below target (Better)
     return "text-green-600";
+  } else if (avgRatio > 1.05) { // Significantly above target (Bad)
+    return "text-destructive";
   } else { // Close to target (Good)
     return "text-amber-600";
   }

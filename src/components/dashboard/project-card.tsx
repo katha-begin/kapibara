@@ -16,13 +16,13 @@ interface ProjectCardProps {
   };
 }
 
-// Function to determine KPI color based on score relative to target (same as in ProjectTable)
+// Function to determine KPI color based on score relative to target (lower is better)
 const getKpiColor = (kpiScore: number, targetKpi: number): string => {
   const ratio = kpiScore / targetKpi;
-  if (ratio < 0.95) { // Significantly below target (Bad)
-    return "text-destructive";
-  } else if (ratio > 1.05) { // Significantly above target (Better)
+  if (ratio < 0.95) { // Significantly below target (Better)
     return "text-green-600";
+  } else if (ratio > 1.05) { // Significantly above target (Bad)
+    return "text-destructive";
   } else { // Close to target (Good)
     return "text-amber-600";
   }
