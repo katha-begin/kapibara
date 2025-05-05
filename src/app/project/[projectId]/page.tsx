@@ -2,6 +2,8 @@
 import type { FC } from 'react';
 import ProjectStatsSummary from '@/components/project-analytics/project-stats-summary';
 import CompletionVsMandayChart from '@/components/project-analytics/completion-vs-manday-chart';
+import DepartmentMandayPieChart from '@/components/project-analytics/department-manday-pie-chart'; // Import Manday Pie Chart
+import DepartmentCompletionPieChart from '@/components/project-analytics/department-completion-pie-chart'; // Import Completion Pie Chart
 import type { Project, ProjectWeeklyProgress } from '@/types/project'; // Import types
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -96,6 +98,14 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
     );
   }
 
+  // Placeholder data structure for pie charts (assuming future data)
+  const departmentContributionData = project.department.map((dept, index) => ({
+    department: dept,
+    mandays: (project.mandays ?? 0) / project.department.length, // Equal split for now
+    completion: (project.completion ?? 0) / project.department.length // Equal split for now
+  }));
+
+
   return (
     <div className="flex flex-col p-4 md:p-6 space-y-6">
         <div className="flex items-center justify-between">
@@ -112,6 +122,12 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
         <ProjectStatsSummary project={project} />
 
         <CompletionVsMandayChart weeklyProgress={weeklyProgress} />
+
+        {/* Grid for Pie Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <DepartmentMandayPieChart data={departmentContributionData} />
+          <DepartmentCompletionPieChart data={departmentContributionData} />
+        </div>
 
     </div>
   );
