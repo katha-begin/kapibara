@@ -7,6 +7,7 @@ import { LayoutDashboard, Users, Settings, ChevronsLeft, ChevronsRight } from 'l
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button'; // Import Button
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'; // Import Tooltip components
+import { ThemeToggle } from './theme-toggle'; // Import ThemeToggle
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -32,23 +33,26 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
     >
       <div className={cn(
         // Adjust padding and height for header
-        "flex items-center h-16 px-4 border-b border-sidebar-border",
+        "flex items-center h-16 px-2 border-b border-sidebar-border", // Reduced px to 2
         isCollapsed ? "justify-center" : "justify-between"
         )}>
         {/* Updated App Name - Hide when collapsed, adjusted font */}
         {!isCollapsed && (
-          <h2 className="text-lg font-semibold text-foreground">Kapibara</h2>
+          <h2 className="text-lg font-semibold text-foreground ml-2">Kapibara</h2> // Added ml-2 for spacing
         )}
-         {/* Toggle Button - Adjusted style */}
-        <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-            className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-            {isCollapsed ? <ChevronsRight className="h-5 w-5" /> : <ChevronsLeft className="h-5 w-5" />}
-        </Button>
+         <div className="flex items-center gap-1"> {/* Wrapper for buttons */}
+            <ThemeToggle isCollapsed={isCollapsed} /> {/* Add Theme Toggle */}
+            {/* Toggle Button - Adjusted style */}
+            <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSidebar}
+                className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+                {isCollapsed ? <ChevronsRight className="h-5 w-5" /> : <ChevronsLeft className="h-5 w-5" />}
+            </Button>
+         </div>
       </div>
 
       {/* Adjusted padding and link styles */}
