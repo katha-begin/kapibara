@@ -17,6 +17,7 @@ import { ArrowLeft } from 'lucide-react';
 // Import raw JSON data for staging/fallback
 import rawProjectsData from '@/data/projects.json';
 import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
+import rawProcessedProjectsData from '@/data/processed_data.json';
 
 // Function to process raw project data (convert date strings, ensure allocations)
 const processProjectsData = (rawData: any[]): Project[] => {
@@ -47,11 +48,14 @@ const fetchProjectData = (
 
   let allProjectsData: Project[];
   if (dataSource === 'json') {
-      console.log(`Fetching project ${projectId} from JSON data source`);
-      allProjectsData = processProjectsData(rawProjectsData);
+    console.log(`Fetching project ${projectId} from JSON data source`);
+    allProjectsData = processProjectsData(rawProjectsData);
+  } else if (process.env.NEXT_PUBLIC_APP_ENV === 'production') {
+    console.log(`Fetching project ${projectId} from PRODUCTION data source (processed_data.json)`);
+    allProjectsData = processProjectsData(rawProcessedProjectsData);
   } else {
-      console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source (projects_dev.json)`);
-      allProjectsData = processProjectsData(rawDevProjectsData); // Load from dev JSON
+    console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source (projects_dev.json)`);
+    allProjectsData = processProjectsData(rawDevProjectsData); // Load from dev JSON
   }
 
   const project = allProjectsData.find(p => p.id === projectId) ?? null;
@@ -226,7 +230,7 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
   const [error, setError] = useState<string | null>(null); // Add error state
 
   // Determine data source based on environment
-  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
+  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : process.env.NEXT_PUBLIC_APP_ENV === 'production' ? 'production' : 'json';
 
   useEffect(() => {
     setLoading(true);
