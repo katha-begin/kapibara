@@ -26,16 +26,19 @@ interface ProjectTableProps {
   selectedProject: string; // Receive selected project state
 }
 
-// Function to determine KPI color based on score relative to target (lower is better)
+// Function to determine KPI color based on score relative to target (1 is ideal - green, deviation scales to red)
 const getKpiColor = (kpiScore: number, targetKpi: number): string => {
   const ratio = kpiScore / targetKpi;
-  // Using Tailwind classes directly for simplicity. Theme variables could be used for better consistency.
-  if (ratio < 0.95) { // Significantly below target (Better)
-    return "text-green-600"; // Use a green color
-  } else if (ratio > 1.05) { // Significantly above target (Bad)
-    return "text-destructive"; // Use destructive color (usually red)
-  } else { // Close to target (Good)
-    return "text-amber-600"; // Use an amber/yellow color
+  if (ratio === 1) {
+    return "text-green-600"; // Perfect score
+  } else if (ratio > 0.97 && ratio < 1.03) {
+     return "text-lime-600"; // Slightly off
+  } else if (ratio > 0.95 && ratio < 1.05) {
+    return "text-yellow-600"; // Moderately off
+  } else if (ratio > 0.90 && ratio < 1.10) {
+    return "text-orange-600"; // Significantly off
+  } else {
+    return "text-destructive"; // Very far off (bad)
   }
 };
 
@@ -50,7 +53,7 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects, selectedProject }) => {
           <TableRow>
             <TableHead>Project Name</TableHead>
             <TableHead>Department(s)</TableHead>
-            <TableHead className="text-right">KPI Score</TableHead>
+            <TableHead className="text-right">KPI Score Ratio</TableHead> {/* Changed label */}
             <TableHead>Completion</TableHead>
             <TableHead className="text-right">Mandays</TableHead>
           </TableRow>

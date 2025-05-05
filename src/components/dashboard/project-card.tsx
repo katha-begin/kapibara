@@ -16,15 +16,19 @@ interface ProjectCardProps {
   };
 }
 
-// Function to determine KPI color based on score relative to target (lower is better)
+// Function to determine KPI color based on score relative to target (1 is ideal - green, deviation scales to red)
 const getKpiColor = (kpiScore: number, targetKpi: number): string => {
   const ratio = kpiScore / targetKpi;
-  if (ratio < 0.95) { // Significantly below target (Better)
-    return "text-green-600";
-  } else if (ratio > 1.05) { // Significantly above target (Bad)
-    return "text-destructive";
-  } else { // Close to target (Good)
-    return "text-amber-600";
+  if (ratio === 1) {
+    return "text-green-600"; // Perfect score
+  } else if (ratio > 0.97 && ratio < 1.03) {
+     return "text-lime-600"; // Slightly off
+  } else if (ratio > 0.95 && ratio < 1.05) {
+    return "text-yellow-600"; // Moderately off
+  } else if (ratio > 0.90 && ratio < 1.10) {
+    return "text-orange-600"; // Significantly off
+  } else {
+    return "text-destructive"; // Very far off (bad)
   }
 };
 
@@ -42,7 +46,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-secondary-foreground">
              <Target className="text-chart-1" />
-            <span>KPI Score</span> {/* Changed label */}
+            <span>KPI Score Ratio</span> {/* Changed label */}
           </div>
           {/* Apply color coding to the KPI score ratio */}
           <span className={cn("font-semibold text-lg", getKpiColor(project.kpiScore, targetKpi))}>
