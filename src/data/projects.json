@@ -2,7 +2,7 @@
 [
   {
     "id": "proj1",
-    "name": "Project Alpha",
+    "name": "Lion Initiative",
     "department": ["Engineering"],
     "kpiScore": 85,
     "completion": 70,
@@ -18,7 +18,7 @@
   },
   {
     "id": "proj2",
-    "name": "Project Beta",
+    "name": "Panda Project",
     "department": ["Marketing"],
     "kpiScore": 92,
     "completion": 95,
@@ -34,7 +34,7 @@
   },
   {
     "id": "proj3",
-    "name": "Project Gamma",
+    "name": "Eagle Taskforce",
     "department": ["Engineering", "Design"],
     "kpiScore": 78,
     "completion": 40,
@@ -51,7 +51,7 @@
   },
   {
     "id": "proj4",
-    "name": "Project Delta",
+    "name": "Dolphin Development",
     "department": ["Sales", "Marketing"],
     "kpiScore": 88,
     "completion": 80,
@@ -68,7 +68,7 @@
    },
   {
     "id": "proj5",
-    "name": "Project Epsilon",
+    "name": "Wolf Pack Program",
     "department": ["Marketing"],
     "kpiScore": 95,
     "completion": 100,
@@ -84,7 +84,7 @@
   },
   {
     "id": "proj6",
-    "name": "Project Zeta",
+    "name": "Badger Build",
     "department": ["Engineering", "Sales"],
     "kpiScore": 80,
     "completion": 60,

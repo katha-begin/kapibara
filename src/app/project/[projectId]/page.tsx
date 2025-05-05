@@ -1,5 +1,8 @@
 
+'use client'; // Required for useEffect and useState
+
 import type { FC } from 'react';
+import { useState, useEffect, useMemo } from 'react'; // Import hooks
 import { format } from 'date-fns';
 import ProjectStatsSummary from '@/components/project-analytics/project-stats-summary';
 import CompletionVsMandayChart from '@/components/project-analytics/completion-vs-manday-chart';
@@ -11,24 +14,75 @@ import { calculateMandayPercentage } from '@/lib/project-utils'; // Import utili
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import rawProjectsData from '@/data/projects.json'; // Import raw JSON data
+// Import raw JSON data for staging/fallback
+import rawProjectsData from '@/data/projects.json';
 
-// Process raw data to convert date strings to Date objects
-const allProjectsData: Project[] = rawProjectsData.map(project => ({
+// Function to process raw project data (convert date strings to Date objects)
+const processProjectsData = (rawData: any[]): Project[] => {
+  return rawData.map(project => ({
     ...project,
     startDate: project.startDate ? new Date(project.startDate) : null,
     endDate: project.endDate ? new Date(project.endDate) : null,
-    // Ensure departmentContributions is handled correctly
     departmentContributions: project.departmentContributions ?? null,
-}));
+  }));
+};
 
+// Define the inline development data separately
+const inlineDevProjectsData = processProjectsData([
+    {
+      "id": "dev-proj1",
+      "name": "Dev Project A (Inline)",
+      "department": ["Dev Team"],
+      "kpiScore": 90,
+      "completion": 80,
+      "mandays": 50,
+      "startDate": "2024-05-01",
+      "endDate": "2024-09-30",
+      "inhousePortion": 100,
+      "outsourcePortion": 0,
+      "allocatedMandays": 60,
+      "departmentContributions": [
+        { "department": "Dev Team", "mandays": 50, "completion": 80 }
+      ]
+    },
+    {
+      "id": "dev-proj2",
+      "name": "Dev Project B (Inline)",
+      "department": ["QA Team", "Dev Team"],
+      "kpiScore": 75,
+      "completion": 50,
+      "mandays": 100,
+      "startDate": "2024-06-10",
+      "endDate": "2024-11-15",
+      "inhousePortion": 70,
+      "outsourcePortion": 30,
+      "allocatedMandays": 120,
+      "departmentContributions": [
+        { "department": "QA Team", "mandays": 30, "completion": 20 },
+        { "department": "Dev Team", "mandays": 70, "completion": 30 }
+      ]
+    }
+]);
 
-// Mock data fetching - updated to use data from imported JSON
-const fetchProjectData = (projectId: string): { project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } => {
-  // Find the project from the processed mock data list
+// Combined data fetching logic (simulates API/JSON/Inline)
+const fetchProjectData = (
+    projectId: string,
+    dataSource: 'inline' | 'json' // Add dataSource parameter
+): { project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } => {
+
+  let allProjectsData: Project[];
+  if (dataSource === 'json') {
+      console.log(`Fetching project ${projectId} from JSON data source`);
+      allProjectsData = processProjectsData(rawProjectsData);
+  } else {
+      console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source`);
+      allProjectsData = inlineDevProjectsData;
+  }
+
   const project = allProjectsData.find(p => p.id === projectId) ?? null;
 
   // --- Weekly Progress Simulation Logic (remains mostly the same) ---
+  // (This logic should ideally be done on the backend if using a real API)
   const weeklyProgress: ProjectWeeklyProgress[] = [];
   const weeklyDepartmentIncrements: WeeklyDepartmentProgressData[] = [];
 
@@ -48,16 +102,14 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
         const roundedAccumulatedMandays = Math.round(accumulatedMandaysOverall);
 
         const remainingCompletion = actualProjectCompletion - currentCompletion;
-        // Ensure weekly completion doesn't overshoot the final project completion
         let weeklyCompletionIncrement = Math.random() * 7;
         if (currentCompletion + weeklyCompletionIncrement > actualProjectCompletion) {
              weeklyCompletionIncrement = actualProjectCompletion - currentCompletion;
         }
-        weeklyCompletionIncrement = Math.max(0, weeklyCompletionIncrement); // Ensure non-negative
+        weeklyCompletionIncrement = Math.max(0, weeklyCompletionIncrement);
 
         currentCompletion += weeklyCompletionIncrement;
         const roundedCurrentCompletion = Math.round(currentCompletion);
-
 
         const mandayPercentage = calculateMandayPercentage(roundedAccumulatedMandays, project.allocatedMandays);
 
@@ -98,25 +150,17 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
 
         currentDate.setDate(currentDate.getDate() + 7);
         week++;
-        if(week > 104) break; // Extended safety break
+        if(week > 104) break;
     }
 
-    // Adjust last recorded overall progress to match actuals if project finished/ongoing
     const lastWeekOverall = weeklyProgress[weeklyProgress.length -1];
     if(lastWeekOverall && project.mandays != null && project.completion != null) {
-        // Ensure the last week's mandays matches the total actual mandays
         if (roundedAccumulatedMandays < project.mandays) {
             lastWeekOverall.accumulatedMandays = project.mandays;
             lastWeekOverall.mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
         }
-        // Ensure the last week's completion matches the total actual completion
-        // Make sure not to exceed the actual project completion
-        if (roundedCurrentCompletion < project.completion) {
-            lastWeekOverall.completionPercentage = project.completion;
-        } else {
-            // If simulation somehow overshot, cap it at actual completion
-            lastWeekOverall.completionPercentage = Math.min(roundedCurrentCompletion, project.completion);
-        }
+        // Ensure last week's completion doesn't exceed actual project completion
+        lastWeekOverall.completionPercentage = Math.min(roundedCurrentCompletion, project.completion);
 
      } else if (!lastWeekOverall && project.mandays != null && project.completion != null) {
         const finalMandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
@@ -128,16 +172,13 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
              mandayPercentage: finalMandayPercentage,
         })
      }
-     // If the project has officially ended according to data, ensure the final simulated week matches the end state
+
      if (project.endDate && new Date() > project.endDate && lastWeekOverall) {
         lastWeekOverall.completionPercentage = project.completion;
         lastWeekOverall.accumulatedMandays = project.mandays;
         lastWeekOverall.mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
      }
-
-
   }
-
 
   return { project, weeklyProgress, weeklyDepartmentProgress: weeklyDepartmentIncrements };
 };
@@ -149,9 +190,27 @@ interface ProjectAnalyticsPageProps {
 
 const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
   const { projectId } = params;
-  // Fetch all data including weeklyDepartmentProgress (which now contains increments)
-  const { project, weeklyProgress, weeklyDepartmentProgress } = fetchProjectData(projectId);
+  const [projectData, setProjectData] = useState<{ project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  // Determine data source based on environment (simplified)
+  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
+
+  useEffect(() => {
+    setLoading(true);
+    // Fetch data based on determined source
+    const data = fetchProjectData(projectId, dataSource);
+    setProjectData(data);
+    setLoading(false);
+  }, [projectId, dataSource]); // Re-run if projectId or dataSource changes
+
+  const project = projectData?.project;
+  const weeklyProgress = projectData?.weeklyProgress ?? [];
+  const weeklyDepartmentProgress = projectData?.weeklyDepartmentProgress ?? [];
+
+  if (loading) {
+      return <div className="p-6">Loading project analytics...</div>;
+  }
 
   if (!project) {
     return (
@@ -161,7 +220,7 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
           </Button>
         </Link>
-        <p className="text-xl text-muted-foreground">Project not found.</p>
+        <p className="text-xl text-muted-foreground">Project not found (ID: {projectId}) in {dataSource} data.</p>
       </div>
     );
   }
@@ -169,7 +228,6 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
   // Use the actual department contribution data if available for pie charts
   const departmentContributionData: DepartmentContribution[] = project.departmentContributions ?? project.department.map(dept => ({
     department: dept,
-    // Fallback logic if departmentContributions is null/undefined (less accurate)
     mandays: (project.mandays ?? 0) / project.department.length,
     completion: (project.completion ?? 0) / project.department.length
   }));
@@ -180,6 +238,7 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
         <div className="flex items-center justify-between">
            <h1 className="text-2xl font-semibold text-primary">
                Project Analytics: <span className="font-normal">{project.name}</span>
+               <span className="text-sm ml-2 text-muted-foreground">(Data: {dataSource})</span>
             </h1>
             <Link href="/" passHref>
                 <Button variant="outline">
@@ -190,14 +249,10 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 
         <ProjectStatsSummary project={project} />
 
-        {/* Area Chart for Overall Completion vs Accumulated Mandays */}
         <CompletionVsMandayChart weeklyProgress={weeklyProgress} />
 
-         {/* Stacked Bar Chart for Weekly Department Manday Increments */}
         <WeeklyDepartmentProgressChart data={weeklyDepartmentProgress} departments={project.department} />
 
-
-        {/* Grid for Pie Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <DepartmentMandayPieChart data={departmentContributionData} departments={project.department} />
           <DepartmentCompletionPieChart data={departmentContributionData} departments={project.department} />

@@ -1,41 +1,82 @@
 
-'use client';
+'use client'; // Keep as client component
 
 import type { FC } from 'react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import UserKpiFilters from '@/components/user-kpis/user-kpi-filters';
 import UserKpiTable from '@/components/user-kpis/user-kpi-table';
 import type { UserKpiData } from '@/types/user-kpi'; // Define this type
-import mockUserKpis from '@/data/userKpis.json'; // Import mock data from JSON
+// Import mock data from JSON for staging/fallback
+import rawUserKpis from '@/data/userKpis.json';
 
 
 const UserKpiPage: FC = () => {
+  const [userKpisData, setUserKpisData] = useState<UserKpiData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<string>('all'); // State for selected project
 
-  // Get unique departments from mock data
-  const availableDepartments = useMemo(() => {
-    const departments = new Set(mockUserKpis.map(user => user.department));
-    return Array.from(departments);
-  }, []);
+  // Determine data source based on environment (simplified)
+  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
 
-  // Get unique project names from mock data
+  useEffect(() => {
+    setLoading(true);
+    let data: UserKpiData[];
+    if (dataSource === 'json') {
+      // Simulate fetching from JSON (could be API call)
+       console.log("Using JSON data source for User KPIs");
+      // Assume rawUserKpis is already in the correct format or process if needed
+      data = rawUserKpis as UserKpiData[];
+    } else {
+      // Use different inline data for 'development' stage display
+      console.log("Using inline DEVELOPMENT data source for User KPIs");
+      data = [
+        // Different inline data for DEV stage
+        {
+          "id": "dev-user1",
+          "name": "Dev User One (Inline)",
+          "department": "Dev Team",
+          "timeliness": 5,
+          "utilization": 5,
+          "contribution": 5,
+          "development": 5,
+          "projects": ["Dev Project A (Inline)", "Dev Project B (Inline)"]
+        },
+        {
+          "id": "dev-user2",
+          "name": "Dev User Two (Inline)",
+          "department": "QA Team",
+          "timeliness": 4,
+          "utilization": 4,
+          "contribution": 3,
+          "development": 4,
+          "projects": ["Dev Project B (Inline)"]
+        }
+      ];
+    }
+    setUserKpisData(data);
+    setLoading(false);
+  }, [dataSource]);
+
+
+  // Get unique departments and projects from the currently loaded data
+  const availableDepartments = useMemo(() => {
+    const departments = new Set(userKpisData.map(user => user.department));
+    return Array.from(departments);
+  }, [userKpisData]);
+
   const availableProjects = useMemo(() => {
-    // Ensure projects array exists and is not empty before flatMapping
-    const projects = new Set(mockUserKpis.flatMap(user => user.projects ?? []));
+    const projects = new Set(userKpisData.flatMap(user => user.projects ?? []));
     return Array.from(projects);
-  }, []);
+  }, [userKpisData]);
 
 
   // Filter users based on selected department AND project
-  // The order of filtering (project then department or vice-versa) does not change the final result.
-  // The logic remains correct for filtering based on both criteria.
   const filteredUsers = useMemo(() => {
-     let users = mockUserKpis as UserKpiData[]; // Cast to UserKpiData[]
+     let users = userKpisData;
 
      // Filter by Project
      if (selectedProject !== 'all') {
-       // Ensure user.projects exists before calling includes
        users = users.filter(user => user.projects?.includes(selectedProject));
      }
 
@@ -45,7 +86,12 @@ const UserKpiPage: FC = () => {
      }
 
      return users;
-  }, [selectedDepartment, selectedProject]);
+  }, [userKpisData, selectedDepartment, selectedProject]);
+
+   if (loading) {
+    return <div className="p-6">Loading user KPI data...</div>; // Basic loading state
+  }
+
 
   return (
     <div className="flex flex-col p-4 md:p-6">

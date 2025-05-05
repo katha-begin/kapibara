@@ -60,9 +60,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
             ))}
         </nav>
          {/* Placeholder for Footer Items at the bottom */}
-         <div className="mt-auto p-2 border-t border-border flex items-center gap-2">
-             {!isCollapsed && <div className="h-6 w-12 bg-muted-foreground/10 rounded-md"></div>}
-             <div className="ml-auto h-10 w-10 bg-muted-foreground/10 rounded-md"></div>
+         <div className={cn(
+             "mt-auto p-2 border-t border-border flex items-center gap-2",
+              isCollapsed ? "flex-col items-center justify-center space-y-2" : "justify-between" // Adjust for collapsed layout
+            )}>
+             {/* Placeholder Stage Indicator */}
+             <div className={cn("h-6 rounded-md", isCollapsed ? "w-8" : "w-12 bg-muted-foreground/10")}></div>
+             {/* Placeholder Theme Toggle */}
+             <div className={cn("h-10 w-10 bg-muted-foreground/10 rounded-md", isCollapsed ? "" : "ml-auto")}></div>
          </div>
        </aside>
      );
@@ -135,15 +140,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
        {/* Footer section for Stage Indicator and Theme Toggle */}
       <div className={cn(
          "mt-auto p-2 border-t border-sidebar-border flex items-center gap-2",
-         isCollapsed ? "justify-center" : "justify-between" // Align left/right when expanded
+         // When collapsed: center items vertically, stack them, add space between
+         // When expanded: justify between (default flex behavior)
+         isCollapsed ? "flex-col items-center justify-center space-y-2" : "justify-between"
          )}>
-         {/* Stage Indicator - Hide label when collapsed */}
-         {isCollapsed ? (
-             <DevelopmentStageIndicator />
-         ) : (
-             <DevelopmentStageIndicator /> // Render normally when expanded
-         )}
-         {/* Theme Toggle - Always visible */}
+         {/* Stage Indicator */}
+         <DevelopmentStageIndicator />
+         {/* Theme Toggle */}
          <ThemeToggle isCollapsed={isCollapsed} />
       </div>
     </aside>
