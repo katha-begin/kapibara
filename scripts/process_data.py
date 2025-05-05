@@ -11,7 +11,7 @@ STUDIO_CONFIG_PATH = 'src/data/studio_config.json'
 PROCESSED_DATA_PATH = 'src/data/processed_data.json'
 
 # Manday definition (hours per manday)
-HOURS_PER_MANDAY = 8
+DEFAULT_HOURS_PER_MANDAY = 8
 
 def calculate_working_days(start_date, end_date, working_day_dates):
     """Calculates working days between two dates based on a list of working day dates."""
@@ -33,10 +33,10 @@ def process_data():
         # Try different delimiters and encoding options
         try:
             # First try with default settings
-            ticket_df = pd.read_csv(TICKET_DATA_PATH)
+            ticket_df = pd.read_csv(TICKET_DATA_PATH, low_memory=False)
             if len(ticket_df.columns) <= 1:
                 # If only one column is detected, try with explicit delimiter
-                ticket_df = pd.read_csv(TICKET_DATA_PATH, delimiter=',', encoding='utf-8')
+                ticket_df = pd.read_csv(TICKET_DATA_PATH, delimiter=',', encoding='utf-8', low_memory=False)
                 
             # If still only one column, check the content of the first row
             if len(ticket_df.columns) <= 1:
@@ -64,9 +64,9 @@ def process_data():
         
         # Similar approach for timesheet data
         try:
-            timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH)
+            timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, low_memory=False)
             if len(timesheet_df.columns) <= 1:
-                timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, delimiter=',', encoding='utf-8')
+                timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, delimiter=',', encoding='utf-8', low_memory=False)
                 
             if len(timesheet_df.columns) <= 1:
                 with open(TIMESHEET_DATA_PATH, 'r', encoding='utf-8') as f:
@@ -107,14 +107,10 @@ def process_data():
 
     # Extract configuration from static data
     default_status_weights = static_data.get('default', {})
-    config = static_data.get('config', {
-        'hours_per_manday': 8, 
-        'default_project': 'default',
-        'working_days': 195
-    })
+    config = static_data.get('config', {})
 
-    # Use the hours_per_manday from config if available, otherwise use the constant
-    HOURS_PER_MANDAY = config.get('hours_per_manday', HOURS_PER_MANDAY)
+    # Set default values if not in config
+    HOURS_PER_MANDAY = config.get('hours_per_manday', DEFAULT_HOURS_PER_MANDAY)
     DEFAULT_PROJECT = config.get('default_project', 'default')
     WORKING_DAYS = config.get('working_days', 195)
 
@@ -338,9 +334,26 @@ def process_data():
 
         processed_data['users'].append(user_data)
 
+    # Before writing the JSON file, add this function to clean NaN values
+    def clean_nan_values(obj):
+        """Replace NaN values with 0 in a nested dictionary/list structure."""
+        import math
+        
+        if isinstance(obj, dict):
+            return {k: clean_nan_values(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [clean_nan_values(item) for item in obj]
+        elif isinstance(obj, float) and math.isnan(obj):
+            return 0  # Replace NaN with 0
+        else:
+            return obj
+
+    # Then use it before writing the JSON file
+    processed_data_cleaned = clean_nan_values(processed_data)
+
     # Write output JSON file
     with open(PROCESSED_DATA_PATH, 'w') as f:
-        json.dump(processed_data, f, indent=4)
+        json.dump(processed_data_cleaned, f, indent=4)
 
     print(f"Data processing complete. Output saved to {PROCESSED_DATA_PATH}")
 
