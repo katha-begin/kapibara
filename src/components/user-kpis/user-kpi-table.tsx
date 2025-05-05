@@ -86,30 +86,13 @@ const UserKpiTable: FC<UserKpiTableProps> = ({ users }) => {
         <TableHeader>
           <TableRow>
             {columns.map((col) => (
-              <TableHead key={col.key} className={col.isNumeric ? 'text-right' : ''}>
-                <Button
-                  variant="ghost"
-                  onClick={() => handleSort(col.key)}
-                  className="px-0 hover:bg-transparent"
-                >
-                  {col.label}
-                  {renderSortIcon(col.key)}
-                </Button>
-              </TableHead>
+              <TableHead key={col.key} className={col.isNumeric ? 'text-right' : ''}><Button variant="ghost" onClick={() => handleSort(col.key)} className="px-0 hover:bg-transparent">{col.label}{renderSortIcon(col.key)}</Button></TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {sortedUsers.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell className="font-medium text-primary">{user.name}</TableCell>
-              <TableCell className="text-muted-foreground">{user.department}</TableCell>
-              <TableCell className="text-right">{user.projects.length}</TableCell> {/* Display project count */}
-              <TableCell className="text-right">{user.timeliness}</TableCell>
-              <TableCell className="text-right">{user.utilization}</TableCell>
-              <TableCell className="text-right">{user.contribution}</TableCell>
-              <TableCell className="text-right">{user.development}</TableCell>
-            </TableRow>
+            <TableRow key={user.id}><TableCell className="font-medium text-primary">{user.name}</TableCell><TableCell className="text-muted-foreground">{user.department}</TableCell><TableCell className="text-right">{user.projects.length}</TableCell><TableCell className="text-right">{user.timeliness}</TableCell><TableCell className="text-right">{user.utilization}</TableCell><TableCell className="text-right">{user.contribution}</TableCell><TableCell className="text-right">{user.development}</TableCell></TableRow>
           ))}
         </TableBody>
       </Table>

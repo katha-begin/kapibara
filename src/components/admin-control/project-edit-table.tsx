@@ -60,38 +60,11 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
     <Card className="shadow-md">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Project Name</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>End Date</TableHead>
-              <TableHead className="text-right">Allocated Mandays</TableHead> {/* Added */}
-              <TableHead className="text-right">Actual Mandays</TableHead> {/* Renamed */}
-              <TableHead className="text-right">Inhouse %</TableHead>
-              <TableHead className="text-right">Outsource %</TableHead>
-              <TableHead className="text-center">Actions</TableHead>
-            </TableRow>
+            <TableRow><TableHead>Project Name</TableHead><TableHead>Start Date</TableHead><TableHead>End Date</TableHead><TableHead className="text-right">Allocated Mandays</TableHead><TableHead className="text-right">Actual Mandays</TableHead><TableHead className="text-right">Inhouse %</TableHead><TableHead className="text-right">Outsource %</TableHead><TableHead className="text-center">Actions</TableHead></TableRow>
           </TableHeader>
           <TableBody>
             {projects.map((project) => (
-              <TableRow key={project.id}>
-                <TableCell className="font-medium text-primary">{project.name}</TableCell>
-                <TableCell>{formatDate(project.startDate)}</TableCell>
-                <TableCell>{formatDate(project.endDate)}</TableCell>
-                <TableCell className="text-right">{project.allocatedMandays ?? 'N/A'}</TableCell> {/* Added */}
-                <TableCell className="text-right">{project.mandays ?? 'N/A'}</TableCell> {/* Renamed */}
-                <TableCell className="text-right">{formatPercentage(project.inhousePortion)}</TableCell>
-                <TableCell className="text-right">{formatPercentage(project.outsourcePortion)}</TableCell>
-                <TableCell className="text-center">
-                    <Button
-                       variant="ghost"
-                       size="icon"
-                       onClick={() => handleEditClick(project)}
-                       aria-label={`Edit ${project.name}`}
-                    >
-                        <Pencil className="h-4 w-4" />
-                    </Button>
-                </TableCell>
-              </TableRow>
+              <TableRow key={project.id}><TableCell className="font-medium text-primary">{project.name}</TableCell><TableCell>{formatDate(project.startDate)}</TableCell><TableCell>{formatDate(project.endDate)}</TableCell><TableCell className="text-right">{project.allocatedMandays ?? 'N/A'}</TableCell><TableCell className="text-right">{project.mandays ?? 'N/A'}</TableCell><TableCell className="text-right">{formatPercentage(project.inhousePortion)}</TableCell><TableCell className="text-right">{formatPercentage(project.outsourcePortion)}</TableCell><TableCell className="text-center"><Button variant="ghost" size="icon" onClick={() => handleEditClick(project)} aria-label={`Edit ${project.name}`}><Pencil className="h-4 w-4" /></Button></TableCell></TableRow>
             ))}
           </TableBody>
         </Table>
