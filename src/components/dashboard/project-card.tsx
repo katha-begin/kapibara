@@ -1,3 +1,4 @@
+
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -7,7 +8,7 @@ interface ProjectCardProps {
   project: {
     id: string;
     name: string;
-    department: string;
+    department: string[]; // Updated to array
     kpiScore: number;
     completion: number;
     mandays: number;
@@ -19,7 +20,8 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     <Card className="shadow-md transition-shadow hover:shadow-lg">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-primary">{project.name}</CardTitle>
-        <p className="text-sm text-muted-foreground">{project.department}</p>
+        {/* Display department array as comma-separated string */}
+        <p className="text-sm text-muted-foreground">{project.department.join(', ')}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">

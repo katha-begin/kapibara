@@ -1,18 +1,19 @@
+
 'use client';
 
-import { useState, useMemo, type FC } from 'react';
+import { useState, useMemo, useEffect, type FC } from 'react';
 import DashboardFilters from './dashboard-filters';
 import ProjectCard from './project-card';
-import ProjectTable from './project-table'; // Import the new ProjectTable component
+import ProjectTable from './project-table';
 import SummaryCard from './summary-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button"; // Import Button
-import { LayoutGrid, List } from 'lucide-react'; // Import icons
+import { Button } from "@/components/ui/button";
+import { LayoutGrid, List } from 'lucide-react';
 
 interface ProjectData {
   id: string;
   name: string;
-  department: string;
+  department: string[]; // Updated to array
   kpiScore: number;
   completion: number;
   mandays: number;
@@ -20,24 +21,49 @@ interface ProjectData {
 
 interface DashboardProps {
     projectsData: ProjectData[];
-    departments: string[];
+    departments: string[]; // All unique departments passed initially
     projectNames: string[];
 }
 
 const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames }) => {
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<'card' | 'table'>('card'); // State for view mode
+  const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+
+  // Determine available departments based on selected project
+  const availableDepartments = useMemo(() => {
+    if (selectedProject === 'all') {
+      return departments; // Show all unique departments if no specific project is selected
+    }
+    const project = projectsData.find(p => p.name === selectedProject);
+    return project ? project.department : []; // Show only departments of the selected project
+  }, [selectedProject, projectsData, departments]);
+
+  // Effect to reset department filter if the selected department is not available for the chosen project
+  useEffect(() => {
+    if (selectedDepartment !== 'all' && !availableDepartments.includes(selectedDepartment)) {
+      setSelectedDepartment('all');
+    }
+  }, [selectedProject, availableDepartments, selectedDepartment]);
+
 
   const filteredProjects = useMemo(() => {
-    return projectsData.filter((project) => {
-      const departmentMatch = selectedDepartment === 'all' || project.department === selectedDepartment;
-      const projectMatch = selectedProject === 'all' || project.name === selectedProject;
-      return departmentMatch && projectMatch;
-    });
-  }, [projectsData, selectedDepartment, selectedProject]);
+    let projects = projectsData;
 
-  // Calculate summary metrics
+    // Filter by selected project first
+    if (selectedProject !== 'all') {
+      projects = projects.filter(project => project.name === selectedProject);
+    }
+
+    // Then filter by selected department within the already filtered projects (or all projects if 'all' projects selected)
+    if (selectedDepartment !== 'all') {
+      projects = projects.filter(project => project.department.includes(selectedDepartment));
+    }
+
+    return projects;
+  }, [projectsData, selectedProject, selectedDepartment]);
+
+  // Calculate summary metrics based on filtered projects
   const summaryMetrics = useMemo(() => {
     const totalProjects = filteredProjects.length;
     if (totalProjects === 0) {
@@ -62,11 +88,9 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
 
   return (
     <div className="flex h-screen bg-background">
-        {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
          <header className="bg-card border-b p-4 shadow-sm flex justify-between items-center">
             <h1 className="text-2xl font-semibold text-primary">BizFlow Dashboard</h1>
-            {/* View Toggle Buttons */}
             <div className="flex gap-2">
                 <Button
                     variant={viewMode === 'card' ? 'default' : 'outline'}
@@ -88,14 +112,13 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
          </header>
          <ScrollArea className="flex-1 p-4 md:p-6">
            <DashboardFilters
-              departments={departments}
+              availableDepartments={availableDepartments} // Pass dynamic list
               projectNames={projectNames}
               selectedDepartment={selectedDepartment}
               selectedProject={selectedProject}
               onDepartmentChange={setSelectedDepartment}
               onProjectChange={setSelectedProject}
             />
-            {/* Add the Summary Card */}
             <SummaryCard metrics={summaryMetrics} className="mb-6" />
 
             {filteredProjects.length > 0 ? (

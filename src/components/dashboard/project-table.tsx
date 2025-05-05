@@ -1,3 +1,4 @@
+
 import type { FC } from 'react';
 import {
   Table,
@@ -8,12 +9,12 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { Card } from "@/components/ui/card"; // Use Card for container styling
+import { Card } from "@/components/ui/card";
 
 interface ProjectData {
   id: string;
   name: string;
-  department: string;
+  department: string[]; // Updated to array
   kpiScore: number;
   completion: number;
   mandays: number;
@@ -30,7 +31,7 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects }) => {
         <TableHeader>
           <TableRow>
             <TableHead>Project Name</TableHead>
-            <TableHead>Department</TableHead>
+            <TableHead>Department(s)</TableHead> {/* Updated header */}
             <TableHead className="text-right">Avg. KPI</TableHead>
             <TableHead>Completion</TableHead>
             <TableHead className="text-right">Mandays</TableHead>
@@ -40,7 +41,8 @@ const ProjectTable: FC<ProjectTableProps> = ({ projects }) => {
           {projects.map((project) => (
             <TableRow key={project.id}>
               <TableCell className="font-medium text-primary">{project.name}</TableCell>
-              <TableCell className="text-muted-foreground">{project.department}</TableCell>
+              {/* Display department array as comma-separated string */}
+              <TableCell className="text-muted-foreground">{project.department.join(', ')}</TableCell>
               <TableCell className="text-right font-semibold text-primary">{project.kpiScore}%</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">

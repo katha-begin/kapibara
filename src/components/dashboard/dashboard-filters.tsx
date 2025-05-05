@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { FC } from 'react';
@@ -11,7 +12,7 @@ import {
 import { Label } from "@/components/ui/label";
 
 interface DashboardFiltersProps {
-  departments: string[];
+  availableDepartments: string[]; // Renamed from departments
   projectNames: string[];
   selectedDepartment: string;
   selectedProject: string;
@@ -20,7 +21,7 @@ interface DashboardFiltersProps {
 }
 
 const DashboardFilters: FC<DashboardFiltersProps> = ({
-  departments,
+  availableDepartments, // Use availableDepartments
   projectNames,
   selectedDepartment,
   selectedProject,
@@ -29,22 +30,7 @@ const DashboardFilters: FC<DashboardFiltersProps> = ({
 }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-card rounded-lg shadow">
-      <div className="flex-1 space-y-2">
-        <Label htmlFor="department-filter">Filter by Department</Label>
-        <Select value={selectedDepartment} onValueChange={onDepartmentChange}>
-          <SelectTrigger id="department-filter" className="w-full">
-            <SelectValue placeholder="All Departments" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Departments</SelectItem>
-            {departments.map((dept) => (
-              <SelectItem key={dept} value={dept}>
-                {dept}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+       {/* Project Filter - Now First */}
       <div className="flex-1 space-y-2">
         <Label htmlFor="project-filter">Filter by Project</Label>
         <Select value={selectedProject} onValueChange={onProjectChange}>
@@ -56,6 +42,24 @@ const DashboardFilters: FC<DashboardFiltersProps> = ({
             {projectNames.map((name) => (
               <SelectItem key={name} value={name}>
                 {name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+       {/* Department Filter - Now Second */}
+      <div className="flex-1 space-y-2">
+        <Label htmlFor="department-filter">Filter by Department</Label>
+        <Select value={selectedDepartment} onValueChange={onDepartmentChange}>
+          <SelectTrigger id="department-filter" className="w-full">
+            <SelectValue placeholder="All Departments" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Departments</SelectItem>
+            {/* Use availableDepartments for options */}
+            {availableDepartments.map((dept) => (
+              <SelectItem key={dept} value={dept}>
+                {dept}
               </SelectItem>
             ))}
           </SelectContent>
