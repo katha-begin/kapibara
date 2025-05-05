@@ -13,7 +13,7 @@ import { ArrowLeft } from 'lucide-react';
 
 // Mock data fetching - replace with actual API call
 // Simulating fetching a single project and its weekly progress
-// Added mock weekly department progress
+// Updated to generate weekly increments for the department progress chart
 const fetchProjectData = (projectId: string): { project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } => {
   // Find the project from the mock data list
    const allProjects: Project[] = [
@@ -60,103 +60,110 @@ const fetchProjectData = (projectId: string): { project: Project | null; weeklyP
 
   const project = allProjects.find(p => p.id === projectId) ?? null;
 
-  // Generate some mock overall weekly progress data if project exists
+  // Generate mock data
   const weeklyProgress: ProjectWeeklyProgress[] = [];
-  const weeklyDepartmentProgress: WeeklyDepartmentProgressData[] = []; // Initialize department progress array
+  const weeklyDepartmentIncrements: WeeklyDepartmentProgressData[] = []; // Stores weekly increments
 
   if (project && project.startDate && project.endDate) {
     let currentDate = new Date(project.startDate);
     let week = 1;
-    let accumulatedMandays = 0;
+    let accumulatedMandaysOverall = 0;
     let currentCompletion = 0;
 
-    // Initialize cumulative mandays per department
-    const deptMandaysAccumulator: Record<string, number> = {};
-    project.department.forEach(dept => { deptMandaysAccumulator[dept] = 0; });
+    // Keep track of accumulated mandays per department for calculation purposes
+    let currentDeptMandaysAccumulator: Record<string, number> = {};
+    project.department.forEach(dept => { currentDeptMandaysAccumulator[dept] = 0; });
 
     while (currentDate <= project.endDate && currentDate <= new Date()) {
-        // Simulate overall progress
-        const weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Random overall mandays per week
-        accumulatedMandays += weeklyMandaysOverall;
-        const weeklyCompletion = Math.max(0, Math.min(100 - currentCompletion, Math.random() * 7)); // Random completion increase per week
+        // Simulate overall progress for the week
+        const weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Total mandays this week
+        accumulatedMandaysOverall += weeklyMandaysOverall;
+        const weeklyCompletion = Math.max(0, Math.min(100 - currentCompletion, Math.random() * 7));
         currentCompletion += weeklyCompletion;
 
+        // Store overall weekly progress (accumulated)
         weeklyProgress.push({
             week: week,
             weekEnding: new Date(currentDate),
             completionPercentage: Math.round(currentCompletion),
-            accumulatedMandays: Math.round(accumulatedMandays),
+            accumulatedMandays: Math.round(accumulatedMandaysOverall),
         });
 
-        // Simulate weekly department progress for stacked bar chart
-        const weeklyDeptData: WeeklyDepartmentProgressData = { weekEnding: format(currentDate, 'MMM d') };
-        let weeklyMandaysDeptTotal = 0;
+        // Simulate and store weekly department INCREMENTS for stacked bar chart
+        const weeklyDeptIncrementData: WeeklyDepartmentProgressData = { weekEnding: format(currentDate, 'MMM d') };
+        let distributedWeeklyMandays = 0;
+
         project.department.forEach((dept, index) => {
-             // Simple split - could be more sophisticated based on contribution data
-            const deptWeeklyMandays = Math.max(0, weeklyMandaysOverall * (Math.random() * 0.4 + (index * 0.1)) ); // Distribute randomly
-            deptMandaysAccumulator[dept] += deptWeeklyMandays;
-            weeklyDeptData[dept] = Math.round(deptMandaysAccumulator[dept]); // Store accumulated value for the week
-            weeklyMandaysDeptTotal += deptWeeklyMandays;
+            let deptWeeklyMandaysIncrement = 0;
+            // Distribute the weeklyMandaysOverall among departments
+            if (index === project.department.length - 1) {
+                // Assign remaining to the last department
+                deptWeeklyMandaysIncrement = Math.max(0, weeklyMandaysOverall - distributedWeeklyMandays);
+            } else {
+                 // Example: semi-random distribution based on index/total departments
+                const baseShare = weeklyMandaysOverall / project.department.length;
+                const variation = baseShare * (Math.random() - 0.3); // Allow some variation
+                deptWeeklyMandaysIncrement = Math.max(0, baseShare + variation);
+                 // Ensure we don't overshoot in intermediate steps
+                 deptWeeklyMandaysIncrement = Math.min(deptWeeklyMandaysIncrement, weeklyMandaysOverall - distributedWeeklyMandays);
+            }
+
+            // Round the increment for this week
+            const roundedIncrement = Math.round(deptWeeklyMandaysIncrement);
+            weeklyDeptIncrementData[dept] = roundedIncrement;
+            distributedWeeklyMandays += roundedIncrement; // Use rounded value for tracking distribution
+
+            // Update the overall accumulator for this department (optional, if needed elsewhere)
+             currentDeptMandaysAccumulator[dept] += roundedIncrement;
         });
 
-         // Optional: Adjust last department to match overall total if needed
-         if(project.department.length > 0 && weeklyMandaysDeptTotal !== weeklyMandaysOverall){
-            const lastDept = project.department[project.department.length -1];
-            const diff = weeklyMandaysOverall - weeklyMandaysDeptTotal;
-            deptMandaysAccumulator[lastDept] += diff;
-            weeklyDeptData[lastDept] = Math.round(deptMandaysAccumulator[lastDept]);
+         // Final check/adjustment due to rounding potentially making sum != weeklyMandaysOverall
+         if (Math.abs(distributedWeeklyMandays - weeklyMandaysOverall) > 0.5 && project.department.length > 0) {
+             const lastDept = project.department[project.department.length - 1];
+             const diff = Math.round(weeklyMandaysOverall - distributedWeeklyMandays);
+             weeklyDeptIncrementData[lastDept] = Math.max(0, (weeklyDeptIncrementData[lastDept] as number || 0) + diff);
+             // Optionally adjust accumulator too
+             // currentDeptMandaysAccumulator[lastDept] += diff;
          }
 
 
-        weeklyDepartmentProgress.push(weeklyDeptData);
+        weeklyDepartmentIncrements.push(weeklyDeptIncrementData);
 
-
-      currentDate.setDate(currentDate.getDate() + 7); // Move to next week
-      week++;
-       if(week > 52) break; // safety break
+        currentDate.setDate(currentDate.getDate() + 7); // Move to next week
+        week++;
+        if(week > 52) break; // Safety break
     }
 
-     // Ensure the final actual completion and mandays are reflected if project is ongoing/finished
-     const lastWeekOverall = weeklyProgress[weeklyProgress.length -1];
-     if(lastWeekOverall && project.mandays && project.completion) {
+    // Adjust last recorded overall progress to match actuals if project finished/ongoing
+    const lastWeekOverall = weeklyProgress[weeklyProgress.length -1];
+    if(lastWeekOverall && project.mandays != null && project.completion != null) {
+        // Use actuals if they are higher than the last simulated week
         if (lastWeekOverall.accumulatedMandays < project.mandays) {
-           lastWeekOverall.accumulatedMandays = project.mandays; // Use actual if higher
+           lastWeekOverall.accumulatedMandays = project.mandays;
         }
         if(lastWeekOverall.completionPercentage < project.completion) {
-            lastWeekOverall.completionPercentage = project.completion; // Use actual if higher
+            lastWeekOverall.completionPercentage = project.completion;
         }
-     } else if (!lastWeekOverall && project.mandays && project.completion) {
-        // Handle case where project finished before first week ending date or no progress yet
+     } else if (!lastWeekOverall && project.mandays != null && project.completion != null) {
+        // Handle case where project finished before first week or no progress yet
         weeklyProgress.push({
              week: 1,
-             weekEnding: project.startDate, // or endDate if finished?
+             weekEnding: project.startDate || new Date(), // Use start date or fallback
              completionPercentage: project.completion,
              accumulatedMandays: project.mandays,
         })
      }
 
-      // Ensure final department mandays match total departmentContributions if available
-      const lastWeekDept = weeklyDepartmentProgress[weeklyDepartmentProgress.length - 1];
-      if (lastWeekDept && project.departmentContributions) {
-        project.departmentContributions.forEach(contrib => {
-          if (lastWeekDept[contrib.department] < contrib.mandays) {
-            lastWeekDept[contrib.department] = contrib.mandays;
-          }
-        });
-      } else if (!lastWeekDept && project.departmentContributions){
-         // Handle case where project finished before first week or no progress yet
-         const finalDeptData: WeeklyDepartmentProgressData = { weekEnding: format(project.endDate || new Date(), 'MMM d') };
-         project.departmentContributions.forEach(contrib => {
-            finalDeptData[contrib.department] = contrib.mandays;
-         });
-         weeklyDepartmentProgress.push(finalDeptData);
-      }
-
+    // Note: weeklyDepartmentIncrements already represents weekly additions,
+    // so no final adjustment needed unless you want the *last* week's increment
+    // to force the total sum to match project.mandays exactly.
+    // This might make the last bar look unusually large/small.
+    // Keeping it as simulated weekly increments.
 
   }
 
 
-  return { project, weeklyProgress, weeklyDepartmentProgress };
+  return { project, weeklyProgress, weeklyDepartmentProgress: weeklyDepartmentIncrements };
 };
 
 
@@ -166,7 +173,7 @@ interface ProjectAnalyticsPageProps {
 
 const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
   const { projectId } = params;
-  // Fetch all data including weeklyDepartmentProgress
+  // Fetch all data including weeklyDepartmentProgress (which now contains increments)
   const { project, weeklyProgress, weeklyDepartmentProgress } = fetchProjectData(projectId);
 
 
@@ -183,7 +190,7 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
     );
   }
 
-  // Use the actual department contribution data if available
+  // Use the actual department contribution data if available for pie charts
   const departmentContributionData: DepartmentContribution[] = project.departmentContributions ?? project.department.map(dept => ({
     department: dept,
     // Fallback logic if departmentContributions is null/undefined (less accurate)
@@ -207,11 +214,12 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 
         <ProjectStatsSummary project={project} />
 
-        {/* Stacked Bar Chart for Weekly Department Mandays */}
+        {/* Area Chart for Overall Completion vs Accumulated Mandays */}
+        <CompletionVsMandayChart weeklyProgress={weeklyProgress} />
+
+         {/* Stacked Bar Chart for Weekly Department Manday Increments */}
         <WeeklyDepartmentProgressChart data={weeklyDepartmentProgress} departments={project.department} />
 
-        {/* Area Chart for Overall Completion vs Mandays */}
-        <CompletionVsMandayChart weeklyProgress={weeklyProgress} />
 
         {/* Grid for Pie Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -224,3 +232,4 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 };
 
 export default ProjectAnalyticsPage;
+

@@ -40,14 +40,14 @@ const WeeklyDepartmentProgressChart: FC<WeeklyDepartmentProgressChartProps> = ({
   return (
     <Card className="shadow-md">
       <CardHeader>
-        <CardTitle>Weekly Manday Progress by Department</CardTitle>
-        <CardDescription>Accumulated mandays spent each week, stacked by department.</CardDescription>
+        <CardTitle>Weekly Manday Contribution by Department</CardTitle>
+        <CardDescription>Mandays spent each week, stacked by department.</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[350px] w-full">
           {hasData ? (
             <BarChart
-              data={data}
+              data={data} // Data now contains weekly increments
               margin={{
                 top: 10,
                 right: 30,
@@ -72,7 +72,7 @@ const WeeklyDepartmentProgressChart: FC<WeeklyDepartmentProgressChartProps> = ({
               />
               <Tooltip
                  cursor={{ fill: 'hsl(var(--muted)/0.3)' }}
-                 content={<ChartTooltipContent indicator="dashed" />} // Use ShadCN tooltip style
+                 content={<ChartTooltipContent indicator="dashed" formatter={(value, name) => `${value} mandays (${name})`} />} // Updated tooltip formatter
               />
               <Legend content={<ChartLegendContent />} />
               {departments.map((dept) => (
