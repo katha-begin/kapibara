@@ -1,4 +1,3 @@
-csv
 ticket_id,ticket_name,class,project_name,category/scene,asset/shot,element,shader_variation(if any),assigner,assignee,create_date,start_date,due_date,current_status,current_status_changed_date
 32394,Hi,share,twh,chr,rider,Tex,default:generic,khims,jele,2024-05-14 9:46:29,2024-05-15 9:00:00,2024-05-29 18:00:00,publishing on queue,2024-05-24 17:49:02
 32394,Hi,share,twh,chr,rider,Tex,default:generic,khims,jele,2024-05-14 9:46:29,2024-05-15 9:00:00,2024-05-29 18:00:00,publishing,2024-05-24 17:49:27

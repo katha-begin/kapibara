@@ -3,8 +3,8 @@ import json
 from datetime import datetime, timedelta
 
 # Define file paths
-TICKET_DATA_PATH = 'src/data/ticketdata_example.csv'
-TIMESHEET_DATA_PATH = 'src/data/timesheetdata_example.csv'
+TICKET_DATA_PATH = 'src/data/kracker_data_2024_2025.csv'
+TIMESHEET_DATA_PATH = 'src/data/time_record_2024_2025.csv'
 STATIC_DATA_PATH = 'src/data/static_data.json'
 PROJECTS_ADMIN_PATH = 'src/data/projects_admin.json'
 STUDIO_CONFIG_PATH = 'src/data/studio_config.json'
@@ -30,8 +30,65 @@ def process_data():
 
     # Read input files
     try:
-        ticket_df = pd.read_csv(TICKET_DATA_PATH)
-        timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH)
+        # Try different delimiters and encoding options
+        try:
+            # First try with default settings
+            ticket_df = pd.read_csv(TICKET_DATA_PATH)
+            if len(ticket_df.columns) <= 1:
+                # If only one column is detected, try with explicit delimiter
+                ticket_df = pd.read_csv(TICKET_DATA_PATH, delimiter=',', encoding='utf-8')
+                
+            # If still only one column, check the content of the first row
+            if len(ticket_df.columns) <= 1:
+                with open(TICKET_DATA_PATH, 'r', encoding='utf-8') as f:
+                    first_line = f.readline().strip()
+                    print(f"First line of ticket data: {first_line}")
+                    # Try to determine the delimiter
+                    if ';' in first_line:
+                        ticket_df = pd.read_csv(TICKET_DATA_PATH, delimiter=';', encoding='utf-8')
+                    elif '\t' in first_line:
+                        ticket_df = pd.read_csv(TICKET_DATA_PATH, delimiter='\t', encoding='utf-8')
+        
+        except Exception as e:
+            print(f"Error reading ticket data with standard methods: {e}")
+            # Last resort: read as text and parse manually
+            with open(TICKET_DATA_PATH, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                header = lines[0].strip().split(',')
+                data = []
+                for line in lines[1:]:
+                    data.append(line.strip().split(','))
+                ticket_df = pd.DataFrame(data, columns=header)
+        
+        print("Ticket DataFrame columns:", ticket_df.columns.tolist())
+        
+        # Similar approach for timesheet data
+        try:
+            timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH)
+            if len(timesheet_df.columns) <= 1:
+                timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, delimiter=',', encoding='utf-8')
+                
+            if len(timesheet_df.columns) <= 1:
+                with open(TIMESHEET_DATA_PATH, 'r', encoding='utf-8') as f:
+                    first_line = f.readline().strip()
+                    print(f"First line of timesheet data: {first_line}")
+                    if ';' in first_line:
+                        timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, delimiter=';', encoding='utf-8')
+                    elif '\t' in first_line:
+                        timesheet_df = pd.read_csv(TIMESHEET_DATA_PATH, delimiter='\t', encoding='utf-8')
+        
+        except Exception as e:
+            print(f"Error reading timesheet data with standard methods: {e}")
+            with open(TIMESHEET_DATA_PATH, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                header = lines[0].strip().split(',')
+                data = []
+                for line in lines[1:]:
+                    data.append(line.strip().split(','))
+                timesheet_df = pd.DataFrame(data, columns=header)
+        
+        print("Timesheet DataFrame columns:", timesheet_df.columns.tolist())
+        
         with open(STATIC_DATA_PATH, 'r') as f:
             static_data = json.load(f)
         with open(PROJECTS_ADMIN_PATH, 'r') as f:
@@ -44,24 +101,64 @@ def process_data():
     except json.JSONDecodeError as e:
         print(f"Error: Could not decode JSON file - {e}")
         return
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return
 
-    status_weights = static_data.get('default', {})
+    # Extract configuration from static data
+    default_status_weights = static_data.get('default', {})
+    config = static_data.get('config', {
+        'hours_per_manday': 8, 
+        'default_project': 'default',
+        'working_days': 195
+    })
+
+    # Use the hours_per_manday from config if available, otherwise use the constant
+    HOURS_PER_MANDAY = config.get('hours_per_manday', HOURS_PER_MANDAY)
+    DEFAULT_PROJECT = config.get('default_project', 'default')
+    WORKING_DAYS = config.get('working_days', 195)
+
+    # Function to get status weight for a specific project
+    def get_status_weight(project_name, status):
+        """Get the status weight for a specific project and status."""
+        # Try to get project-specific weights first
+        if project_name in static_data:
+            return static_data[project_name].get(status, 0.0)
+        # Fall back to default weights
+        return default_status_weights.get(status, 0.0)
+
     # Assume studio_config has a list of working dates in 'working_days'
     working_day_dates = [datetime.strptime(d, '%Y-%m-%d').date() for d in studio_config.get('working_days', [])]
 
     # --- Data Cleaning and Preparation ---
-    ticket_df['create_date'] = pd.to_datetime(ticket_df['create_date'])
-    ticket_df['start_date'] = pd.to_datetime(ticket_df['start_date'])
-    ticket_df['due_date'] = pd.to_datetime(ticket_df['due_date'])
-    ticket_df['current_status_changed_date'] = pd.to_datetime(ticket_df['current_status_changed_date'])
-    timesheet_df['DATE'] = pd.to_datetime(timesheet_df['DATE'])
+    # Convert string columns to appropriate types
+    # Convert date columns to datetime
+    for col in ['create_date', 'start_date', 'due_date', 'current_status_changed_date']:
+        if col in ticket_df.columns:
+            ticket_df[col] = pd.to_datetime(ticket_df[col], errors='coerce')
+        else:
+            print(f"Warning: '{col}' column not found in ticket data")
+            # Create a default column if missing
+            ticket_df[col] = pd.to_datetime('today')
 
-    # Calculate ticket duration (in days for simplicity, adjust if needed)
-    # Handle potential NaT values after conversion
+    if 'DATE' in timesheet_df.columns:
+        timesheet_df['DATE'] = pd.to_datetime(timesheet_df['DATE'], errors='coerce')
+    else:
+        print("Warning: 'DATE' column not found in timesheet data")
+        timesheet_df['DATE'] = pd.to_datetime('today')
+
+    # Convert HOURS to numeric
+    if 'HOURS' in timesheet_df.columns:
+        timesheet_df['HOURS'] = pd.to_numeric(timesheet_df['HOURS'], errors='coerce').fillna(0)
+
+    # Calculate ticket duration (in days for simplicity)
     ticket_df['duration'] = (ticket_df['due_date'] - ticket_df['start_date']).dt.days.fillna(0)
 
-    # Calculate ticket weight score
-    ticket_df['status_weight'] = ticket_df['current_status'].apply(lambda x: status_weights.get(x, 0.0))
+    # Calculate ticket weight score using project-specific weights
+    ticket_df['status_weight'] = ticket_df.apply(
+        lambda row: get_status_weight(row['project_name'], row['current_status']), 
+        axis=1
+    )
     ticket_df['ticket_weight_score'] = ticket_df['status_weight'] * ticket_df['duration']
 
     # Process projects admin data
@@ -136,11 +233,19 @@ def process_data():
             # Calculate weekly completion rate
             completion_rate = 0
             if total_project_ticket_duration > 0:
-                 cumulative_ticket_duration_weighted = tickets_up_to_week.groupby('ticket_id').apply(
-                    lambda x: x.sort_values('current_status_changed_date').iloc[-1]['status_weight'] * x.iloc[0]['duration']
-                 ).sum()
+                # Fix the calculation to avoid summing datetime values
+                cumulative_ticket_duration_weighted = 0
+                for ticket_id, group in tickets_up_to_week.groupby('ticket_id'):
+                    # Sort by current_status_changed_date to get the latest status
+                    latest_status = group.sort_values('current_status_changed_date').iloc[-1]
+                    # Get the duration from the first row (should be the same for all rows with this ticket_id)
+                    duration = group.iloc[0]['duration']
+                    # Calculate weighted duration
+                    status_weight = latest_status['status_weight']
+                    weighted_duration = status_weight * duration
+                    cumulative_ticket_duration_weighted += weighted_duration
 
-                 completion_rate = (cumulative_ticket_duration_weighted / total_project_ticket_duration) * 100
+                completion_rate = (cumulative_ticket_duration_weighted / total_project_ticket_duration) * 100
 
 
             # Aggregate by department weekly
@@ -207,9 +312,8 @@ def process_data():
             current_total_working_days = calculate_working_days(start_week.date(), week_end_date.date(), working_day_dates) # Working days up to this week
             user_utilization = 0
             if current_total_working_days > 0:
-                 user_utilization = (cumulative_user_actual_mandays / current_total_working_days) * HOURS_PER_MANDAY # Utilization in hours per working day
-
-
+                # Use the actual working days up to this week
+                user_utilization = (cumulative_user_actual_mandays / current_total_working_days) * 100  # As percentage
 
             user_data['weekly_data'].append({
                 'week_end_date': week_end_date.strftime('%Y-%m-%d'),

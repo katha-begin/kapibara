@@ -1,4 +1,3 @@
-csv
 USERNAME,DATE,RAW_PROJECT,PROJECT,HOURS,WEEK(month),WEEK(year),YEAR,MONTH,Department,Cost_contributions,MONTH_YEAR,WORKING_DAY
 user_a,2024-01-01,proj_x,proj_x,8,1,1,2024,Jan,Art,"4,000.00",Jan 2024,1.00
 user_a,2024-01-02,proj_x,proj_x,8,1,1,2024,Jan,Art,"4,000.00",Jan 2024,1.00
