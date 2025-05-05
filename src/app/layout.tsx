@@ -30,13 +30,11 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>{/* Added suppressHydrationWarning */}
-      <head>
+    <html lang="en" suppressHydrationWarning><head>
          {/* Add metadata tags here directly if needed */}
          <title>Kapibara Dashboard</title>
          <meta name="description" content="Basic ERP Dashboard for Small Businesses using Kapibara" />
-      </head>
-      {/* Removed font variable classes from body */}
+      </head>{/* Removed font variable classes from body */}
       <body className={`antialiased flex h-screen bg-background overflow-hidden`}> {/* Added overflow-hidden */}
         <ThemeProvider
            attribute="class"
@@ -53,7 +51,7 @@ export default function RootLayout({
           </main>
           <Toaster />
         </ThemeProvider>
-      </body>
-    </html>
+      </body></html>
   );
 }
+
