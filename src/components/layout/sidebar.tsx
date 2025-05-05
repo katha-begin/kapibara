@@ -18,7 +18,8 @@ const Sidebar = () => {
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border p-4 flex flex-col">
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-sidebar-primary">BizFlow</h2>
+        {/* Updated App Name */}
+        <h2 className="text-xl font-semibold text-sidebar-primary">Kapibara</h2>
       </div>
       <nav className="flex-1 space-y-2">
         {navItems.map((item) => (

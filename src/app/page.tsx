@@ -5,7 +5,7 @@ import Dashboard from "@/components/dashboard/dashboard";
 import type { Project } from "@/types/project"; // Import the Project type
 
 export const metadata: Metadata = {
-  title: "BizFlow - Project Dashboard", // Specific title for the page
+  title: "Kapibara - Project Dashboard", // Specific title for the page
   description: "ERP Dashboard Overview",
 };
 

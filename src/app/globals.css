@@ -14,35 +14,37 @@ body {
     --card-foreground: 220 10% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 10% 20%;
-    --primary: 220 10% 30%; /* Darker gray */
-    --primary-foreground: 210 15% 95%; /* Light text on primary */
-    --secondary: 210 20% 94%; /* Lighter gray */
-    --secondary-foreground: 220 10% 30%; /* Darker text on secondary */
-    --muted: 210 20% 96%; /* Very light gray */
-    --muted-foreground: 220 10% 45%; /* Medium gray text */
-    --accent: 180 80% 30%; /* Teal */
-    --accent-foreground: 180 100% 95%; /* Very light text on accent */
+    --primary: 45 20% 25%; /* Dark desaturated yellow/brown */
+    --primary-foreground: 45 15% 95%; /* Light text on primary */
+    --secondary: 45 20% 94%; /* Lighter yellow/brown gray */
+    --secondary-foreground: 45 10% 30%; /* Darker text on secondary */
+    --muted: 45 20% 96%; /* Very light yellow/brown gray */
+    --muted-foreground: 45 10% 45%; /* Medium gray text */
+    --accent: 45 80% 50%; /* Mustard Yellow */
+    --accent-foreground: 45 100% 10%; /* Dark text on accent */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 15% 88%; /* Light gray border */
-    --input: 210 15% 88%; /* Light gray input border */
-    --ring: 180 80% 40%; /* Teal focus ring */
-    --chart-1: 210 60% 65%; /* Soft Blue 1 */
-    --chart-2: 215 70% 55%; /* Soft Blue 2 */
-    --chart-3: 220 80% 75%; /* Soft Blue 3 */
-    --chart-4: 210 50% 85%; /* Soft Blue 4 */
-    --chart-5: 215 75% 45%; /* Soft Blue 5 */
+    --border: 45 15% 88%; /* Light yellow/brown gray border */
+    --input: 45 15% 88%; /* Light yellow/brown gray input border */
+    --ring: 45 80% 60%; /* Mustard Yellow focus ring */
+
+    /* Chart colors adjusted for yellow theme */
+    --chart-1: 40 70% 60%; /* Lighter Yellow/Orange */
+    --chart-2: 35 75% 55%; /* Medium Yellow/Orange */
+    --chart-3: 50 65% 65%; /* Lighter Yellow/Greenish */
+    --chart-4: 30 80% 70%; /* Light Orange */
+    --chart-5: 45 70% 45%; /* Darker Mustard */
     --radius: 0.5rem;
 
     /* Sidebar Light Theme */
-    --sidebar-background: 210 20% 98%; /* Same as main background */
+    --sidebar-background: 210 20% 98%; /* Keep cool gray for contrast */
     --sidebar-foreground: 220 10% 30%; /* Darker gray text */
-    --sidebar-primary: 180 80% 30%; /* Teal (Accent) for active item */
-    --sidebar-primary-foreground: 0 0% 100%; /* White text on active item */
-    --sidebar-accent: 210 20% 94%; /* Lighter gray for hover */
-    --sidebar-accent-foreground: 220 10% 20%; /* Dark text on hover */
-    --sidebar-border: 210 15% 88%; /* Light gray border */
-    --sidebar-ring: 180 80% 40%; /* Teal focus ring */
+    --sidebar-primary: 45 80% 50%; /* Mustard Yellow (Accent) for active item */
+    --sidebar-primary-foreground: 45 100% 10%; /* Dark text on active item */
+    --sidebar-accent: 45 20% 94%; /* Lighter yellow/brown gray for hover */
+    --sidebar-accent-foreground: 45 10% 20%; /* Dark text on hover */
+    --sidebar-border: 45 15% 88%; /* Light yellow/brown gray border */
+    --sidebar-ring: 45 80% 60%; /* Mustard Yellow focus ring */
   }
   .dark {
     --background: 220 15% 10%; /* Dark cool gray */
@@ -51,34 +53,36 @@ body {
     --card-foreground: 210 15% 90%;
     --popover: 220 15% 15%;
     --popover-foreground: 210 15% 90%;
-    --primary: 210 15% 95%; /* Light gray */
-    --primary-foreground: 220 10% 20%; /* Dark text on primary */
-    --secondary: 220 15% 20%; /* Darker gray */
-    --secondary-foreground: 210 15% 90%; /* Light text on secondary */
-    --muted: 220 15% 25%; /* Dark muted gray */
-    --muted-foreground: 210 15% 70%; /* Lighter muted text */
-    --accent: 180 70% 40%; /* Lighter Teal */
-    --accent-foreground: 180 100% 10%; /* Dark text on accent */
+    --primary: 45 15% 95%; /* Light yellow/gray */
+    --primary-foreground: 45 10% 15%; /* Dark text on primary */
+    --secondary: 45 15% 20%; /* Darker yellow/brown gray */
+    --secondary-foreground: 45 15% 90%; /* Light text on secondary */
+    --muted: 45 15% 25%; /* Dark muted yellow/brown gray */
+    --muted-foreground: 45 15% 70%; /* Lighter muted text */
+    --accent: 45 70% 55%; /* Slightly lighter Mustard Yellow */
+    --accent-foreground: 45 100% 10%; /* Dark text on accent */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 25%; /* Dark gray border */
-    --input: 220 15% 25%; /* Dark gray input border */
-    --ring: 180 70% 50%; /* Lighter Teal focus ring */
-    --chart-1: 210 60% 55%; /* Soft Blue 1 (Dark) */
-    --chart-2: 215 70% 45%; /* Soft Blue 2 (Dark) */
-    --chart-3: 220 80% 65%; /* Soft Blue 3 (Dark) */
-    --chart-4: 210 50% 75%; /* Soft Blue 4 (Dark) */
-    --chart-5: 215 75% 35%; /* Soft Blue 5 (Dark) */
+    --border: 45 15% 25%; /* Dark yellow/brown gray border */
+    --input: 45 15% 25%; /* Dark yellow/brown gray input border */
+    --ring: 45 70% 65%; /* Lighter Mustard Yellow focus ring */
+
+    /* Chart colors adjusted for yellow theme (Dark) */
+    --chart-1: 40 60% 50%; /* Muted Yellow/Orange */
+    --chart-2: 35 65% 45%; /* Darker Yellow/Orange */
+    --chart-3: 50 55% 55%; /* Muted Yellow/Greenish */
+    --chart-4: 30 70% 60%; /* Muted Orange */
+    --chart-5: 45 60% 35%; /* Darker Mustard */
 
     /* Sidebar Dark Theme */
-    --sidebar-background: 220 15% 10%; /* Same as main dark background */
+    --sidebar-background: 220 15% 10%; /* Keep cool gray dark background */
     --sidebar-foreground: 210 15% 85%; /* Lighter gray text */
-    --sidebar-primary: 180 70% 40%; /* Lighter Teal (Accent) for active item */
-    --sidebar-primary-foreground: 0 0% 100%; /* White text on active item */
-    --sidebar-accent: 220 15% 20%; /* Darker gray for hover */
-    --sidebar-accent-foreground: 210 15% 95%; /* Light text on hover */
-    --sidebar-border: 220 15% 25%; /* Dark gray border */
-    --sidebar-ring: 180 70% 50%; /* Lighter Teal focus ring */
+    --sidebar-primary: 45 70% 55%; /* Lighter Mustard Yellow (Accent) for active item */
+    --sidebar-primary-foreground: 45 100% 10%; /* Dark text on active item */
+    --sidebar-accent: 45 15% 20%; /* Darker yellow/brown gray for hover */
+    --sidebar-accent-foreground: 45 15% 95%; /* Light text on hover */
+    --sidebar-border: 45 15% 25%; /* Dark yellow/brown gray border */
+    --sidebar-ring: 45 70% 65%; /* Lighter Mustard Yellow focus ring */
   }
 }
 

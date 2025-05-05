@@ -50,15 +50,15 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-  			sidebar: { // Added sidebar color variables
-  				DEFAULT: 'hsl(var(--sidebar-background))',
-  				foreground: 'hsl(var(--sidebar-foreground))',
-  				primary: 'hsl(var(--sidebar-primary))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				accent: 'hsl(var(--sidebar-accent))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-  				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
+  			sidebar: { // Updated sidebar color variables to match theme
+  				DEFAULT: 'hsl(var(--sidebar-background))', // Uses theme variable
+  				foreground: 'hsl(var(--sidebar-foreground))', // Uses theme variable
+  				primary: 'hsl(var(--sidebar-primary))', // Uses theme variable
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))', // Uses theme variable
+  				accent: 'hsl(var(--sidebar-accent))', // Uses theme variable
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))', // Uses theme variable
+  				border: 'hsl(var(--sidebar-border))', // Uses theme variable
+  				ring: 'hsl(var(--sidebar-ring))' // Uses theme variable
   			}
   		},
   		borderRadius: {

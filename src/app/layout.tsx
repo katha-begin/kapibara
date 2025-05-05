@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'BizFlow Dashboard', // Updated App Name
-  description: 'Basic ERP Dashboard for Small Businesses', // Updated Description
+  title: 'Kapibara Dashboard', // Updated App Name
+  description: 'Basic ERP Dashboard for Small Businesses using Kapibara', // Updated Description
 };
 
 export default function RootLayout({
