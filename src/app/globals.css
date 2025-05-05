@@ -3,86 +3,89 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  /* Use a standard sans-serif font stack similar to the image */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 @layer base {
   :root {
-    --background: 210 20% 98%; /* Light cool gray */
-    --foreground: 220 10% 20%; /* Dark cool gray text */
-    --card: 0 0% 100%;
-    --card-foreground: 220 10% 20%;
+    /* Lighter theme inspired by the image */
+    --background: 220 20% 96%; /* Very light cool gray */
+    --foreground: 220 15% 25%; /* Darker gray text */
+    --card: 0 0% 100%; /* White cards */
+    --card-foreground: 220 15% 25%; /* Darker gray text */
     --popover: 0 0% 100%;
-    --popover-foreground: 220 10% 20%;
-    --primary: 45 20% 25%; /* Dark desaturated yellow/brown */
-    --primary-foreground: 45 15% 95%; /* Light text on primary */
-    --secondary: 45 20% 94%; /* Lighter yellow/brown gray */
-    --secondary-foreground: 45 10% 30%; /* Darker text on secondary */
-    --muted: 45 20% 96%; /* Very light yellow/brown gray */
-    --muted-foreground: 45 10% 45%; /* Medium gray text */
-    --accent: 45 80% 50%; /* Mustard Yellow */
+    --popover-foreground: 220 15% 25%;
+    --primary: 45 80% 50%; /* Mustard Yellow - kept from previous theme for branding */
+    --primary-foreground: 45 100% 10%; /* Dark text on primary */
+    --secondary: 220 15% 92%; /* Slightly darker light gray */
+    --secondary-foreground: 220 10% 30%; /* Darker text on secondary */
+    --muted: 220 15% 90%; /* Muted light gray */
+    --muted-foreground: 220 10% 45%; /* Medium gray text */
+    --accent: 45 80% 55%; /* Slightly brighter Mustard Yellow */
     --accent-foreground: 45 100% 10%; /* Dark text on accent */
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 75% 55%; /* Adjusted destructive red */
     --destructive-foreground: 0 0% 98%;
-    --border: 45 15% 88%; /* Light yellow/brown gray border */
-    --input: 45 15% 88%; /* Light yellow/brown gray input border */
+    --border: 220 15% 88%; /* Light gray border */
+    --input: 220 15% 88%; /* Light gray input border */
     --ring: 45 80% 60%; /* Mustard Yellow focus ring */
 
-    /* Chart colors adjusted for yellow theme */
+    /* Chart colors - can be adjusted further */
     --chart-1: 40 70% 60%; /* Lighter Yellow/Orange */
-    --chart-2: 35 75% 55%; /* Medium Yellow/Orange */
+    --chart-2: 140 60% 40%; /* Green for completion */
     --chart-3: 50 65% 65%; /* Lighter Yellow/Greenish */
     --chart-4: 30 80% 70%; /* Light Orange */
     --chart-5: 45 70% 45%; /* Darker Mustard */
     --radius: 0.5rem;
 
-    /* Sidebar Light Theme */
-    --sidebar-background: 210 20% 98%; /* Keep cool gray for contrast */
-    --sidebar-foreground: 220 10% 30%; /* Darker gray text */
+    /* Sidebar Light Theme (Adjusted) */
+    --sidebar-background: 220 10% 99%; /* Almost white */
+    --sidebar-foreground: 220 15% 30%; /* Dark gray text */
     --sidebar-primary: 45 80% 50%; /* Mustard Yellow (Accent) for active item */
     --sidebar-primary-foreground: 45 100% 10%; /* Dark text on active item */
-    --sidebar-accent: 45 20% 94%; /* Lighter yellow/brown gray for hover */
-    --sidebar-accent-foreground: 45 10% 20%; /* Dark text on hover */
-    --sidebar-border: 45 15% 88%; /* Light yellow/brown gray border */
+    --sidebar-accent: 220 15% 92%; /* Light gray for hover */
+    --sidebar-accent-foreground: 220 15% 20%; /* Darker text on hover */
+    --sidebar-border: 220 15% 88%; /* Light gray border */
     --sidebar-ring: 45 80% 60%; /* Mustard Yellow focus ring */
   }
   .dark {
+    /* Dark theme adjustments needed if dark mode is intended */
     --background: 220 15% 10%; /* Dark cool gray */
     --foreground: 210 15% 90%; /* Light gray text */
     --card: 220 15% 15%;
     --card-foreground: 210 15% 90%;
     --popover: 220 15% 15%;
     --popover-foreground: 210 15% 90%;
-    --primary: 45 15% 95%; /* Light yellow/gray */
-    --primary-foreground: 45 10% 15%; /* Dark text on primary */
-    --secondary: 45 15% 20%; /* Darker yellow/brown gray */
-    --secondary-foreground: 45 15% 90%; /* Light text on secondary */
-    --muted: 45 15% 25%; /* Dark muted yellow/brown gray */
-    --muted-foreground: 45 15% 70%; /* Lighter muted text */
-    --accent: 45 70% 55%; /* Slightly lighter Mustard Yellow */
-    --accent-foreground: 45 100% 10%; /* Dark text on accent */
+    --primary: 45 70% 55%; /* Lighter Mustard Yellow */
+    --primary-foreground: 45 100% 10%; /* Dark text on primary */
+    --secondary: 220 15% 20%; /* Darker gray */
+    --secondary-foreground: 210 15% 85%; /* Light text on secondary */
+    --muted: 220 15% 25%; /* Dark muted gray */
+    --muted-foreground: 210 15% 70%; /* Lighter muted text */
+    --accent: 45 70% 60%; /* Brighter Mustard Yellow */
+    --accent-foreground: 45 100% 10%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 45 15% 25%; /* Dark yellow/brown gray border */
-    --input: 45 15% 25%; /* Dark yellow/brown gray input border */
+    --border: 220 15% 25%; /* Dark gray border */
+    --input: 220 15% 25%;
     --ring: 45 70% 65%; /* Lighter Mustard Yellow focus ring */
 
     /* Chart colors adjusted for yellow theme (Dark) */
     --chart-1: 40 60% 50%; /* Muted Yellow/Orange */
-    --chart-2: 35 65% 45%; /* Darker Yellow/Orange */
+    --chart-2: 140 50% 35%; /* Darker Green for completion */
     --chart-3: 50 55% 55%; /* Muted Yellow/Greenish */
     --chart-4: 30 70% 60%; /* Muted Orange */
     --chart-5: 45 60% 35%; /* Darker Mustard */
 
-    /* Sidebar Dark Theme */
-    --sidebar-background: 220 15% 10%; /* Keep cool gray dark background */
-    --sidebar-foreground: 210 15% 85%; /* Lighter gray text */
-    --sidebar-primary: 45 70% 55%; /* Lighter Mustard Yellow (Accent) for active item */
-    --sidebar-primary-foreground: 45 100% 10%; /* Dark text on active item */
-    --sidebar-accent: 45 15% 20%; /* Darker yellow/brown gray for hover */
-    --sidebar-accent-foreground: 45 15% 95%; /* Light text on hover */
-    --sidebar-border: 45 15% 25%; /* Dark yellow/brown gray border */
-    --sidebar-ring: 45 70% 65%; /* Lighter Mustard Yellow focus ring */
+    /* Sidebar Dark Theme (Adjusted) */
+    --sidebar-background: 220 15% 12%; /* Slightly lighter dark */
+    --sidebar-foreground: 210 15% 85%;
+    --sidebar-primary: 45 70% 55%; /* Lighter Mustard Yellow */
+    --sidebar-primary-foreground: 45 100% 10%;
+    --sidebar-accent: 220 15% 20%; /* Darker gray for hover */
+    --sidebar-accent-foreground: 210 15% 95%;
+    --sidebar-border: 220 15% 25%;
+    --sidebar-ring: 45 70% 65%;
   }
 }
 
@@ -92,5 +95,14 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    /* Ensure text is not overly thick */
+    font-weight: 400;
+  }
+}
+
+/* Reduce default ShadCN card shadow to match image */
+@layer components {
+  .card {
+    @apply shadow-sm; /* Use shadow-sm or shadow-none for lighter shadow */
   }
 }

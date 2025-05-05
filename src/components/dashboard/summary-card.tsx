@@ -26,49 +26,64 @@ const getKpiColor = (avgKpiScore: number, targetKpi: number): string => {
   if (avgRatio === 1) {
     return "text-green-600"; // Perfect score
   } else if (avgRatio > 0.97 && avgRatio < 1.03) {
-     return "text-lime-600"; // Slightly off
+     return "text-lime-600"; // Slightly off (closer to green)
   } else if (avgRatio > 0.95 && avgRatio < 1.05) {
-    return "text-yellow-600"; // Moderately off
+    return "text-yellow-600"; // Moderately off (closer to green)
   } else if (avgRatio > 0.90 && avgRatio < 1.10) {
-    return "text-orange-600"; // Significantly off
+    return "text-orange-600"; // Significantly off (closer to red)
   } else {
-    return "text-destructive"; // Very far off (bad)
+    return "text-destructive"; // Very far off (bad - red)
   }
 };
 
 const SummaryCard: FC<SummaryCardProps> = ({ metrics, className }) => {
   const targetKpi = 85; // Define the target KPI
 
+  const formatNumber = (num: number) => {
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
+  };
+
+
   return (
-    <Card className={cn("shadow-md", className)}>
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-primary">Projects Summary</CardTitle>
-        <p className="text-sm text-muted-foreground">Overview of selected projects</p>
-      </CardHeader>
-      <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
-          <Briefcase className="h-6 w-6 text-primary mb-2" />
-          <span className="text-sm text-muted-foreground">Total Projects</span>
-          <span className="text-xl font-semibold text-primary">{metrics.totalProjects}</span>
+    // Removed CardHeader for a denser look like the image
+    <Card className={cn("shadow-sm border", className)}> {/* Added border */}
+      <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4"> {/* Adjusted padding and gap */}
+        {/* Total Projects */}
+        <div className="flex flex-col items-start p-0"> {/* Align items start */}
+           <div className="flex items-center gap-1 mb-1">
+             <Briefcase className="h-4 w-4 text-muted-foreground" />
+             <span className="text-xs text-muted-foreground">Total Projects</span>
+           </div>
+           <span className="text-xl font-semibold text-foreground">{formatNumber(metrics.totalProjects)}</span>
         </div>
-        <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
-          <Target className="h-6 w-6 text-chart-1 mb-2" />
-          <span className="text-sm text-muted-foreground">Avg. KPI Ratio</span> {/* Changed label */}
-           {/* Apply color coding to the average KPI score ratio */}
-          <span className={cn("text-xl font-semibold", getKpiColor(metrics.avgKpiScore, targetKpi))}>
-             {/* Display average KPI as ratio */}
-            {metrics.totalProjects > 0 && targetKpi > 0 ? (metrics.avgKpiScore / targetKpi).toFixed(2) : 'N/A'}
+         {/* Avg. KPI Ratio */}
+        <div className="flex flex-col items-start p-0">
+           <div className="flex items-center gap-1 mb-1">
+              <Target className="h-4 w-4 text-muted-foreground" />
+             <span className="text-xs text-muted-foreground">Avg. KPI Ratio</span>
+           </div>
+           <span className={cn("text-xl font-semibold", getKpiColor(metrics.avgKpiScore, targetKpi))}>
+             {metrics.totalProjects > 0 && targetKpi > 0 ? (metrics.avgKpiScore / targetKpi).toFixed(2) : 'N/A'}
           </span>
         </div>
-        <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
-          <CheckCircle className="h-6 w-6 text-chart-2 mb-2" />
-          <span className="text-sm text-muted-foreground">Avg. Completion</span>
-          <span className="text-xl font-semibold text-primary">{metrics.avgCompletion}%</span>
+        {/* Avg. Completion */}
+        <div className="flex flex-col items-start p-0">
+          <div className="flex items-center gap-1 mb-1">
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Avg. Completion</span>
+          </div>
+          <span className="text-xl font-semibold text-foreground">{metrics.avgCompletion}%</span>
         </div>
-        <div className="flex flex-col items-center p-4 bg-secondary/50 rounded-lg">
-          <Users className="h-6 w-6 text-chart-3 mb-2" />
-          <span className="text-sm text-muted-foreground">Total Mandays</span>
-          <span className="text-xl font-semibold text-primary">{metrics.totalMandays}</span>
+        {/* Total Mandays */}
+        <div className="flex flex-col items-start p-0">
+          <div className="flex items-center gap-1 mb-1">
+             <Users className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Total Mandays</span>
+          </div>
+          <span className="text-xl font-semibold text-foreground">{formatNumber(metrics.totalMandays)}</span>
         </div>
       </CardContent>
     </Card>

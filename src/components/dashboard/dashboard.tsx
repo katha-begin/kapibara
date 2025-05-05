@@ -79,25 +79,29 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
   }, [filteredProjects]);
 
   return (
-    <div className="flex flex-col p-4 md:p-6"> {/* Removed h-screen and overflow */}
-        <div className="flex justify-between items-center mb-6">
-           <h1 className="text-2xl font-semibold text-primary">Project Dashboard</h1>
+    // Removed padding here, will be added in layout.tsx or page.tsx if needed globally
+    <div className="flex flex-col">
+        <div className="flex justify-between items-center mb-4 md:mb-6"> {/* Adjusted margin */}
+           {/* Reduced heading size */}
+           <h1 className="text-xl font-semibold text-foreground">Project Dashboard</h1>
            <div className="flex gap-2">
                <Button
-                   variant={viewMode === 'card' ? 'default' : 'outline'}
+                   variant={viewMode === 'card' ? 'secondary' : 'ghost'} // Adjusted variants for subtle look
                    size="icon"
                    onClick={() => setViewMode('card')}
                    aria-label="Card View"
+                   className={viewMode === 'card' ? 'bg-muted text-primary' : 'text-muted-foreground'}
                >
-                   <LayoutGrid />
+                   <LayoutGrid className="h-5 w-5"/>
                </Button>
                <Button
-                   variant={viewMode === 'table' ? 'default' : 'outline'}
+                   variant={viewMode === 'table' ? 'secondary' : 'ghost'} // Adjusted variants
                    size="icon"
                    onClick={() => setViewMode('table')}
                    aria-label="Table View"
+                   className={viewMode === 'table' ? 'bg-muted text-primary' : 'text-muted-foreground'}
                >
-                   <List />
+                   <List className="h-5 w-5"/>
                </Button>
            </div>
         </div>
@@ -110,12 +114,12 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
          onDepartmentChange={setSelectedDepartment}
          onProjectChange={setSelectedProject}
        />
-       <SummaryCard metrics={summaryMetrics} className="mb-6" />
+       <SummaryCard metrics={summaryMetrics} className="mb-4 md:mb-6" /> {/* Adjusted margin */}
 
        {filteredProjects.length > 0 ? (
          <div>
            {viewMode === 'card' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> {/* Reduced gap */}
                {filteredProjects.map((project) => (
                  <ProjectCard key={project.id} project={project} />
                ))}

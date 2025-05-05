@@ -29,12 +29,14 @@ const DashboardFilters: FC<DashboardFiltersProps> = ({
   onProjectChange,
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-card rounded-lg shadow">
+    // Adjusted styles: lighter background, smaller padding, remove shadow
+    <div className="flex flex-col sm:flex-row gap-4 mb-4 md:mb-6 p-3 bg-card rounded-lg border">
        {/* Project Filter - Now First */}
-      <div className="flex-1 space-y-2">
-        <Label htmlFor="project-filter">Filter by Project</Label>
+      <div className="flex-1 space-y-1"> {/* Reduced space */}
+        <Label htmlFor="project-filter" className="text-xs font-medium text-muted-foreground">Project</Label> {/* Smaller label */}
         <Select value={selectedProject} onValueChange={onProjectChange}>
-          <SelectTrigger id="project-filter" className="w-full">
+          {/* Adjusted trigger style */}
+          <SelectTrigger id="project-filter" className="w-full h-9 text-sm">
             <SelectValue placeholder="All Projects" />
           </SelectTrigger>
           <SelectContent>
@@ -48,10 +50,11 @@ const DashboardFilters: FC<DashboardFiltersProps> = ({
         </Select>
       </div>
        {/* Department Filter - Now Second */}
-      <div className="flex-1 space-y-2">
-        <Label htmlFor="department-filter">Filter by Department</Label>
+      <div className="flex-1 space-y-1"> {/* Reduced space */}
+        <Label htmlFor="department-filter" className="text-xs font-medium text-muted-foreground">Department</Label> {/* Smaller label */}
         <Select value={selectedDepartment} onValueChange={onDepartmentChange}>
-          <SelectTrigger id="department-filter" className="w-full">
+          {/* Adjusted trigger style */}
+          <SelectTrigger id="department-filter" className="w-full h-9 text-sm">
             <SelectValue placeholder="All Departments" />
           </SelectTrigger>
           <SelectContent>

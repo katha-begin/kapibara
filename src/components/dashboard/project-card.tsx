@@ -1,7 +1,7 @@
 
 import type { FC } from 'react';
 import Link from 'next/link'; // Import Link
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
 import { Progress } from "@/components/ui/progress";
 import { Target, CheckCircle, Users, CalendarClock } from "lucide-react"; // Added CalendarClock
 import { cn } from "@/lib/utils";
@@ -66,59 +66,65 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     // Wrap the Card with Link
     <Link href={`/project/${project.id}`} passHref legacyBehavior>
       <a className="block hover:no-underline"> {/* Use anchor tag for styling */}
-        <Card className="shadow-md transition-shadow hover:shadow-lg h-full cursor-pointer"> {/* Added h-full and cursor-pointer */}
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-primary">{project.name}</CardTitle>
-            {/* Display department array as comma-separated string */}
-            <p className="text-sm text-muted-foreground">{project.department.join(', ')}</p>
+        {/* Use shadow-sm or shadow-none for lighter shadow, added border */}
+        <Card className="shadow-sm border transition-shadow hover:shadow-md h-full cursor-pointer">
+          {/* Adjusted padding and reduced title size */}
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-base font-medium text-foreground">{project.name}</CardTitle>
+            {/* Smaller description text */}
+            <CardDescription className="text-xs text-muted-foreground">{project.department.join(', ')}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-secondary-foreground">
-                 <Target className="text-chart-1" />
-                <span>KPI Score Ratio</span>
+          {/* Adjusted padding and spacing */}
+          <CardContent className="p-4 pt-2 space-y-3">
+            {/* KPI Score */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                 <Target className="h-4 w-4" /> {/* Smaller Icon */}
+                <span>KPI Ratio</span>
               </div>
-              <span className={cn("font-semibold text-lg", getKpiColor(project.kpiScore, targetKpi))}>
+              <span className={cn("font-medium", getKpiColor(project.kpiScore, targetKpi))}>
                 {(project.kpiScore / targetKpi).toFixed(2)}
               </span>
             </div>
 
             {/* Project Schedule Percentage */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-secondary-foreground">
-                <CalendarClock className="text-chart-4" /> {/* New Icon */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <CalendarClock className="h-4 w-4" /> {/* Smaller Icon */}
                 <span>Schedule</span>
               </div>
               <div className="w-1/2 flex items-center gap-2">
                 {schedulePercentage !== null ? (
                     <>
-                    <Progress value={schedulePercentage} className="h-2 [&>div]:bg-chart-4" aria-label={`Project schedule ${schedulePercentage}% complete`}/>
-                    <span className="text-sm font-medium text-primary">{schedulePercentage}%</span>
+                    <Progress value={schedulePercentage} className="h-1.5 flex-1" aria-label={`Project schedule ${schedulePercentage}% complete`}/> {/* Smaller progress bar */}
+                    <span className="text-xs font-medium text-muted-foreground">{schedulePercentage}%</span> {/* Smaller percentage text */}
                     </>
                 ) : (
-                    <span className="text-sm text-muted-foreground">N/A</span>
+                    <span className="text-xs text-muted-foreground">N/A</span>
                 )}
               </div>
             </div>
 
 
-            <div className="flex items-center justify-between">
-               <div className="flex items-center gap-2 text-secondary-foreground">
-                <CheckCircle className="text-chart-2" />
+            {/* Completion Percentage */}
+            <div className="flex items-center justify-between text-sm">
+               <div className="flex items-center gap-1.5 text-muted-foreground">
+                <CheckCircle className="h-4 w-4" /> {/* Smaller Icon */}
                 <span>Completion</span>
                </div>
               <div className="w-1/2 flex items-center gap-2">
-                <Progress value={project.completion} className="h-2 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/>
-                <span className="text-sm font-medium text-primary">{project.completion}%</span>
+                <Progress value={project.completion} className="h-1.5 flex-1 [&>div]:bg-chart-2" aria-label={`Project completion ${project.completion}%`}/> {/* Smaller progress bar */}
+                <span className="text-xs font-medium text-muted-foreground">{project.completion}%</span> {/* Smaller percentage text */}
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-secondary-foreground">
-                <Users className="text-chart-3" />
-                <span>Cumulative Mandays</span>
+            {/* Cumulative Mandays */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Users className="h-4 w-4" /> {/* Smaller Icon */}
+                <span>Mandays</span>
               </div>
-              <span className="font-semibold text-lg text-primary">{project.mandays ?? 'N/A'}</span>
+              <span className="font-medium text-foreground">{project.mandays ?? 'N/A'}</span>
             </div>
           </CardContent>
         </Card>
@@ -128,4 +134,3 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
 };
 
 export default ProjectCard;
-

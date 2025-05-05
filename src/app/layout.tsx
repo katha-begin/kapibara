@@ -3,21 +3,13 @@
 
 import type { ReactNode } from 'react'; // Import ReactNode
 import { useState } from 'react'; // Import useState
-import { Geist, Geist_Mono } from 'next/font/google';
+// Removed Geist font imports
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import Sidebar from '@/components/layout/sidebar';
 import { cn } from '@/lib/utils'; // Import cn utility
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+// Removed Geist font constants
 
 // Metadata can still be exported from a Client Component in App Router
 // export const metadata: Metadata = { // This needs to be moved or handled differently if strict RSC is needed
@@ -43,10 +35,11 @@ export default function RootLayout({
          <title>Kapibara Dashboard</title>
          <meta name="description" content="Basic ERP Dashboard for Small Businesses using Kapibara" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-screen bg-background overflow-hidden`}> {/* Added overflow-hidden */}
+      {/* Removed font variable classes from body */}
+      <body className={`antialiased flex h-screen bg-background overflow-hidden`}> {/* Added overflow-hidden */}
         <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} /> {/* Pass state and toggle function */}
         <main className={cn(
-            "flex-1 overflow-y-auto transition-all duration-300 ease-in-out",
+            "flex-1 overflow-y-auto transition-all duration-300 ease-in-out p-4 md:p-6", // Added default padding
             // isSidebarCollapsed ? 'ml-16' : 'ml-64' // This causes layout shift, better to let flexbox handle it
             )}> {/* Main content area */}
           {children}
