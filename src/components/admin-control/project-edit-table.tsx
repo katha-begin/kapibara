@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { FC } from 'react';
@@ -27,7 +26,7 @@ import type { Project } from '@/types/project'; // Import the Project type
 
 interface ProjectEditTableProps {
   projects: Project[];
-  onUpdateProject: (updatedProject: Project) => void;
+  onUpdateProject: (updatedProject: Partial<Project> & { id: string }) => void; // Adjusted to handle partial updates
 }
 
 const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject }) => {
@@ -39,11 +38,16 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
     setIsDialogOpen(true);
   };
 
-  const handleFormSubmit = (updatedProject: Project) => {
-    onUpdateProject(updatedProject);
-    setIsDialogOpen(false); // Close dialog on successful submit
-    setEditingProject(null);
-  };
+  // Adjusted to handle partial updates from the form
+  const handleFormSubmit = (updatedProjectData: Partial<Project> & { id: string }) => {
+     if (!editingProject) return;
+     // Merge the updated data with the existing project data
+     const fullyUpdatedProject = { ...editingProject, ...updatedProjectData };
+     onUpdateProject(fullyUpdatedProject); // Pass the merged object
+     setIsDialogOpen(false); // Close dialog on successful submit
+     setEditingProject(null);
+   };
+
 
   const formatDate = (date: Date | null | undefined) => {
     return date ? format(date, 'PPP') : 'N/A';
@@ -55,8 +59,8 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
 
   // Calculate sum of department allocated mandays
   const calculateTotalDeptAllocation = (project: Project): number | string => {
-    if (!project.departmentAllocations) return 'N/A';
-    return project.departmentAllocations.reduce((sum, dept) => sum + dept.allocatedMandays, 0);
+    if (!project.departmentAllocations || project.departmentAllocations.length === 0) return 'N/A'; // Check for empty array too
+    return project.departmentAllocations.reduce((sum, dept) => sum + (dept.allocatedMandays || 0), 0); // Handle null/undefined mandays
   };
 
 
@@ -64,36 +68,13 @@ const ProjectEditTable: FC<ProjectEditTableProps> = ({ projects, onUpdateProject
     <Card className="shadow-md">
         <Table>
           <TableHeader>
-            <TableRow>
-                <TableHead>Project Name</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>End Date</TableHead>
-                <TableHead className="text-right">Overall Allocated</TableHead>
-                <TableHead className="text-right">Dept. Allocated Sum</TableHead> {/* New Column */}
-                <TableHead className="text-right">Inhouse %</TableHead>
-                <TableHead className="text-right">Outsource %</TableHead>
-                <TableHead className="text-center">Actions</TableHead>
-            </TableRow>
+            <TableRow><TableHead>Project Name</TableHead><TableHead>Start Date</TableHead><TableHead>End Date</TableHead><TableHead className="text-right">Overall Allocated</TableHead><TableHead className="text-right">Dept. Allocated Sum</TableHead><TableHead className="text-right">Inhouse %</TableHead><TableHead className="text-right">Outsource %</TableHead><TableHead className="text-center">Actions</TableHead></TableRow>
           </TableHeader>
           <TableBody>
             {projects.map((project) => (
               <TableRow key={project.id}>
                 {/* Project Name as Link */}
-                <TableCell className="font-medium text-primary hover:underline">
-                    <Link href={`/admin-control/project/${project.id}`}>{project.name}</Link>
-                </TableCell>
-                <TableCell>{formatDate(project.startDate)}</TableCell>
-                <TableCell>{formatDate(project.endDate)}</TableCell>
-                <TableCell className="text-right">{project.allocatedMandays ?? 'N/A'}</TableCell>
-                {/* Sum of Department Allocations */}
-                <TableCell className="text-right">{calculateTotalDeptAllocation(project)}</TableCell>
-                <TableCell className="text-right">{formatPercentage(project.inhousePortion)}</TableCell>
-                <TableCell className="text-right">{formatPercentage(project.outsourcePortion)}</TableCell>
-                <TableCell className="text-center">
-                    <Button variant="ghost" size="icon" onClick={() => handleEditClick(project)} aria-label={`Edit ${project.name}`}>
-                        <Pencil className="h-4 w-4" />
-                    </Button>
-                </TableCell>
+                <TableCell className="font-medium text-primary hover:underline"><Link href={`/admin-control/project/${project.id}`}>{project.name}</Link></TableCell><TableCell>{formatDate(project.startDate)}</TableCell><TableCell>{formatDate(project.endDate)}</TableCell><TableCell className="text-right">{project.allocatedMandays ?? 'N/A'}</TableCell><TableCell className="text-right">{calculateTotalDeptAllocation(project)}</TableCell><TableCell className="text-right">{formatPercentage(project.inhousePortion)}</TableCell><TableCell className="text-right">{formatPercentage(project.outsourcePortion)}</TableCell><TableCell className="text-center"><Button variant="ghost" size="icon" onClick={() => handleEditClick(project)} aria-label={`Edit ${project.name}`}><Pencil className="h-4 w-4" /></Button></TableCell>
               </TableRow>
             ))}
           </TableBody>
