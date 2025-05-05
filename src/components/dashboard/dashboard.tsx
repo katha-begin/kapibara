@@ -3,6 +3,7 @@
 import { useState, useMemo, type FC } from 'react';
 import DashboardFilters from './dashboard-filters';
 import ProjectCard from './project-card';
+import SummaryCard from './summary-card'; // Import the new SummaryCard component
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ProjectData {
@@ -32,6 +33,29 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
     });
   }, [projectsData, selectedDepartment, selectedProject]);
 
+  // Calculate summary metrics
+  const summaryMetrics = useMemo(() => {
+    const totalProjects = filteredProjects.length;
+    if (totalProjects === 0) {
+        return {
+            totalProjects: 0,
+            avgKpiScore: 0,
+            avgCompletion: 0,
+            totalMandays: 0,
+        };
+    }
+    const totalKpiScore = filteredProjects.reduce((sum, p) => sum + p.kpiScore, 0);
+    const totalCompletion = filteredProjects.reduce((sum, p) => sum + p.completion, 0);
+    const totalMandays = filteredProjects.reduce((sum, p) => sum + p.mandays, 0);
+
+    return {
+        totalProjects,
+        avgKpiScore: Math.round(totalKpiScore / totalProjects),
+        avgCompletion: Math.round(totalCompletion / totalProjects),
+        totalMandays,
+    };
+  }, [filteredProjects]);
+
   return (
     <div className="flex h-screen bg-background">
         {/* Main Content Area */}
@@ -48,6 +72,9 @@ const Dashboard: FC<DashboardProps> = ({ projectsData, departments, projectNames
               onDepartmentChange={setSelectedDepartment}
               onProjectChange={setSelectedProject}
             />
+            {/* Add the Summary Card */}
+            <SummaryCard metrics={summaryMetrics} className="mb-6" />
+
             {filteredProjects.length > 0 ? (
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filteredProjects.map((project) => (
