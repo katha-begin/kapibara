@@ -1,0 +1,36 @@
+
+[
+  {
+    "id": "dev-proj1",
+    "name": "Dev Project A (Inline)",
+    "department": ["Dev Team"],
+    "kpiScore": 90,
+    "completion": 80,
+    "mandays": 50,
+    "startDate": "2024-05-01",
+    "endDate": "2024-09-30",
+    "inhousePortion": 100,
+    "outsourcePortion": 0,
+    "allocatedMandays": 60,
+    "departmentAllocations": [
+      { "department": "Dev Team", "allocatedMandays": 60 }
+    ]
+  },
+  {
+    "id": "dev-proj2",
+    "name": "Dev Project B (Inline)",
+    "department": ["QA Team", "Dev Team"],
+    "kpiScore": 75,
+    "completion": 50,
+    "mandays": 100,
+    "startDate": "2024-06-10",
+    "endDate": "2024-11-15",
+    "inhousePortion": 70,
+    "outsourcePortion": 30,
+    "allocatedMandays": 120,
+    "departmentAllocations": [
+      { "department": "QA Team", "allocatedMandays": 40 },
+      { "department": "Dev Team", "allocatedMandays": 80 }
+    ]
+  }
+]

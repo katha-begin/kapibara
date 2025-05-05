@@ -7,6 +7,7 @@ import Dashboard from "@/components/dashboard/dashboard";
 import type { Project } from "@/types/project"; // Import the Project type
 // Import raw JSON data for staging/fallback
 import rawProjectsData from '@/data/projects.json';
+import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
 
 // Metadata needs to be handled differently in Client Components or moved to layout if static
 // export const metadata: Metadata = {
@@ -20,7 +21,18 @@ const processProjectsData = (rawData: any[]): Project[] => {
     ...project,
     startDate: project.startDate ? new Date(project.startDate) : null,
     endDate: project.endDate ? new Date(project.endDate) : null,
-    departmentContributions: project.departmentContributions ?? null,
+    // Rename departmentContributions to departmentAllocations for consistency
+    departmentAllocations: project.departmentAllocations ?? null,
+    // Ensure other fields exist or are defaulted if missing in raw data
+    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`, // Generate ID if missing
+    name: project.name ?? 'Unnamed Project',
+    department: project.department ?? [],
+    kpiScore: project.kpiScore ?? 0,
+    completion: project.completion ?? 0,
+    mandays: project.mandays ?? null,
+    allocatedMandays: project.allocatedMandays ?? null,
+    inhousePortion: project.inhousePortion ?? null,
+    outsourcePortion: project.outsourcePortion ?? null,
   }));
 };
 
@@ -30,7 +42,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Determine data source based on environment (simplified for example)
-  // In a real app, this might involve context or a hook
   const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
 
   useEffect(() => {
@@ -41,44 +52,9 @@ export default function HomePage() {
       console.log("Using JSON data source");
       data = processProjectsData(rawProjectsData);
     } else {
-      // Use different inline data for 'development' stage display
-      console.log("Using inline DEVELOPMENT data source");
-      data = processProjectsData([
-        // Different inline data for DEV stage
-        {
-          "id": "dev-proj1",
-          "name": "Dev Project A (Inline)",
-          "department": ["Dev Team"],
-          "kpiScore": 90,
-          "completion": 80,
-          "mandays": 50,
-          "startDate": "2024-05-01",
-          "endDate": "2024-09-30",
-          "inhousePortion": 100,
-          "outsourcePortion": 0,
-          "allocatedMandays": 60,
-          "departmentContributions": [
-            { "department": "Dev Team", "mandays": 50, "completion": 80 }
-          ]
-        },
-        {
-          "id": "dev-proj2",
-          "name": "Dev Project B (Inline)",
-          "department": ["QA Team", "Dev Team"],
-          "kpiScore": 75,
-          "completion": 50,
-          "mandays": 100,
-          "startDate": "2024-06-10",
-          "endDate": "2024-11-15",
-          "inhousePortion": 70,
-          "outsourcePortion": 30,
-          "allocatedMandays": 120,
-          "departmentContributions": [
-            { "department": "QA Team", "mandays": 30, "completion": 20 },
-            { "department": "Dev Team", "mandays": 70, "completion": 30 }
-          ]
-        }
-      ]);
+      // Use different inline data for 'development' stage display from projects_dev.json
+      console.log("Using inline DEVELOPMENT data source (from projects_dev.json)");
+      data = processProjectsData(rawDevProjectsData); // Load from dev JSON
     }
     setProjectsData(data);
     setLoading(false);
@@ -86,7 +62,10 @@ export default function HomePage() {
 
   // Calculate departments and project names from the currently loaded data
   const departments = useMemo(() =>
-    Array.from(new Set(projectsData.flatMap(p => p.department))),
+    // Use departmentAllocations if available, otherwise fall back to project.department
+    Array.from(new Set(projectsData.flatMap(p =>
+      p.departmentAllocations ? p.departmentAllocations.map(da => da.department) : p.department
+    ))),
     [projectsData]
   );
   const projectNames = useMemo(() =>

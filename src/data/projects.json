@@ -12,8 +12,8 @@
     "inhousePortion": 80,
     "outsourcePortion": 20,
     "allocatedMandays": 150,
-    "departmentContributions": [
-      { "department": "Engineering", "mandays": 120, "completion": 70 }
+    "departmentAllocations": [
+      { "department": "Engineering", "allocatedMandays": 150 }
     ]
   },
   {
@@ -28,8 +28,8 @@
     "inhousePortion": 100,
     "outsourcePortion": 0,
     "allocatedMandays": 90,
-    "departmentContributions": [
-      { "department": "Marketing", "mandays": 80, "completion": 95 }
+    "departmentAllocations": [
+      { "department": "Marketing", "allocatedMandays": 90 }
     ]
   },
   {
@@ -44,9 +44,9 @@
     "inhousePortion": 50,
     "outsourcePortion": 50,
     "allocatedMandays": 250,
-    "departmentContributions": [
-      { "department": "Engineering", "mandays": 130, "completion": 25 },
-      { "department": "Design", "mandays": 70, "completion": 15 }
+    "departmentAllocations": [
+      { "department": "Engineering", "allocatedMandays": 150 },
+      { "department": "Design", "allocatedMandays": 100 }
     ]
   },
   {
@@ -61,9 +61,9 @@
     "inhousePortion": null,
     "outsourcePortion": null,
     "allocatedMandays": 60,
-    "departmentContributions": [
-      { "department": "Sales", "mandays": 20, "completion": 30 },
-      { "department": "Marketing", "mandays": 30, "completion": 50 }
+    "departmentAllocations": [
+      { "department": "Sales", "allocatedMandays": 25 },
+      { "department": "Marketing", "allocatedMandays": 35 }
     ]
    },
   {
@@ -78,8 +78,8 @@
     "inhousePortion": 90,
     "outsourcePortion": 10,
     "allocatedMandays": 70,
-    "departmentContributions": [
-      { "department": "Marketing", "mandays": 65, "completion": 100 }
+    "departmentAllocations": [
+      { "department": "Marketing", "allocatedMandays": 70 }
     ]
   },
   {
@@ -94,9 +94,9 @@
     "inhousePortion": 70,
     "outsourcePortion": 30,
     "allocatedMandays": 180,
-    "departmentContributions": [
-      { "department": "Engineering", "mandays": 100, "completion": 40 },
-      { "department": "Sales", "mandays": 50, "completion": 20 }
+    "departmentAllocations": [
+      { "department": "Engineering", "allocatedMandays": 120 },
+      { "department": "Sales", "allocatedMandays": 60 }
     ]
   }
 ]

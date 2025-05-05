@@ -1,0 +1,74 @@
+{
+    "projects": [
+      {
+        "project_name": "Project Name 1",
+        "weekly_data": [
+          {
+            "week_end_date": "YYYY-MM-DD",
+            "cumulative_total_ticket_weight_score": 0.0,
+            "cumulative_actual_mandays": 0.0,
+            "kpis_ratio": 0.0,
+            "completion_rate": 0.0,
+            "department_mandays": [
+              {
+                "Department": "Department Name 1",
+                "mandays": 0.0
+              },
+              {
+                "Department": "Department Name 2",
+                "mandays": 0.0
+              }
+              // ... potentially more departments
+            ]
+          }
+          // ... potentially more weekly data entries
+        ],
+        "latest_summary": {
+          "week_end_date": "YYYY-MM-DD",
+          "cumulative_total_ticket_weight_score": 0.0,
+          "cumulative_actual_mandays": 0.0,
+          "kpis_ratio": 0.0,
+          "completion_rate": 0.0,
+          "department_mandays": [
+            {
+              "Department": "Department Name 1",
+              "mandays": 0.0
+            },
+            {
+              "Department": "Department Name 2",
+              "mandays": 0.0
+            }
+            // ... potentially more departments
+          ]
+        }
+      }
+      // ... potentially more project entries
+    ],
+    "users": [
+      {
+        "username": "username1",
+        "weekly_data": [
+          {
+            "week_end_date": "YYYY-MM-DD",
+            "cumulative_user_ticket_weight_score": 0.0,
+            "cumulative_user_actual_mandays": 0.0,
+            "user_timeliness_score": 0.0,
+            "user_utilization": 0.0
+          }
+          // ... potentially more weekly data entries
+        ],
+        "annual_summary": {
+          "contribution": 0.0,
+          "latest_weekly_data": {
+               "week_end_date": "YYYY-MM-DD",
+               "cumulative_user_ticket_weight_score": 0.0,
+               "cumulative_user_actual_mandays": 0.0,
+               "user_timeliness_score": 0.0,
+               "user_utilization": 0.0
+          }
+        }
+      }
+      // ... potentially more user entries
+    ]
+  }
+  

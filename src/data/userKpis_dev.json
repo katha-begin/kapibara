@@ -1,0 +1,23 @@
+
+[
+  {
+    "id": "dev-user1",
+    "name": "Dev User One (Inline)",
+    "department": "Dev Team",
+    "timeliness": 5,
+    "utilization": 5,
+    "contribution": 5,
+    "development": 5,
+    "projects": ["Dev Project A (Inline)", "Dev Project B (Inline)"]
+  },
+  {
+    "id": "dev-user2",
+    "name": "Dev User Two (Inline)",
+    "department": "QA Team",
+    "timeliness": 4,
+    "utilization": 4,
+    "contribution": 3,
+    "development": 4,
+    "projects": ["Dev Project B (Inline)"]
+  }
+]

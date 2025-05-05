@@ -30,10 +30,9 @@ import { Label } from '@/components/ui/label'; // Import the Label component
 import { toast } from '@/hooks/use-toast';
 import type { Project } from '@/types/project';
 
-// Zod Schema for Validation
+// Zod Schema for Validation - Removed 'mandays' field
 const projectFormSchema = z.object({
   name: z.string().min(1, { message: "Project name is required." }), // Keep name for context, but likely read-only in form
-  mandays: z.coerce.number().int().positive({ message: "Actual Mandays must be a positive number." }), // Renamed description slightly
   allocatedMandays: z.coerce.number().int().positive({ message: "Allocated Mandays must be a positive number." }).nullable().optional(), // Added allocated mandays
   startDate: z.date().nullable().optional(),
   endDate: z.date().nullable().optional(),
@@ -63,7 +62,7 @@ type ProjectFormValues = z.infer<typeof projectFormSchema>;
 
 interface ProjectEditFormProps {
   project: Project;
-  onSubmit: (data: Project) => void;
+  onSubmit: (data: Omit<Project, 'mandays' | 'department' | 'kpiScore' | 'completion' | 'departmentAllocations' | 'id'> & { id: string }) => void; // Adjust onSubmit type
   onCancel: () => void;
 }
 
@@ -72,7 +71,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
       name: project.name,
-      mandays: project.mandays ?? 0, // Actual mandays consumed
+      // mandays: project.mandays ?? 0, // Actual mandays consumed - REMOVED
       allocatedMandays: project.allocatedMandays ?? null, // Allocated mandays
       startDate: project.startDate ?? null,
       endDate: project.endDate ?? null,
@@ -83,16 +82,22 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
   });
 
   function handleFormSubmit(data: ProjectFormValues) {
-     const updatedProject: Project = {
-      ...project, // Spread existing project data
-      mandays: data.mandays, // Actual consumed
-      allocatedMandays: data.allocatedMandays, // Allocated
-      startDate: data.startDate,
-      endDate: data.endDate,
-      inhousePortion: data.inhousePortion,
-      outsourcePortion: data.outsourcePortion,
-    };
-    onSubmit(updatedProject);
+     // Create a partial project object with only the editable fields
+     const updatedProjectData = {
+        id: project.id, // Keep the ID
+        // name: data.name, // Name is read-only, don't update it here
+        allocatedMandays: data.allocatedMandays,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        inhousePortion: data.inhousePortion,
+        outsourcePortion: data.outsourcePortion,
+     };
+
+    // We need to merge this partial data back in the parent component
+    // Let's adjust onSubmit to pass only the updated fields
+    // onSubmit needs to be adapted in the parent to handle this partial update
+    onSubmit(updatedProjectData);
+
     toast({
       title: "Project Updated",
       description: `Details for ${project.name} have been saved.`,
@@ -114,7 +119,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
           name="allocatedMandays"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Allocated Mandays</FormLabel>
+              <FormLabel>Overall Allocated Mandays</FormLabel>
               <FormControl>
                  <Input
                     type="number"
@@ -125,7 +130,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
                  />
               </FormControl>
               <FormDescription>
-                Total mandays originally planned for the project.
+                Total mandays originally planned for the project. This can be the sum of department allocations.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -133,7 +138,8 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
         />
 
 
-        {/* Actual Mandays Consumed */}
+        {/* Actual Mandays Consumed - REMOVED */}
+        {/*
         <FormField
           control={form.control}
           name="mandays"
@@ -150,6 +156,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
             </FormItem>
           )}
         />
+        */}
 
         {/* Start Date */}
         <FormField
@@ -253,9 +260,8 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
                     type="number"
                     placeholder="e.g., 70"
                     {...field}
-                    // Handle potential null value from form state if needed, though zod coerce handles it
                     value={field.value ?? ''}
-                    onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)} // Set to null if empty
+                    onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)}
                  />
               </FormControl>
               <FormDescription>
@@ -279,7 +285,7 @@ const ProjectEditForm: FC<ProjectEditFormProps> = ({ project, onSubmit, onCancel
                     placeholder="e.g., 30"
                     {...field}
                     value={field.value ?? ''}
-                    onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)} // Set to null if empty
+                    onChange={e => field.onChange(e.target.value === '' ? null : e.target.value)}
                  />
               </FormControl>
               <FormDescription>

@@ -7,6 +7,7 @@ import ProjectEditTable from '@/components/admin-control/project-edit-table';
 import type { Project } from '@/types/project'; // Import the Project type
 // Import raw JSON data for staging/fallback
 import rawProjectsData from '@/data/projects.json';
+import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
 
 // Function to process raw project data (convert date strings to Date objects)
 const processProjectsData = (rawData: any[]): Project[] => {
@@ -14,7 +15,18 @@ const processProjectsData = (rawData: any[]): Project[] => {
     ...project,
     startDate: project.startDate ? new Date(project.startDate) : null,
     endDate: project.endDate ? new Date(project.endDate) : null,
-    departmentContributions: project.departmentContributions ?? null,
+    // Rename departmentContributions to departmentAllocations for consistency
+    departmentAllocations: project.departmentAllocations ?? null,
+    // Ensure other fields exist or are defaulted if missing in raw data
+    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`, // Generate ID if missing
+    name: project.name ?? 'Unnamed Project',
+    department: project.department ?? [],
+    kpiScore: project.kpiScore ?? 0,
+    completion: project.completion ?? 0,
+    mandays: project.mandays ?? null,
+    allocatedMandays: project.allocatedMandays ?? null,
+    inhousePortion: project.inhousePortion ?? null,
+    outsourcePortion: project.outsourcePortion ?? null,
   }));
 };
 
@@ -34,64 +46,32 @@ const AdminControlPage: FC = () => {
       console.log("Using JSON data source for Admin Control");
       data = processProjectsData(rawProjectsData);
     } else {
-      // Use different inline data for 'development' stage display
-      console.log("Using inline DEVELOPMENT data source for Admin Control");
-      data = processProjectsData([
-        // Different inline data for DEV stage
-        {
-          "id": "dev-proj1",
-          "name": "Dev Project A (Inline)",
-          "department": ["Dev Team"],
-          "kpiScore": 90,
-          "completion": 80,
-          "mandays": 50,
-          "startDate": "2024-05-01",
-          "endDate": "2024-09-30",
-          "inhousePortion": 100,
-          "outsourcePortion": 0,
-          "allocatedMandays": 60,
-          "departmentContributions": [
-            { "department": "Dev Team", "mandays": 50, "completion": 80 }
-          ]
-        },
-        {
-          "id": "dev-proj2",
-          "name": "Dev Project B (Inline)",
-          "department": ["QA Team", "Dev Team"],
-          "kpiScore": 75,
-          "completion": 50,
-          "mandays": 100,
-          "startDate": "2024-06-10",
-          "endDate": "2024-11-15",
-          "inhousePortion": 70,
-          "outsourcePortion": 30,
-          "allocatedMandays": 120,
-          "departmentContributions": [
-            { "department": "QA Team", "mandays": 30, "completion": 20 },
-            { "department": "Dev Team", "mandays": 70, "completion": 30 }
-          ]
-        }
-      ]);
+      // Use different inline data for 'development' stage display from projects_dev.json
+      console.log("Using inline DEVELOPMENT data source for Admin Control (from projects_dev.json)");
+      data = processProjectsData(rawDevProjectsData); // Load from dev JSON
     }
     setProjects(data);
     setLoading(false);
   }, [dataSource]);
 
 
-  const handleUpdateProject = (updatedProject: Project) => {
-    // Update logic needs to consider the source (state vs. API)
+  // Adjusted to handle partial updates
+  const handleUpdateProject = (updatedProjectData: Partial<Project> & { id: string }) => {
     setProjects(prevProjects =>
-      prevProjects.map(p => (p.id === updatedProject.id ? updatedProject : p))
+      prevProjects.map(p =>
+        p.id === updatedProjectData.id ? { ...p, ...updatedProjectData } : p
+      )
     );
     // In a real app:
     // if (dataSource === 'json') { /* Make API call to update JSON/backend */ }
     // else { /* Update local state only for inline data */ }
-    console.log("Updated Project (in-memory):", updatedProject);
+    console.log("Updated Project (in-memory):", updatedProjectData);
     // Consider persisting changes back to JSON file via API/server action if needed for staging demo
   };
 
+
   if (loading) {
-    return <div className="p-6">Loading project data for admin...</div>; // Basic loading state
+    return <div className="p-6">Loading project admin data...</div>; // Updated loading state message
   }
 
 
@@ -99,7 +79,7 @@ const AdminControlPage: FC = () => {
     <div className="flex flex-col p-4 md:p-6">
         <header className="mb-6">
           <h1 className="text-2xl font-semibold text-primary">Admin Control - Projects</h1>
-          <p className="text-muted-foreground">Edit project details below. (Data source: {dataSource})</p>
+          <p className="text-muted-foreground">Edit project details below. Click project name to manage department allocations. (Data source: {dataSource})</p>
         </header>
         <ProjectEditTable projects={projects} onUpdateProject={handleUpdateProject} />
     </div>

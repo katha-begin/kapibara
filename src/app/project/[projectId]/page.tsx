@@ -1,68 +1,43 @@
 
-'use client'; // Required for useEffect, useState, and React.use
+'use client';
 
 import type { FC } from 'react';
-import { useState, useEffect, useMemo, use } from 'react'; // Import React.use
+import { useState, useEffect, useMemo, use } from 'react';
 import { format } from 'date-fns';
 import ProjectStatsSummary from '@/components/project-analytics/project-stats-summary';
 import CompletionVsMandayChart from '@/components/project-analytics/completion-vs-manday-chart';
-import DepartmentMandayPieChart from '@/components/project-analytics/department-manday-pie-chart'; // Import Manday Pie Chart
-import DepartmentCompletionPieChart from '@/components/project-analytics/department-completion-pie-chart'; // Import Completion Pie Chart
-import WeeklyDepartmentProgressChart from '@/components/project-analytics/weekly-department-progress-chart'; // Import Stacked Bar Chart
-import type { Project, ProjectWeeklyProgress, DepartmentContribution, WeeklyDepartmentProgressData } from '@/types/project'; // Import types
-import { calculateMandayPercentage } from '@/lib/project-utils'; // Import utility
+import DepartmentMandayPieChart from '@/components/project-analytics/department-manday-pie-chart';
+import DepartmentCompletionPieChart from '@/components/project-analytics/department-completion-pie-chart';
+import WeeklyDepartmentProgressChart from '@/components/project-analytics/weekly-department-progress-chart';
+import type { Project, ProjectWeeklyProgress, DepartmentAllocation, WeeklyDepartmentProgressData } from '@/types/project'; // Import DepartmentAllocation
+import { calculateMandayPercentage } from '@/lib/project-utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 // Import raw JSON data for staging/fallback
 import rawProjectsData from '@/data/projects.json';
+import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
 
-// Function to process raw project data (convert date strings to Date objects)
+// Function to process raw project data (convert date strings, ensure allocations)
 const processProjectsData = (rawData: any[]): Project[] => {
   return rawData.map(project => ({
     ...project,
     startDate: project.startDate ? new Date(project.startDate) : null,
     endDate: project.endDate ? new Date(project.endDate) : null,
-    departmentContributions: project.departmentContributions ?? null,
+    departmentAllocations: project.departmentAllocations ?? [], // Default to empty array
+    // Ensure other fields exist or are defaulted
+    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`,
+    name: project.name ?? 'Unnamed Project',
+    department: project.department ?? [],
+    kpiScore: project.kpiScore ?? 0,
+    completion: project.completion ?? 0,
+    mandays: project.mandays ?? null,
+    allocatedMandays: project.allocatedMandays ?? null,
+    inhousePortion: project.inhousePortion ?? null,
+    outsourcePortion: project.outsourcePortion ?? null,
   }));
 };
 
-// Define the inline development data separately
-const inlineDevProjectsData = processProjectsData([
-    {
-      "id": "dev-proj1",
-      "name": "Dev Project A (Inline)",
-      "department": ["Dev Team"],
-      "kpiScore": 90,
-      "completion": 80,
-      "mandays": 50,
-      "startDate": "2024-05-01",
-      "endDate": "2024-09-30",
-      "inhousePortion": 100,
-      "outsourcePortion": 0,
-      "allocatedMandays": 60,
-      "departmentContributions": [
-        { "department": "Dev Team", "mandays": 50, "completion": 80 }
-      ]
-    },
-    {
-      "id": "dev-proj2",
-      "name": "Dev Project B (Inline)",
-      "department": ["QA Team", "Dev Team"],
-      "kpiScore": 75,
-      "completion": 50,
-      "mandays": 100,
-      "startDate": "2024-06-10",
-      "endDate": "2024-11-15",
-      "inhousePortion": 70,
-      "outsourcePortion": 30,
-      "allocatedMandays": 120,
-      "departmentContributions": [
-        { "department": "QA Team", "mandays": 30, "completion": 20 },
-        { "department": "Dev Team", "mandays": 70, "completion": 30 }
-      ]
-    }
-]);
 
 // Combined data fetching logic (simulates API/JSON/Inline)
 const fetchProjectData = (
@@ -75,8 +50,8 @@ const fetchProjectData = (
       console.log(`Fetching project ${projectId} from JSON data source`);
       allProjectsData = processProjectsData(rawProjectsData);
   } else {
-      console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source`);
-      allProjectsData = inlineDevProjectsData;
+      console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source (projects_dev.json)`);
+      allProjectsData = processProjectsData(rawDevProjectsData); // Load from dev JSON
   }
 
   const project = allProjectsData.find(p => p.id === projectId) ?? null;
@@ -86,22 +61,26 @@ const fetchProjectData = (
   const weeklyProgress: ProjectWeeklyProgress[] = [];
   const weeklyDepartmentIncrements: WeeklyDepartmentProgressData[] = [];
 
-  if (project && project.startDate && project.endDate) {
+  if (project && project.startDate && project.endDate && project.mandays !== null && project.completion !== null) {
     let currentDate = new Date(project.startDate);
     let week = 1;
-    let accumulatedMandaysOverall = 0; // Initialize before the loop
+    let accumulatedMandaysOverall = 0;
     let currentCompletion = 0;
-    const actualProjectCompletion = project.completion ?? 100;
+    const actualProjectCompletion = project.completion; // Use non-null value
 
+    // Initialize accumulator based on departmentAllocations or project.department
+    const departmentsInProject = project.departmentAllocations && project.departmentAllocations.length > 0
+        ? project.departmentAllocations.map(da => da.department)
+        : project.department;
     let currentDeptMandaysAccumulator: Record<string, number> = {};
-    project.department.forEach(dept => { currentDeptMandaysAccumulator[dept] = 0; });
+    departmentsInProject.forEach(dept => { currentDeptMandaysAccumulator[dept] = 0; });
+
 
     while (currentDate <= project.endDate && currentDate <= new Date()) {
-        let weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10)); // Use 'let' to allow modification
-        // Ensure accumulated mandays doesn't exceed allocated unless project is complete or past due
+        let weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10));
+
+        // Cap weekly mandays if approaching total mandays prematurely
         if (project.mandays && accumulatedMandaysOverall + weeklyMandaysOverall > project.mandays && new Date() <= project.endDate && project.completion < 100) {
-            // Cap weekly mandays if approaching total mandays prematurely
-            // This logic might need refinement based on how over-budget should be handled visually
              weeklyMandaysOverall = Math.max(0, project.mandays - accumulatedMandaysOverall); // Cap to remaining mandays
         }
         accumulatedMandaysOverall += weeklyMandaysOverall;
@@ -136,102 +115,97 @@ const fetchProjectData = (
         const weeklyDeptIncrementData: WeeklyDepartmentProgressData = { weekEnding: format(currentDate, 'MMM d') };
         let distributedWeeklyMandays = 0;
 
-        // Distribute weekly mandays somewhat realistically (proportional to contribution?)
-        project.department.forEach((dept, index) => {
+        // Distribute weekly mandays somewhat realistically (proportional to allocation?)
+        departmentsInProject.forEach((dept, index) => {
             let deptWeeklyMandaysIncrement = 0;
-            // Find the contribution data for this department
-            const deptContribution = project.departmentContributions?.find(dc => dc.department === dept);
-            const deptMandayTarget = deptContribution?.mandays ?? (project.mandays ?? 0) / project.department.length; // Fallback to equal share
+            const deptAllocation = project.departmentAllocations?.find(da => da.department === dept);
+            const deptMandayTarget = deptAllocation?.allocatedMandays ?? (project.allocatedMandays ?? 0) / departmentsInProject.length; // Fallback to equal share of overall allocation
 
-            if (index === project.department.length - 1) {
-                // Assign remaining to the last department
+            if (index === departmentsInProject.length - 1) {
                 deptWeeklyMandaysIncrement = Math.max(0, weeklyMandaysOverall - distributedWeeklyMandays);
             } else {
-                // Simple random distribution for now, could be weighted by target mandays
-                const baseShare = weeklyMandaysOverall / project.department.length;
+                const baseShare = weeklyMandaysOverall / departmentsInProject.length;
                 const variation = baseShare * (Math.random() - 0.3); // +/- 30% variation
                 deptWeeklyMandaysIncrement = Math.max(0, baseShare + variation);
-                 // Prevent distributing more than the total weekly mandays
                 deptWeeklyMandaysIncrement = Math.min(deptWeeklyMandaysIncrement, weeklyMandaysOverall - distributedWeeklyMandays);
             }
             const roundedIncrement = Math.round(deptWeeklyMandaysIncrement);
             weeklyDeptIncrementData[dept] = roundedIncrement;
             distributedWeeklyMandays += roundedIncrement;
-            currentDeptMandaysAccumulator[dept] += roundedIncrement;
+            currentDeptMandaysAccumulator[dept] = (currentDeptMandaysAccumulator[dept] || 0) + roundedIncrement;
         });
 
         // Adjust last department if rounding caused mismatch
-         if (Math.abs(distributedWeeklyMandays - Math.round(weeklyMandaysOverall)) > 0.5 && project.department.length > 0) {
-             const lastDept = project.department[project.department.length - 1];
+         if (Math.abs(distributedWeeklyMandays - Math.round(weeklyMandaysOverall)) > 0.5 && departmentsInProject.length > 0) {
+             const lastDept = departmentsInProject[departmentsInProject.length - 1];
              const diff = Math.round(weeklyMandaysOverall - distributedWeeklyMandays);
              weeklyDeptIncrementData[lastDept] = Math.max(0, (weeklyDeptIncrementData[lastDept] as number || 0) + diff);
-             currentDeptMandaysAccumulator[lastDept] = Math.max(0, currentDeptMandaysAccumulator[lastDept] + diff);
+             currentDeptMandaysAccumulator[lastDept] = Math.max(0, (currentDeptMandaysAccumulator[lastDept] || 0) + diff);
          }
 
 
         weeklyDepartmentIncrements.push(weeklyDeptIncrementData);
 
-        // Move to the next week
         currentDate.setDate(currentDate.getDate() + 7);
         week++;
-        if(week > 104) break; // Safety break for long projects
+        if(week > 104) break;
     }
 
-     // --- Ensure final data matches project totals if project ended or is past due ---
-    const lastWeekOverall = weeklyProgress[weeklyProgress.length - 1];
+    const lastWeekOverall = weeklyProgress.length > 0 ? weeklyProgress[weeklyProgress.length - 1] : null;
     const isProjectCompleteOrPastDue = (project.endDate && new Date() > project.endDate) || (project.completion >= 100);
 
+    // --- Ensure final data matches project totals if project ended/is past due ---
     if (isProjectCompleteOrPastDue && lastWeekOverall) {
-        // Set final week's values to the actual project totals
         lastWeekOverall.completionPercentage = project.completion;
-        lastWeekOverall.accumulatedMandays = project.mandays ?? roundedAccumulatedMandays; // Use actual if available
-        lastWeekOverall.mandayPercentage = calculateMandayPercentage(lastWeekOverall.accumulatedMandays, project.allocatedMandays);
+        lastWeekOverall.accumulatedMandays = project.mandays;
+        lastWeekOverall.mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
 
-        // Adjust final department increments to match actual contributions if available
-        if(project.departmentContributions && weeklyDepartmentIncrements.length > 0) {
-            const lastDeptWeek = weeklyDepartmentIncrements[weeklyDepartmentIncrements.length -1];
-             // Calculate total simulated mandays per department up to the *second to last* week
+        // Adjust final department increments based on ACTUAL mandays consumed per department (if we had that data)
+        // Since we only have *allocated* mandays per department, this simulation part is tricky.
+        // For now, we'll adjust the last simulated week to *try* and match the *allocated* amounts
+        // This is imperfect as actual consumption might differ significantly.
+        if(project.departmentAllocations && weeklyDepartmentIncrements.length > 0) {
+             const lastDeptWeek = weeklyDepartmentIncrements[weeklyDepartmentIncrements.length -1];
              let simulatedTotalMandaysPerDeptBeforeLastWeek: Record<string, number> = {};
-             project.department.forEach(dept => { simulatedTotalMandaysPerDeptBeforeLastWeek[dept] = 0; });
+             departmentsInProject.forEach(dept => { simulatedTotalMandaysPerDeptBeforeLastWeek[dept] = 0; });
+
              weeklyDepartmentIncrements.slice(0, -1).forEach(weekData => {
-                 project.department.forEach(dept => {
+                 departmentsInProject.forEach(dept => {
                      simulatedTotalMandaysPerDeptBeforeLastWeek[dept] += (weekData[dept] as number || 0);
                  });
              });
 
-             // Set the last week's increment to make the total match the actual contribution
-             project.departmentContributions.forEach(contrib => {
-                 const requiredLastWeekIncrement = Math.max(0, contrib.mandays - simulatedTotalMandaysPerDeptBeforeLastWeek[contrib.department]);
-                 lastDeptWeek[contrib.department] = requiredLastWeekIncrement;
+             // Set the last week's increment to make the total match the *allocated* amount (approximation)
+             project.departmentAllocations.forEach(alloc => {
+                 const requiredLastWeekIncrement = Math.max(0, alloc.allocatedMandays - (simulatedTotalMandaysPerDeptBeforeLastWeek[alloc.department] || 0) );
+                 lastDeptWeek[alloc.department] = requiredLastWeekIncrement;
              });
         }
 
     } else if (lastWeekOverall && lastWeekOverall.completionPercentage > project.completion) {
-         // If simulation overshot completion before end date, cap it
          lastWeekOverall.completionPercentage = project.completion;
-     } else if (!lastWeekOverall && project.mandays != null && project.completion != null) {
-        // Handle cases where the project hasn't even started (or has zero duration in data)
-        // Add a single entry representing the current state if start date is in the past or today
-        if (project.startDate && project.startDate <= new Date()) {
-            const finalMandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
-            weeklyProgress.push({
-                week: 1,
-                weekEnding: project.startDate || new Date(), // Or today?
-                completionPercentage: project.completion,
-                accumulatedMandays: project.mandays,
-                mandayPercentage: finalMandayPercentage,
-            });
+         // Don't force mandays to match allocated if project is still ongoing
+    } else if (!lastWeekOverall && project.startDate && project.startDate <= new Date()) {
+        // Handle case where project started but loop didn't run (e.g., end date = start date)
+        const finalMandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
+        weeklyProgress.push({
+            week: 1,
+            weekEnding: project.startDate,
+            completionPercentage: project.completion,
+            accumulatedMandays: project.mandays,
+            mandayPercentage: finalMandayPercentage,
+        });
 
-            // Add a single department increment entry based on contributions
-            const singleDeptIncrement: WeeklyDepartmentProgressData = { weekEnding: format(project.startDate || new Date(), 'MMM d') };
-            project.departmentContributions?.forEach(contrib => {
-                singleDeptIncrement[contrib.department] = contrib.mandays;
-            });
-            if (Object.keys(singleDeptIncrement).length > 1) { // Check if contributions exist
-                 weeklyDepartmentIncrements.push(singleDeptIncrement);
-             }
+        const singleDeptIncrement: WeeklyDepartmentProgressData = { weekEnding: format(project.startDate, 'MMM d') };
+        // Base initial increments on allocated mandays (approximation)
+        project.departmentAllocations?.forEach(alloc => {
+            // This assumes initial mandays somehow relate to allocation - might need better data
+            singleDeptIncrement[alloc.department] = Math.round(alloc.allocatedMandays * (project.mandays / (project.allocatedMandays||1)));
+        });
+        if (Object.keys(singleDeptIncrement).length > 1) {
+            weeklyDepartmentIncrements.push(singleDeptIncrement);
         }
-     }
+    }
 
 
   }
@@ -241,38 +215,70 @@ const fetchProjectData = (
 
 
 interface ProjectAnalyticsPageProps {
-  // params is now expected to be a Promise in Client Components under Suspense
-  params: { projectId: string }; // No longer a promise after applying React.use
+  params: { projectId: string };
 }
 
 const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
-  // Unwrap the params Promise using React.use() - Removed as it's no longer needed after fixing the type
-  // const resolvedParams = use(params);
-  const { projectId } = params; // Access projectId directly
+  const { projectId } = params; // Direct access is fine in latest Next.js client components
 
   const [projectData, setProjectData] = useState<{ project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null); // Add error state
 
-  // Determine data source based on environment (simplified)
+  // Determine data source based on environment
   const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
 
   useEffect(() => {
     setLoading(true);
-    // Fetch data based on determined source
-    const data = fetchProjectData(projectId, dataSource);
-    setProjectData(data);
-    setLoading(false);
-  }, [projectId, dataSource]); // Re-run if projectId or dataSource changes
+    setError(null); // Reset error on new fetch
+    try {
+        const data = fetchProjectData(projectId, dataSource);
+        if (!data.project) {
+             setError(`Project with ID "${projectId}" not found in ${dataSource} data.`);
+        }
+        setProjectData(data);
+    } catch (err) {
+        console.error("Error fetching or processing project data:", err);
+        setError("Failed to load project analytics data.");
+    } finally {
+        setLoading(false);
+    }
+  }, [projectId, dataSource]);
 
   const project = projectData?.project;
   const weeklyProgress = projectData?.weeklyProgress ?? [];
   const weeklyDepartmentProgress = projectData?.weeklyDepartmentProgress ?? [];
 
+  // Get department list for charts
+  const departmentsInProject = useMemo(() => {
+      if (!project) return [];
+      return project.departmentAllocations && project.departmentAllocations.length > 0
+        ? project.departmentAllocations.map(da => da.department)
+        : project.department;
+  }, [project]);
+
+
   if (loading) {
       return <div className="p-6">Loading project analytics...</div>;
   }
 
+  // Use error state for displaying error message
+  if (error) {
+      return (
+          <div className="flex flex-col items-center justify-center h-screen p-4 md:p-6">
+              <Link href="/" passHref>
+                  <Button variant="outline" className="absolute top-4 left-4 md:top-6 md:left-6">
+                      <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+                  </Button>
+              </Link>
+              <p className="text-xl text-destructive">{error}</p>
+          </div>
+      );
+  }
+
+
   if (!project) {
+    // This case might be redundant if error state handles 'not found', but keep as fallback
     return (
       <div className="flex flex-col items-center justify-center h-screen p-4 md:p-6">
          <Link href="/" passHref>
@@ -280,22 +286,24 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
           </Button>
         </Link>
-        <p className="text-xl text-muted-foreground">Project not found (ID: {projectId}) in {dataSource} data.</p>
+        <p className="text-xl text-muted-foreground">Project data not available (ID: {projectId}).</p>
       </div>
     );
   }
 
-  // Use the actual department contribution data if available for pie charts
-  const departmentContributionData: DepartmentContribution[] = project.departmentContributions ?? project.department.map(dept => ({
-    department: dept,
-    mandays: (project.mandays ?? 0) / project.department.length, // Fallback: Equal distribution
-    completion: (project.completion ?? 0) // Fallback: No specific completion breakdown available
-    // Note: Completion breakdown per department might not be accurate without specific data.
-    //       For the pie chart, we might need to adjust the logic if 'departmentContributions.completion' isn't reliable.
-    //       Let's assume `departmentContributions.completion` represents the % of *overall* completion attributed to that dept.
-    //       Or perhaps it's the department's *internal* completion % on their tasks?
-    //       Assuming the `completion` in DepartmentContribution is the % value this dept contributed to the *overall* project completion.
-  }));
+  // Prepare data for pie charts using DepartmentAllocation
+  // Note: Completion data per department is not directly available in allocations.
+  // We might need to derive/simulate it or adjust the completion pie chart.
+  // For now, manday pie chart uses allocatedMandays. Completion pie chart might show inaccurate data.
+  const departmentChartData = project.departmentAllocations?.map(alloc => ({
+      department: alloc.department,
+      allocatedMandays: alloc.allocatedMandays,
+      // Placeholder/Derived Completion - Needs better source data
+      // This assumes completion contribution is proportional to manday allocation
+      completionContribution: project.allocatedMandays
+        ? (alloc.allocatedMandays / project.allocatedMandays) * project.completion
+        : 0,
+  })) ?? [];
 
 
   return (
@@ -316,11 +324,13 @@ const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
 
         <CompletionVsMandayChart weeklyProgress={weeklyProgress} />
 
-        <WeeklyDepartmentProgressChart data={weeklyDepartmentProgress} departments={project.department} />
+        <WeeklyDepartmentProgressChart data={weeklyDepartmentProgress} departments={departmentsInProject} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <DepartmentMandayPieChart data={departmentContributionData} departments={project.department} />
-          <DepartmentCompletionPieChart data={departmentContributionData} departments={project.department} />
+          {/* Pass allocatedMandays to Manday Pie Chart */}
+          <DepartmentMandayPieChart data={departmentChartData.map(d => ({ department: d.department, mandays: d.allocatedMandays }))} departments={departmentsInProject} />
+          {/* Pass derived completion to Completion Pie Chart - acknowledge potential inaccuracy */}
+          <DepartmentCompletionPieChart data={departmentChartData.map(d => ({ department: d.department, completion: d.completionContribution, mandays: 0 /* mandays not needed here */ }))} departments={departmentsInProject} />
         </div>
 
     </div>

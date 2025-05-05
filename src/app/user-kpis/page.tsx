@@ -8,6 +8,7 @@ import UserKpiTable from '@/components/user-kpis/user-kpi-table';
 import type { UserKpiData } from '@/types/user-kpi'; // Define this type
 // Import mock data from JSON for staging/fallback
 import rawUserKpis from '@/data/userKpis.json';
+import rawDevUserKpis from '@/data/userKpis_dev.json'; // Import separate dev data
 
 
 const UserKpiPage: FC = () => {
@@ -19,40 +20,32 @@ const UserKpiPage: FC = () => {
   // Determine data source based on environment (simplified)
   const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
 
+  // Basic processing/validation for user KPI data
+  const processUserKpiData = (rawData: any[]): UserKpiData[] => {
+     return rawData.map(user => ({
+        id: user.id ?? `user-${Math.random().toString(36).substring(2, 9)}`,
+        name: user.name ?? 'Unknown User',
+        department: user.department ?? 'Unassigned',
+        timeliness: user.timeliness ?? 0,
+        utilization: user.utilization ?? 0,
+        contribution: user.contribution ?? 0,
+        development: user.development ?? 0,
+        projects: user.projects ?? [],
+     }));
+  };
+
+
   useEffect(() => {
     setLoading(true);
     let data: UserKpiData[];
     if (dataSource === 'json') {
       // Simulate fetching from JSON (could be API call)
        console.log("Using JSON data source for User KPIs");
-      // Assume rawUserKpis is already in the correct format or process if needed
-      data = rawUserKpis as UserKpiData[];
+       data = processUserKpiData(rawUserKpis);
     } else {
-      // Use different inline data for 'development' stage display
-      console.log("Using inline DEVELOPMENT data source for User KPIs");
-      data = [
-        // Different inline data for DEV stage
-        {
-          "id": "dev-user1",
-          "name": "Dev User One (Inline)",
-          "department": "Dev Team",
-          "timeliness": 5,
-          "utilization": 5,
-          "contribution": 5,
-          "development": 5,
-          "projects": ["Dev Project A (Inline)", "Dev Project B (Inline)"]
-        },
-        {
-          "id": "dev-user2",
-          "name": "Dev User Two (Inline)",
-          "department": "QA Team",
-          "timeliness": 4,
-          "utilization": 4,
-          "contribution": 3,
-          "development": 4,
-          "projects": ["Dev Project B (Inline)"]
-        }
-      ];
+      // Use different inline data for 'development' stage display from userKpis_dev.json
+      console.log("Using inline DEVELOPMENT data source for User KPIs (from userKpis_dev.json)");
+      data = processUserKpiData(rawDevUserKpis); // Load from dev JSON
     }
     setUserKpisData(data);
     setLoading(false);

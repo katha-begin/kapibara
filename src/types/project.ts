@@ -1,29 +1,29 @@
 
 
-// New type for department-specific contribution
-export interface DepartmentContribution {
+// New type for department-specific allocated mandays
+export interface DepartmentAllocation {
   department: string;
-  mandays: number;
-  completion: number; // Percentage completion contribution of this department
+  allocatedMandays: number;
 }
 
 
 export interface Project {
   id: string;
   name: string;
-  department: string[]; // List of involved departments
-  kpiScore: number;
-  completion: number; // Overall project completion percentage
-  mandays: number; // Overall actual mandays consumed
+  department: string[]; // List of involved departments (derived or could be managed separately)
+  kpiScore: number; // This might be calculated or come from processed data later
+  completion: number; // Overall project completion percentage (likely from processed data)
+  mandays: number | null; // Overall actual mandays consumed (read-only, from processed data)
   startDate?: Date | null;
   endDate?: Date | null;
   inhousePortion?: number | null;
   outsourcePortion?: number | null;
-  allocatedMandays?: number | null; // New: Mandays originally allocated
-  departmentContributions?: DepartmentContribution[] | null; // New: Department-specific contributions
+  allocatedMandays?: number | null; // Overall allocated mandays (potentially sum of department allocations)
+  // Renamed departmentContributions to departmentAllocations
+  departmentAllocations?: DepartmentAllocation[] | null; // Department-specific *allocated* mandays
 }
 
-// Type for overall weekly progress data
+// Type for overall weekly progress data (remains the same)
 export interface ProjectWeeklyProgress {
   week: number;
   weekEnding: Date;
@@ -32,7 +32,7 @@ export interface ProjectWeeklyProgress {
   mandayPercentage: number | null; // Overall weekly manday usage percentage
 }
 
-// New type for weekly progress broken down by department
+// Type for weekly progress broken down by department (remains the same)
 // Used for the stacked bar chart
 export interface WeeklyDepartmentProgressData {
   weekEnding: string; // Formatted date string for X-axis

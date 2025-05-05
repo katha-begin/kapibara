@@ -4,13 +4,17 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PieChart, Pie, Cell, Tooltip, Label, ResponsiveContainer } from 'recharts';
-import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"; // Removed ChartLegendContent
-import { Progress } from "@/components/ui/progress"; // Import Progress
-import { cn } from "@/lib/utils"; // Import cn
-import type { DepartmentContribution } from '@/types/project'; // Import type
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
+// Using a simpler structure for props data
+interface DepartmentMandayData {
+  department: string;
+  mandays: number; // Represents allocated mandays for this chart
+}
 
 interface DepartmentMandayPieChartProps {
-  data: DepartmentContribution[];
+  data: DepartmentMandayData[]; // Expect simplified data structure
   departments: string[]; // Pass all project departments for consistent coloring
 }
 
@@ -19,7 +23,6 @@ const chartConfig = {
   mandays: {
     label: "Mandays",
   },
-  // Colors will be generated dynamically based on the full department list
 } satisfies Record<string, { label?: string; color?: string }>;
 
 // Function to format large numbers (e.g., 1200 -> 1.2k)
@@ -40,17 +43,17 @@ const generateChartColor = (department: string, allDepartments: string[]): strin
 
 const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, departments }) => {
 
-  // Check if data is valid and has entries
+  // Check if data is valid and has entries where mandays > 0
   const hasData = data && data.length > 0 && data.some(d => d.mandays > 0);
-  // Calculate total mandays
+  // Calculate total allocated mandays
   const totalMandaysValue = data.reduce((sum, entry) => sum + (entry.mandays || 0), 0);
 
 
   return (
     <Card className="shadow-md flex flex-col h-full">
       <CardHeader>
-        <CardTitle>Department Manday Contribution</CardTitle>
-        <CardDescription>Distribution of total mandays per department.</CardDescription>
+        <CardTitle>Department Manday Allocation</CardTitle> {/* Title updated to Allocation */}
+        <CardDescription>Distribution of total allocated mandays per department.</CardDescription> {/* Description updated */}
       </CardHeader>
       <CardContent className="flex-1 flex flex-col items-center justify-center p-4 pt-0">
         {hasData ? (
@@ -63,13 +66,13 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, dep
                      content={
                         <ChartTooltipContent
                           hideLabel // Hide the default label line
-                          formatter={(value, name) => `${value.toLocaleString()} mandays`} // Format tooltip value
+                          formatter={(value, name) => `${value.toLocaleString()} mandays allocated`} // Updated tooltip format
                         />
                       }
                   />
                   <Pie
                     data={data}
-                    dataKey="mandays"
+                    dataKey="mandays" // Represents allocated mandays
                     nameKey="department"
                     cx="50%"
                     cy="50%"
@@ -105,7 +108,7 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, dep
                                      dominantBaseline="middle"
                                      className="fill-muted-foreground text-sm"
                                 >
-                                     Total Mandays
+                                     Total Allocated {/* Updated Label */}
                                  </text>
                               </>
                             );
@@ -114,22 +117,25 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, dep
                         }}
                      />
                   </Pie>
-                  {/* Remove default Legend: <Legend content={<ChartLegendContent nameKey="department" />} /> */}
                 </PieChart>
               </ResponsiveContainer>
             </ChartContainer>
 
             {/* Custom Legend/List */}
             <div className="w-full mt-4 space-y-2">
-               {data.sort((a, b) => b.mandays - a.mandays).map((entry, index) => { // Sort by mandays descending
+               {/* Sort by allocated mandays descending */}
+               {data.sort((a, b) => b.mandays - a.mandays).map((entry, index) => {
                  const percentage = totalMandaysValue > 0 ? ((entry.mandays / totalMandaysValue) * 100) : 0;
                  const color = generateChartColor(entry.department, departments); // Get the consistent color
+
+                 // Style for the progress bar indicator using inline style
+                 const indicatorStyle = { backgroundColor: color };
+
                  return (
                    <div key={entry.department} className="flex items-center gap-3 text-sm">
                      <span className="flex-1 text-muted-foreground truncate">{entry.department}</span>
-                     {/* Apply department color to the progress bar indicator */}
-                     {/* Ensure color string is directly usable by Tailwind JIT */}
-                     <Progress value={percentage} className="h-2 w-24" indicatorClassName={`bg-[${color}]`} />
+                     {/* Use inline style for dynamic color */}
+                     <Progress value={percentage} className="h-2 w-24" style={{ '--indicator-color': color } as React.CSSProperties} indicatorClassName={`bg-[var(--indicator-color)]`} />
                      <span className="w-10 text-right font-medium">{percentage.toFixed(0)}%</span>
                    </div>
                  );
@@ -138,8 +144,7 @@ const DepartmentMandayPieChart: FC<DepartmentMandayPieChartProps> = ({ data, dep
           </>
         ) : (
           <p className="text-muted-foreground text-center">
-           No manday data available for the selected project<br />
-           or department contributions are zero.
+           No manday allocation data available.
          </p>
         )}
       </CardContent>
