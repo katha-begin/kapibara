@@ -1,6 +1,8 @@
 import pandas as pd
 import json
 from datetime import datetime, timedelta
+import os
+import argparse
 
 # Define file paths
 TICKET_DATA_PATH = 'src/data/kracker_data_2024_2025.csv'
@@ -9,6 +11,16 @@ STATIC_DATA_PATH = 'src/data/static_data.json'
 PROJECTS_ADMIN_PATH = 'src/data/projects_admin.json'
 STUDIO_CONFIG_PATH = 'src/data/studio_config.json'
 PROCESSED_DATA_PATH = 'src/data/processed_data.json'
+
+# Output paths for frontend-compatible files
+PROJECTS_JSON_PATH = 'src/data/projects.json'
+PROJECTS_DEV_JSON_PATH = 'src/data/projects_dev.json'
+USER_KPIS_JSON_PATH = 'src/data/userKpis.json'
+USER_KPIS_DEV_JSON_PATH = 'src/data/userKpis_dev.json'
+
+# New specific output paths
+PROCESSED_PROJECTS_PATH = 'src/data/processed_projects.json'
+PROCESSED_USER_KPIS_PATH = 'src/data/processed_userKpis.json'
 
 # Manday definition (hours per manday)
 DEFAULT_HOURS_PER_MANDAY = 8
@@ -25,9 +37,94 @@ def calculate_working_days(start_date, end_date, working_day_dates):
         current_date += timedelta(days=1)
     return count
 
-def process_data():
-    """Processes raw data to generate project and user KPIs with weekly snapshots."""
+def clean_nan_values(obj):
+    """Replace NaN values with 0 in a nested dictionary/list structure."""
+    import math
+    
+    if isinstance(obj, dict):
+        return {k: clean_nan_values(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_nan_values(item) for item in obj]
+    elif isinstance(obj, float) and math.isnan(obj):
+        return 0  # Replace NaN with 0
+    else:
+        return obj
 
+def convert_to_frontend_projects(processed_data):
+    """Convert processed data to frontend-compatible projects format."""
+    frontend_projects = []
+    
+    for project in processed_data['projects']:
+        # Get the latest summary for KPIs
+        latest_summary = project.get('latest_summary', {})
+        
+        # Create a frontend-compatible project object
+        frontend_project = {
+            'id': project['project_name'],
+            'name': project['project_name'],
+            'department': [],  # Default empty array, could be populated if available
+            'kpiScore': latest_summary.get('kpis_ratio', 0),
+            'completion': latest_summary.get('completion_rate', 0),
+            'mandays': latest_summary.get('cumulative_actual_mandays', 0),
+            'startDate': None,  # Could be populated from projects_admin_data if available
+            'endDate': None,    # Could be populated from projects_admin_data if available
+            'inhousePortion': 100,  # Default value
+            'outsourcePortion': 0,   # Default value
+            'allocatedMandays': 100, # Default value
+            'departmentAllocations': []  # Default empty array
+        }
+        
+        # Add department allocations if available in the latest summary
+        if 'department_mandays' in latest_summary:
+            for dept in latest_summary['department_mandays']:
+                frontend_project['departmentAllocations'].append({
+                    'department': dept['Department'],
+                    'allocatedMandays': dept['mandays']
+                })
+                # Also add to the department list
+                if dept['Department'] not in frontend_project['department']:
+                    frontend_project['department'].append(dept['Department'])
+        
+        frontend_projects.append(frontend_project)
+    
+    return frontend_projects
+
+def convert_to_frontend_user_kpis(processed_data):
+    """Convert processed data to frontend-compatible user KPIs format."""
+    frontend_user_kpis = []
+    
+    for user in processed_data['users']:
+        # Get the annual summary and latest weekly data
+        annual_summary = user.get('annual_summary', {})
+        latest_weekly_data = annual_summary.get('latest_weekly_data', {})
+        
+        # Create a frontend-compatible user KPI object
+        frontend_user = {
+            'id': user['username'],
+            'name': user['username'],
+            'department': 'Unassigned',  # Default value, could be populated if available
+            'timeliness': latest_weekly_data.get('user_timeliness_score', 0),
+            'utilization': latest_weekly_data.get('user_utilization', 0),
+            'contribution': annual_summary.get('contribution', 0),
+            'development': 0,  # Default value, not available in processed data
+            'projects': []  # Default empty array, could be populated if available
+        }
+        
+        # Could populate projects list if that data is available
+        # This would require additional processing or data sources
+        
+        frontend_user_kpis.append(frontend_user)
+    
+    return frontend_user_kpis
+
+def process_data(output_mode='all'):
+    """Processes raw data to generate project and user KPIs with weekly snapshots.
+    
+    Args:
+        output_mode (str): Output mode - 'all', 'combined', 'separate', 'projects', or 'users'
+    """
+    print(f"Processing data with output mode: {output_mode}")
+    
     # Read input files
     try:
         # Try different delimiters and encoding options
@@ -334,28 +431,71 @@ def process_data():
 
         processed_data['users'].append(user_data)
 
-    # Before writing the JSON file, add this function to clean NaN values
-    def clean_nan_values(obj):
-        """Replace NaN values with 0 in a nested dictionary/list structure."""
-        import math
-        
-        if isinstance(obj, dict):
-            return {k: clean_nan_values(v) for k, v in obj.items()}
-        elif isinstance(obj, list):
-            return [clean_nan_values(item) for item in obj]
-        elif isinstance(obj, float) and math.isnan(obj):
-            return 0  # Replace NaN with 0
-        else:
-            return obj
-
-    # Then use it before writing the JSON file
+    # Clean NaN values before writing to JSON
     processed_data_cleaned = clean_nan_values(processed_data)
-
-    # Write output JSON file
-    with open(PROCESSED_DATA_PATH, 'w') as f:
-        json.dump(processed_data_cleaned, f, indent=4)
-
-    print(f"Data processing complete. Output saved to {PROCESSED_DATA_PATH}")
+    
+    # Output based on selected mode
+    if output_mode in ['all', 'combined']:
+        # Write the combined processed_data.json
+        with open(PROCESSED_DATA_PATH, 'w') as f:
+            json.dump(processed_data_cleaned, f, indent=4)
+        print(f"Combined data processing complete. Output saved to {PROCESSED_DATA_PATH}")
+    
+    if output_mode in ['all', 'separate']:
+        # Convert to frontend-compatible formats
+        frontend_projects = convert_to_frontend_projects(processed_data_cleaned)
+        frontend_user_kpis = convert_to_frontend_user_kpis(processed_data_cleaned)
+        
+        # Write separate files for frontend
+        with open(PROJECTS_JSON_PATH, 'w') as f:
+            json.dump(frontend_projects, f, indent=4)
+        
+        # Create a copy for dev version (could be modified if needed)
+        with open(PROJECTS_DEV_JSON_PATH, 'w') as f:
+            json.dump(frontend_projects, f, indent=4)
+        
+        with open(USER_KPIS_JSON_PATH, 'w') as f:
+            json.dump(frontend_user_kpis, f, indent=4)
+        
+        # Create a copy for dev version (could be modified if needed)
+        with open(USER_KPIS_DEV_JSON_PATH, 'w') as f:
+            json.dump(frontend_user_kpis, f, indent=4)
+        
+        print(f"Separate frontend files created:")
+        print(f"  - Projects: {PROJECTS_JSON_PATH}")
+        print(f"  - Projects (Dev): {PROJECTS_DEV_JSON_PATH}")
+        print(f"  - User KPIs: {USER_KPIS_JSON_PATH}")
+        print(f"  - User KPIs (Dev): {USER_KPIS_DEV_JSON_PATH}")
+    
+    # New output modes for specific files
+    if output_mode == 'projects':
+        # Convert to frontend-compatible projects format
+        frontend_projects = convert_to_frontend_projects(processed_data_cleaned)
+        
+        # Write to processed_projects.json
+        with open(PROCESSED_PROJECTS_PATH, 'w') as f:
+            json.dump(frontend_projects, f, indent=4)
+        
+        print(f"Projects data processing complete. Output saved to {PROCESSED_PROJECTS_PATH}")
+    
+    if output_mode == 'users':
+        # Convert to frontend-compatible user KPIs format
+        frontend_user_kpis = convert_to_frontend_user_kpis(processed_data_cleaned)
+        
+        # Write to processed_userKpis.json
+        with open(PROCESSED_USER_KPIS_PATH, 'w') as f:
+            json.dump(frontend_user_kpis, f, indent=4)
+        
+        print(f"User KPIs data processing complete. Output saved to {PROCESSED_USER_KPIS_PATH}")
 
 if __name__ == "__main__":
-    process_data()
+    # Add command line argument parsing
+    parser = argparse.ArgumentParser(description='Process project and user data.')
+    parser.add_argument('--output', 
+                        choices=['all', 'combined', 'separate', 'projects', 'users'], 
+                        default='all', 
+                        help='Output mode: all, combined, separate, projects, or users')
+    args = parser.parse_args()
+    
+    print(f"Command line argument received: --output {args.output}")
+    process_data(args.output)
