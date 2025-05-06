@@ -1,58 +1,42 @@
 
 'use client';
 
-import type { FC } from 'react';
-import { useState, useEffect, useMemo } from 'react'; // Import useEffect and useMemo
+import { useState, useEffect } from 'react';
 import ProjectEditTable from '@/components/admin-control/project-edit-table';
-import type { Project } from '@/types/project'; // Import the Project type
-// Import raw JSON data for staging/fallback
-import rawProjectsData from '@/data/projects.json';
-import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
+import type { Project } from '@/types/project';
+import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
 
-// Function to process raw project data (convert date strings to Date objects)
-const processProjectsData = (rawData: any[]): Project[] => {
-  return rawData.map(project => ({
-    ...project,
-    startDate: project.startDate ? new Date(project.startDate) : null,
-    endDate: project.endDate ? new Date(project.endDate) : null,
-    // Rename departmentContributions to departmentAllocations for consistency
-    departmentAllocations: project.departmentAllocations ?? null,
-    // Ensure other fields exist or are defaulted if missing in raw data
-    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`, // Generate ID if missing
-    name: project.name ?? 'Unnamed Project',
-    department: project.department ?? [],
-    kpiScore: project.kpiScore ?? 0,
-    completion: project.completion ?? 0,
-    mandays: project.mandays ?? null,
-    allocatedMandays: project.allocatedMandays ?? null,
-    inhousePortion: project.inhousePortion ?? null,
-    outsourcePortion: project.outsourcePortion ?? null,
-  }));
-};
-
-
-const AdminControlPage: FC = () => {
+const AdminControlPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Determine data source based on environment (simplified)
-  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
-
   useEffect(() => {
-    setLoading(true);
-    let data: Project[];
-    if (dataSource === 'json') {
-      // Simulate fetching from JSON (could be API call)
-      console.log("Using JSON data source for Admin Control");
-      data = processProjectsData(rawProjectsData);
-    } else {
-      // Use different inline data for 'development' stage display from projects_dev.json
-      console.log("Using inline DEVELOPMENT data source for Admin Control (from projects_dev.json)");
-      data = processProjectsData(rawDevProjectsData); // Load from dev JSON
-    }
-    setProjects(data);
-    setLoading(false);
-  }, [dataSource]);
+    let isMounted = true;
+    
+    const loadData = async () => {
+      setLoading(true);
+      
+      try {
+        // Use the adapter to get projects in the expected format
+        const data = adaptProcessedDataToProjects();
+        if (isMounted) {
+          setProjects(data);
+        }
+      } catch (error) {
+        console.error("Error loading project data:", error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+    
+    loadData();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
 
   // Adjusted to handle partial updates

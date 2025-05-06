@@ -2,27 +2,32 @@
     {
         "id": "act",
         "name": "act",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.850243309002433,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "ad",
         "name": "ad",
-        "department": "Unassigned",
+        "department": "CG",
         "timeliness": 0.4729401304090101,
         "utilization": 0,
         "contribution": 0.17918354627609848,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "alicia",
         "name": "alicia",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -32,17 +37,19 @@
     {
         "id": "amonnut",
         "name": "amonnut",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.16612529002320187,
         "utilization": 0,
         "contribution": 0.1558117793705204,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "amonpan",
         "name": "amonpan",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -52,7 +59,7 @@
     {
         "id": "anat",
         "name": "anat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -62,7 +69,7 @@
     {
         "id": "anawin",
         "name": "anawin",
-        "department": "Unassigned",
+        "department": "Rig",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -72,7 +79,7 @@
     {
         "id": "anukul",
         "name": "anukul",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -82,7 +89,7 @@
     {
         "id": "aphiwat",
         "name": "aphiwat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -92,27 +99,32 @@
     {
         "id": "apisarab",
         "name": "apisarab",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.7198240866035182,
         "utilization": 0,
         "contribution": 0.8335930196322842,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "apisits",
         "name": "apisits",
-        "department": "Unassigned",
+        "department": "Pipeline",
         "timeliness": 0.6791184971098266,
         "utilization": 0,
         "contribution": 0.17139295730757245,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "tmk"
+        ]
     },
     {
         "id": "arisas",
         "name": "arisas",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -122,7 +134,7 @@
     {
         "id": "arpapisu",
         "name": "arpapisu",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -132,7 +144,7 @@
     {
         "id": "athitaya",
         "name": "athitaya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -142,7 +154,7 @@
     {
         "id": "atipa",
         "name": "atipa",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -152,27 +164,33 @@
     {
         "id": "bas",
         "name": "bas",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.5545918367346939,
         "utilization": 0,
         "contribution": 0.2648800249298847,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious"
+        ]
     },
     {
         "id": "beau",
         "name": "beau",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9065960099750623,
         "utilization": 0,
         "contribution": 0.06232471174820816,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "best",
         "name": "best",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -182,7 +200,7 @@
     {
         "id": "bhubodin",
         "name": "bhubodin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -192,27 +210,34 @@
     {
         "id": "bhuminat",
         "name": "bhuminat",
-        "department": "Unassigned",
+        "department": "Rig",
         "timeliness": 0.6562841530054645,
         "utilization": 0,
         "contribution": 0.14023060143346838,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "tmk"
+        ]
     },
     {
         "id": "boom",
         "name": "boom",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8624810030395137,
         "utilization": 0,
         "contribution": 0.10906824555936429,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "boonyara",
         "name": "boonyara",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -222,7 +247,7 @@
     {
         "id": "bu",
         "name": "bu",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -232,7 +257,7 @@
     {
         "id": "budsarin",
         "name": "budsarin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -242,67 +267,86 @@
     {
         "id": "chaipat",
         "name": "chaipat",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.6667259786476867,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "chaiyapa",
         "name": "chaiyapa",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9202509585221331,
         "utilization": 0,
         "contribution": 0.21034590215020257,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "chanatit",
         "name": "chanatit",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.35504973221117064,
         "utilization": 0,
         "contribution": 0.8102212527267061,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious",
+            "tmk"
+        ]
     },
     {
         "id": "chanin",
         "name": "chanin",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.8229241877256318,
         "utilization": 0,
         "contribution": 0.08569647865378623,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "elm"
+        ]
     },
     {
         "id": "chanipor",
         "name": "chanipor",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.25,
         "utilization": 0,
         "contribution": 0.20255531318167652,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "chaoc",
         "name": "chaoc",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8070175438596491,
         "utilization": 0,
         "contribution": 0.1558117793705204,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "chawalit",
         "name": "chawalit",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -312,27 +356,33 @@
     {
         "id": "chayanon",
         "name": "chayanon",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8873664122137406,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "chinnawa",
         "name": "chinnawa",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.06666666666666667,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "chiyada",
         "name": "chiyada",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -342,7 +392,7 @@
     {
         "id": "chonlada",
         "name": "chonlada",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -352,7 +402,7 @@
     {
         "id": "chonlath",
         "name": "chonlath",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -362,27 +412,35 @@
     {
         "id": "chonniks",
         "name": "chonniks",
-        "department": "Unassigned",
+        "department": "Rig",
         "timeliness": 0.9112676056338028,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious",
+            "dtyt"
+        ]
     },
     {
         "id": "chutchap",
         "name": "chutchap",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.3427859146151449,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "tmk",
+            "x6"
+        ]
     },
     {
         "id": "danop",
         "name": "danop",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -392,17 +450,20 @@
     {
         "id": "danuphol",
         "name": "danuphol",
-        "department": "Unassigned",
+        "department": "Pipeline",
         "timeliness": 0.5680000000000001,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "deenee",
         "name": "deenee",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -412,7 +473,7 @@
     {
         "id": "dent",
         "name": "dent",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -422,47 +483,58 @@
     {
         "id": "dongporn",
         "name": "dongporn",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.984,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "duangrue",
         "name": "duangrue",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0.9482121212121212,
         "utilization": 0,
         "contribution": 0.06232471174820816,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "coton"
+        ]
     },
     {
         "id": "famp",
         "name": "famp",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.610487209425751,
         "utilization": 0,
         "contribution": 1.916484886257401,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "golf",
         "name": "golf",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.5677536231884056,
         "utilization": 0,
         "contribution": 0.00779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "hatsanai",
         "name": "hatsanai",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -472,7 +544,7 @@
     {
         "id": "iyaboot",
         "name": "iyaboot",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -482,7 +554,7 @@
     {
         "id": "jakkarin",
         "name": "jakkarin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -492,27 +564,33 @@
     {
         "id": "jakkrit",
         "name": "jakkrit",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.7391983695652175,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "tmk"
+        ]
     },
     {
         "id": "jakrapon",
         "name": "jakrapon",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.4000000000000001,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "elm"
+        ]
     },
     {
         "id": "jaturath",
         "name": "jaturath",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -522,17 +600,19 @@
     {
         "id": "jele",
         "name": "jele",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "jetsadap",
         "name": "jetsadap",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -542,7 +622,7 @@
     {
         "id": "jidapa",
         "name": "jidapa",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -552,7 +632,7 @@
     {
         "id": "jirawat",
         "name": "jirawat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -562,7 +642,7 @@
     {
         "id": "jirawut",
         "name": "jirawut",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -572,7 +652,7 @@
     {
         "id": "jirayut",
         "name": "jirayut",
-        "department": "Unassigned",
+        "department": "Rig",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -582,7 +662,7 @@
     {
         "id": "jitsinee",
         "name": "jitsinee",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -592,7 +672,7 @@
     {
         "id": "joobjang",
         "name": "joobjang",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -602,7 +682,7 @@
     {
         "id": "jutamas",
         "name": "jutamas",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -612,17 +692,19 @@
     {
         "id": "kaew",
         "name": "kaew",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.5119260584376863,
         "utilization": 0,
         "contribution": 0.42069180430040515,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "kak",
         "name": "kak",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -632,7 +714,7 @@
     {
         "id": "kamonpor",
         "name": "kamonpor",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -642,17 +724,20 @@
     {
         "id": "kamphon",
         "name": "kamphon",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9891696750902527,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "kanlaya",
         "name": "kanlaya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -662,17 +747,21 @@
     {
         "id": "kanokpol",
         "name": "kanokpol",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9408115942028986,
         "utilization": 0,
         "contribution": 0.0779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "kanyaluk",
         "name": "kanyaluk",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -682,37 +771,47 @@
     {
         "id": "karn",
         "name": "karn",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.7346153846153846,
         "utilization": 0,
         "contribution": 0.32720473667809286,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "karnjana",
         "name": "karnjana",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.6415197871632856,
         "utilization": 0,
         "contribution": 0.14802119040199438,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "elm"
+        ]
     },
     {
         "id": "kaset",
         "name": "kaset",
-        "department": "Unassigned",
+        "department": "Composite",
         "timeliness": 0.5132317943836269,
         "utilization": 0,
         "contribution": 0.2648800249298847,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "elm"
+        ]
     },
     {
         "id": "kasinee",
         "name": "kasinee",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -722,17 +821,19 @@
     {
         "id": "kati",
         "name": "kati",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.6789808917197452,
         "utilization": 0,
         "contribution": 0.14802119040199438,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "keerata",
         "name": "keerata",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -742,7 +843,7 @@
     {
         "id": "khims",
         "name": "khims",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -752,7 +853,7 @@
     {
         "id": "khundet",
         "name": "khundet",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -762,47 +863,57 @@
     {
         "id": "kiam",
         "name": "kiam",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.8526347305389222,
         "utilization": 0,
         "contribution": 0.0779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "kim",
         "name": "kim",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8944736842105263,
         "utilization": 0,
         "contribution": 0.023371766905578063,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "kittisak",
         "name": "kittisak",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.6990333919156415,
         "utilization": 0,
         "contribution": 0.21813649111872857,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "klaorawe",
         "name": "klaorawe",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0.9793986636971048,
         "utilization": 0,
         "contribution": 0.06232471174820816,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious"
+        ]
     },
     {
         "id": "kob",
         "name": "kob",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -812,7 +923,7 @@
     {
         "id": "komson",
         "name": "komson",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -822,7 +933,7 @@
     {
         "id": "kong",
         "name": "kong",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -832,17 +943,20 @@
     {
         "id": "korapath",
         "name": "korapath",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8818947368421053,
         "utilization": 0,
         "contribution": 0.11685883452789031,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "korrapha",
         "name": "korrapha",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -852,7 +966,7 @@
     {
         "id": "kulaya",
         "name": "kulaya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -862,17 +976,21 @@
     {
         "id": "kulwadee",
         "name": "kulwadee",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9326878388845856,
         "utilization": 0,
         "contribution": 0.16360236833904643,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "kunlapha",
         "name": "kunlapha",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -882,7 +1000,7 @@
     {
         "id": "kwanmana",
         "name": "kwanmana",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -892,37 +1010,46 @@
     {
         "id": "lookpong",
         "name": "lookpong",
-        "department": "Unassigned",
+        "department": "Pipeline",
         "timeliness": 0.3466666666666667,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "smm"
+        ]
     },
     {
         "id": "mac",
         "name": "mac",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.6867132867132867,
         "utilization": 0,
         "contribution": 0.1869741352446245,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "mai",
         "name": "mai",
-        "department": "Unassigned",
+        "department": "Content Development",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "maneewan",
         "name": "maneewan",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -932,17 +1059,19 @@
     {
         "id": "maruai",
         "name": "maruai",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.2728637413394919,
         "utilization": 0,
         "contribution": 0.1558117793705204,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "maythus",
         "name": "maythus",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -952,7 +1081,7 @@
     {
         "id": "meiwikor",
         "name": "meiwikor",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -962,17 +1091,20 @@
     {
         "id": "mew",
         "name": "mew",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9937172774869111,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "michaeli",
         "name": "michaeli",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -982,7 +1114,7 @@
     {
         "id": "milk",
         "name": "milk",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -992,7 +1124,7 @@
     {
         "id": "mo",
         "name": "mo",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1002,7 +1134,7 @@
     {
         "id": "mori",
         "name": "mori",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1012,7 +1144,7 @@
     {
         "id": "mos",
         "name": "mos",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1022,17 +1154,20 @@
     {
         "id": "mui",
         "name": "mui",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9186013528256596,
         "utilization": 0,
         "contribution": 0.2259270800872546,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "mutsuko",
         "name": "mutsuko",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1042,17 +1177,20 @@
     {
         "id": "nantatch",
         "name": "nantatch",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.872063120981882,
         "utilization": 0,
         "contribution": 0.24929884699283264,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "napate",
         "name": "napate",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1062,7 +1200,7 @@
     {
         "id": "napatt",
         "name": "napatt",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1072,17 +1210,21 @@
     {
         "id": "nateetho",
         "name": "nateetho",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8965263993648274,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "natnaree",
         "name": "natnaree",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1092,7 +1234,7 @@
     {
         "id": "natnichs",
         "name": "natnichs",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1102,7 +1244,7 @@
     {
         "id": "natpapon",
         "name": "natpapon",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1112,27 +1254,34 @@
     {
         "id": "nattacha",
         "name": "nattacha",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8577814569536424,
         "utilization": 0,
         "contribution": 0.11685883452789031,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "nattawaa",
         "name": "nattawaa",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8774096385542169,
         "utilization": 0,
         "contribution": 0.14802119040199438,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "nattawut",
         "name": "nattawut",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1142,7 +1291,7 @@
     {
         "id": "natthano",
         "name": "natthano",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1152,7 +1301,7 @@
     {
         "id": "natthida",
         "name": "natthida",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1162,7 +1311,7 @@
     {
         "id": "navatep",
         "name": "navatep",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1172,7 +1321,7 @@
     {
         "id": "navipas",
         "name": "navipas",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1182,17 +1331,20 @@
     {
         "id": "nay",
         "name": "nay",
-        "department": "Unassigned",
+        "department": "CFX",
         "timeliness": 0.7870573870573873,
         "utilization": 0,
         "contribution": 1.2464942349641632,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "nichakan",
         "name": "nichakan",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1202,17 +1354,19 @@
     {
         "id": "noo",
         "name": "noo",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.9342105263157893,
         "utilization": 0,
         "contribution": 0.00779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "nopparat",
         "name": "nopparat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1222,47 +1376,61 @@
     {
         "id": "nub",
         "name": "nub",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.05453412277968214,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "dtyt"
+        ]
     },
     {
         "id": "nut",
         "name": "nut",
-        "department": "Unassigned",
+        "department": "Grooming",
         "timeliness": 0.45815494393476036,
         "utilization": 0,
         "contribution": 0.24929884699283264,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "coton"
+        ]
     },
     {
         "id": "nutchawe",
         "name": "nutchawe",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.13883677298311445,
         "utilization": 0,
         "contribution": 0.27267061389841074,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious",
+            "dtyt"
+        ]
     },
     {
         "id": "nuttapov",
         "name": "nuttapov",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.4134193548387097,
         "utilization": 0,
         "contribution": 0.16360236833904643,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "smm"
+        ]
     },
     {
         "id": "nuttaput",
         "name": "nuttaput",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1272,7 +1440,7 @@
     {
         "id": "oil",
         "name": "oil",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1282,7 +1450,7 @@
     {
         "id": "onpriya",
         "name": "onpriya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1292,27 +1460,33 @@
     {
         "id": "pailin",
         "name": "pailin",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9039788408463661,
         "utilization": 0,
         "contribution": 0.09348706762231225,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "pair",
         "name": "pair",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.5493740855145505,
         "utilization": 0,
         "contribution": 0.27267061389841074,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "pakornt",
         "name": "pakornt",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1322,7 +1496,7 @@
     {
         "id": "panchanl",
         "name": "panchanl",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1332,17 +1506,19 @@
     {
         "id": "panna",
         "name": "panna",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "pannapor",
         "name": "pannapor",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1352,7 +1528,7 @@
     {
         "id": "panuwatp",
         "name": "panuwatp",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1362,7 +1538,7 @@
     {
         "id": "patchara",
         "name": "patchara",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1372,7 +1548,7 @@
     {
         "id": "patcharl",
         "name": "patcharl",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1382,7 +1558,7 @@
     {
         "id": "patiparn",
         "name": "patiparn",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1392,7 +1568,7 @@
     {
         "id": "patlapa",
         "name": "patlapa",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1402,7 +1578,7 @@
     {
         "id": "patsawan",
         "name": "patsawan",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1412,7 +1588,7 @@
     {
         "id": "pawaris",
         "name": "pawaris",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1422,17 +1598,22 @@
     {
         "id": "peerapat",
         "name": "peerapat",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 0.95,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "peingpet",
         "name": "peingpet",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1442,17 +1623,19 @@
     {
         "id": "phanatho",
         "name": "phanatho",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.4255892255892256,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious"
+        ]
     },
     {
         "id": "phattarc",
         "name": "phattarc",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1462,7 +1645,7 @@
     {
         "id": "phitchan",
         "name": "phitchan",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1472,17 +1655,21 @@
     {
         "id": "pimlada",
         "name": "pimlada",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9302636363636368,
         "utilization": 0,
         "contribution": 0.08569647865378623,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "pimpatu",
         "name": "pimpatu",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1492,7 +1679,7 @@
     {
         "id": "pisit",
         "name": "pisit",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1502,7 +1689,7 @@
     {
         "id": "pitikhun",
         "name": "pitikhun",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1512,17 +1699,20 @@
     {
         "id": "piyapong",
         "name": "piyapong",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.6973317865429234,
         "utilization": 0,
         "contribution": 0.0779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious"
+        ]
     },
     {
         "id": "pla",
         "name": "pla",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1532,57 +1722,72 @@
     {
         "id": "plug",
         "name": "plug",
-        "department": "Unassigned",
+        "department": "CFX",
         "timeliness": 0.8780354706684855,
         "utilization": 0,
         "contribution": 0.5998753505765035,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "pod",
         "name": "pod",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.16309794988610476,
         "utilization": 0,
         "contribution": 0.16360236833904643,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "pokin",
         "name": "pokin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.8126404494382022,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "pongsapa",
         "name": "pongsapa",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.551063829787234,
         "utilization": 0,
         "contribution": 0.11685883452789031,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "tmk",
+            "elm"
+        ]
     },
     {
         "id": "pongsopo",
         "name": "pongsopo",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 0.5431034482758621,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "pook",
         "name": "pook",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1592,17 +1797,20 @@
     {
         "id": "pornneek",
         "name": "pornneek",
-        "department": "Unassigned",
+        "department": "CFX",
         "timeliness": 0.7565833333333334,
         "utilization": 0,
         "contribution": 1.2776565908382673,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "pornpimo",
         "name": "pornpimo",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1612,7 +1820,7 @@
     {
         "id": "praewpan",
         "name": "praewpan",
-        "department": "Unassigned",
+        "department": "Grooming",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1622,7 +1830,7 @@
     {
         "id": "prapatso",
         "name": "prapatso",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1632,7 +1840,7 @@
     {
         "id": "prateep",
         "name": "prateep",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1642,27 +1850,33 @@
     {
         "id": "pueng",
         "name": "pueng",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9140934844192634,
         "utilization": 0,
         "contribution": 0.10906824555936429,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "pui",
         "name": "pui",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.24149324571011319,
         "utilization": 0,
         "contribution": 0.8180118416952322,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious"
+        ]
     },
     {
         "id": "punyawee",
         "name": "punyawee",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1672,17 +1886,19 @@
     {
         "id": "rack",
         "name": "rack",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.0,
         "utilization": 0,
         "contribution": 0.17918354627609848,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "ratchata",
         "name": "ratchata",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1692,7 +1908,7 @@
     {
         "id": "rinradar",
         "name": "rinradar",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1702,27 +1918,31 @@
     {
         "id": "rujikan",
         "name": "rujikan",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0.6114888817273606,
         "utilization": 0,
         "contribution": 0.14023060143346838,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "rung",
         "name": "rung",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8812500000000001,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "sakolwan",
         "name": "sakolwan",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1732,7 +1952,7 @@
     {
         "id": "sam",
         "name": "sam",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1742,7 +1962,7 @@
     {
         "id": "sappasit",
         "name": "sappasit",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1752,7 +1972,7 @@
     {
         "id": "sarancha",
         "name": "sarancha",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1762,7 +1982,7 @@
     {
         "id": "sarawut",
         "name": "sarawut",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1772,17 +1992,19 @@
     {
         "id": "sarut",
         "name": "sarut",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "x6"
+        ]
     },
     {
         "id": "saruta",
         "name": "saruta",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1792,17 +2014,19 @@
     {
         "id": "sasin",
         "name": "sasin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.6829268292682927,
         "utilization": 0,
         "contribution": 0.08569647865378623,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious"
+        ]
     },
     {
         "id": "sasiporp",
         "name": "sasiporp",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1812,7 +2036,7 @@
     {
         "id": "sathit",
         "name": "sathit",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1822,7 +2046,7 @@
     {
         "id": "settapon",
         "name": "settapon",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1832,17 +2056,20 @@
     {
         "id": "sho",
         "name": "sho",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.7885856079404466,
         "utilization": 0,
         "contribution": 0.9037083203490184,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "smm"
+        ]
     },
     {
         "id": "siriratc",
         "name": "siriratc",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1852,7 +2079,7 @@
     {
         "id": "sitthipo",
         "name": "sitthipo",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1862,27 +2089,32 @@
     {
         "id": "sitticho",
         "name": "sitticho",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8254278728606358,
         "utilization": 0,
         "contribution": 0.2259270800872546,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "siwakorn",
         "name": "siwakorn",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.6713390501319261,
         "utilization": 0,
         "contribution": 1.2854471798067935,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "siwakorw",
         "name": "siwakorw",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1892,17 +2124,19 @@
     {
         "id": "songsak",
         "name": "songsak",
-        "department": "Unassigned",
+        "department": "Composite",
         "timeliness": 0.2638190303344568,
         "utilization": 0,
         "contribution": 1.114054222499221,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious"
+        ]
     },
     {
         "id": "sorawit",
         "name": "sorawit",
-        "department": "Unassigned",
+        "department": "Rig",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1912,17 +2146,19 @@
     {
         "id": "srithida",
         "name": "srithida",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0.65,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "tmk"
+        ]
     },
     {
         "id": "sunida",
         "name": "sunida",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1932,7 +2168,7 @@
     {
         "id": "supatsar",
         "name": "supatsar",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1942,37 +2178,47 @@
     {
         "id": "surang",
         "name": "surang",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0.985230179028133,
         "utilization": 0,
         "contribution": 0.09348706762231225,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious"
+        ]
     },
     {
         "id": "sutimon",
         "name": "sutimon",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9935196950444727,
         "utilization": 0,
         "contribution": 0.023371766905578063,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tanakrit",
         "name": "tanakrit",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9446865571572243,
         "utilization": 0,
         "contribution": 0.16360236833904643,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tanawatw",
         "name": "tanawatw",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -1982,17 +2228,21 @@
     {
         "id": "tanawoot",
         "name": "tanawoot",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 0.8038308457711444,
         "utilization": 0,
         "contribution": 0.0779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tanin",
         "name": "tanin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2002,7 +2252,7 @@
     {
         "id": "tawanj",
         "name": "tawanj",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2012,17 +2262,20 @@
     {
         "id": "tawatcha",
         "name": "tawatcha",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.8341708542713567,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tee",
         "name": "tee",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2032,7 +2285,7 @@
     {
         "id": "teenida",
         "name": "teenida",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2042,7 +2295,7 @@
     {
         "id": "thanakoh",
         "name": "thanakoh",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2052,7 +2305,7 @@
     {
         "id": "thanakot",
         "name": "thanakot",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2062,7 +2315,7 @@
     {
         "id": "thanakrc",
         "name": "thanakrc",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2072,27 +2325,33 @@
     {
         "id": "thanapat",
         "name": "thanapat",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 0.6906249999999999,
         "utilization": 0,
         "contribution": 0.0779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "coton"
+        ]
     },
     {
         "id": "thanapol",
         "name": "thanapol",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.3878151260504201,
         "utilization": 0,
         "contribution": 0.4284823932689311,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "thanida",
         "name": "thanida",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2102,7 +2361,7 @@
     {
         "id": "thantip",
         "name": "thantip",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2112,37 +2371,45 @@
     {
         "id": "thanyada",
         "name": "thanyada",
-        "department": "Unassigned",
+        "department": "Production Management",
         "timeliness": 0.6782258064516129,
         "utilization": 0,
         "contribution": 0.35057650358367093,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "thanyath",
         "name": "thanyath",
-        "department": "Unassigned",
+        "department": "Pipeline",
         "timeliness": 0.47540106951871663,
         "utilization": 0,
         "contribution": 0.046743533811156125,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "tharadon",
         "name": "tharadon",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.7942307692307692,
         "utilization": 0,
         "contribution": 0.023371766905578063,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "theerapp",
         "name": "theerapp",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2152,27 +2419,35 @@
     {
         "id": "thirada",
         "name": "thirada",
-        "department": "Unassigned",
+        "department": "Technical Development",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "thitikon",
         "name": "thitikon",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.049736430782432804,
         "utilization": 0,
         "contribution": 2.1034590215020255,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious",
+            "dtyt",
+            "elm"
+        ]
     },
     {
         "id": "thitiwud",
         "name": "thitiwud",
-        "department": "Unassigned",
+        "department": "Pipeline",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2182,17 +2457,21 @@
     {
         "id": "thongkho",
         "name": "thongkho",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9279536016038952,
         "utilization": 0,
         "contribution": 0.13244001246494236,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tisarat",
         "name": "tisarat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2202,17 +2481,19 @@
     {
         "id": "tittayan",
         "name": "tittayan",
-        "department": "Unassigned",
+        "department": "CFX",
         "timeliness": 0.27990654205607474,
         "utilization": 0,
         "contribution": 0.5998753505765035,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "tom",
         "name": "tom",
-        "department": "Unassigned",
+        "department": "Content Development",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2222,67 +2503,84 @@
     {
         "id": "toon",
         "name": "toon",
-        "department": "Unassigned",
+        "department": "Effect",
         "timeliness": 0.4024767801857585,
         "utilization": 0,
         "contribution": 0.00779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "tou",
         "name": "tou",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8459905660377359,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "touch",
         "name": "touch",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.10326594090202178,
         "utilization": 0,
         "contribution": 0.24150825802430664,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt"
+        ]
     },
     {
         "id": "toy",
         "name": "toy",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.8934529678564387,
         "utilization": 0,
         "contribution": 0.03116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "tune",
         "name": "tune",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "x6"
+        ]
     },
     {
         "id": "ueakan",
         "name": "ueakan",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.6023178807947019,
         "utilization": 0,
         "contribution": 0.32720473667809286,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "urr",
         "name": "urr",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2292,17 +2590,19 @@
     {
         "id": "van",
         "name": "van",
-        "department": "Unassigned",
+        "department": "Texture",
         "timeliness": 0.8060191518467853,
         "utilization": 0,
         "contribution": 0.12464942349641632,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "view",
         "name": "view",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2312,37 +2612,44 @@
     {
         "id": "vipavee",
         "name": "vipavee",
-        "department": "Unassigned",
+        "department": "Art",
         "timeliness": 0.7042116630669547,
         "utilization": 0,
         "contribution": 0.4518541601745092,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "viphada",
         "name": "viphada",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.2936170212765958,
         "utilization": 0,
         "contribution": 0.07011530071673419,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "tmk"
+        ]
     },
     {
         "id": "waan",
         "name": "waan",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.9339887640449438,
         "utilization": 0,
         "contribution": 0.0,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "waewwan",
         "name": "waewwan",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2352,37 +2659,46 @@
     {
         "id": "wanatcha",
         "name": "wanatcha",
-        "department": "Unassigned",
+        "department": "Animation",
         "timeliness": 0.7884824667472794,
         "utilization": 0,
         "contribution": 0.06232471174820816,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "wanchale",
         "name": "wanchale",
-        "department": "Unassigned",
+        "department": "Lighting",
         "timeliness": 0.6815195071868583,
         "utilization": 0,
         "contribution": 0.12464942349641632,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious"
+        ]
     },
     {
         "id": "waritrod",
         "name": "waritrod",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.031067961165048546,
         "utilization": 0,
         "contribution": 0.20255531318167652,
         "development": 0,
-        "projects": []
+        "projects": [
+            "smm"
+        ]
     },
     {
         "id": "warunya",
         "name": "warunya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2392,7 +2708,7 @@
     {
         "id": "wasancha",
         "name": "wasancha",
-        "department": "Unassigned",
+        "department": "CG",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2402,7 +2718,7 @@
     {
         "id": "wasu",
         "name": "wasu",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2412,17 +2728,20 @@
     {
         "id": "wattanac",
         "name": "wattanac",
-        "department": "Unassigned",
+        "department": "CG",
         "timeliness": 0.2779963848720801,
         "utilization": 0,
         "contribution": 1.0127765659083825,
         "development": 0,
-        "projects": []
+        "projects": [
+            "furious",
+            "elm"
+        ]
     },
     {
         "id": "wichpusa",
         "name": "wichpusa",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2432,27 +2751,31 @@
     {
         "id": "win",
         "name": "win",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.5650334075723831,
         "utilization": 0,
         "contribution": 0.3116235587410408,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "witsanuk",
         "name": "witsanuk",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.00779058896852602,
         "development": 0,
-        "projects": []
+        "projects": [
+            "dtyt"
+        ]
     },
     {
         "id": "wongwaru",
         "name": "wongwaru",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2462,27 +2785,32 @@
     {
         "id": "woraporn",
         "name": "woraporn",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.6516329704510109,
         "utilization": 0,
         "contribution": 0.0389529448426301,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "furious"
+        ]
     },
     {
         "id": "ya",
         "name": "ya",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.6,
         "utilization": 0,
         "contribution": 0.09348706762231225,
         "development": 0,
-        "projects": []
+        "projects": [
+            "tmk"
+        ]
     },
     {
         "id": "yannakor",
         "name": "yannakor",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2492,27 +2820,32 @@
     {
         "id": "yotin",
         "name": "yotin",
-        "department": "Unassigned",
+        "department": "Grooming",
         "timeliness": 0.597950819672131,
         "utilization": 0,
         "contribution": 0.05453412277968214,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "yuttana",
         "name": "yuttana",
-        "department": "Unassigned",
+        "department": "Model",
         "timeliness": 0.42912586331306046,
         "utilization": 0,
         "contribution": 1.5814895606107822,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "tmk"
+        ]
     },
     {
         "id": "jittamas",
         "name": "jittamas",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2522,7 +2855,7 @@
     {
         "id": "nutchap",
         "name": "nutchap",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2532,7 +2865,7 @@
     {
         "id": "chanapho",
         "name": "chanapho",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2542,57 +2875,69 @@
     {
         "id": "nutnawin",
         "name": "nutnawin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.8950581395348837,
         "utilization": 0,
         "contribution": 0.12464942349641632,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "kerkkaid",
         "name": "kerkkaid",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.7574475777295735,
         "utilization": 0,
         "contribution": 1.0828918666251168,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "chermar",
         "name": "chermar",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.7254893238434164,
         "utilization": 0,
         "contribution": 1.0517295107510127,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "duen",
         "name": "duen",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.7458485401459853,
         "utilization": 0,
         "contribution": 1.0283577438454348,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "arty",
         "name": "arty",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.5166666666666667,
         "utilization": 0,
         "contribution": 0.14023060143346838,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "x6"
+        ]
     },
     {
         "id": "cholpat",
         "name": "cholpat",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2602,7 +2947,7 @@
     {
         "id": "iyarin",
         "name": "iyarin",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2612,27 +2957,33 @@
     {
         "id": "kevink",
         "name": "kevink",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0.8003118503118503,
         "utilization": 0,
         "contribution": 0.23371766905578062,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh",
+            "dtyt",
+            "x6"
+        ]
     },
     {
         "id": "ponprase",
         "name": "ponprase",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 1.0,
         "utilization": 0,
         "contribution": 0.13244001246494236,
         "development": 0,
-        "projects": []
+        "projects": [
+            "twh"
+        ]
     },
     {
         "id": "yue",
         "name": "yue",
-        "department": "Unassigned",
+        "department": "resign/freelance",
         "timeliness": 0,
         "utilization": 0,
         "contribution": 0.0,
@@ -2640,8 +2991,8 @@
         "projects": []
     },
     {
-        "id": 0,
-        "name": 0,
+        "id": NaN,
+        "name": NaN,
         "department": "Unassigned",
         "timeliness": 0,
         "utilization": 0,

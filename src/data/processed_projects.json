@@ -23,11 +23,11 @@
         "kpiScore": 0.002216308326740051,
         "completion": 65.88863234279896,
         "mandays": 4178.7375,
-        "startDate": null,
-        "endDate": null,
+        "startDate": "2024-05-01",
+        "endDate": "2024-09-30",
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 200,
         "departmentAllocations": [
             {
                 "department": "Animation",
@@ -118,7 +118,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 786.70625,
         "departmentAllocations": [
             {
                 "department": "CG",
@@ -191,7 +191,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 3051.6025,
         "departmentAllocations": [
             {
                 "department": "Animation",
@@ -263,7 +263,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 14.375,
         "departmentAllocations": [
             {
                 "department": "Content Development",
@@ -303,7 +303,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 281.75,
         "departmentAllocations": [
             {
                 "department": "CFX",
@@ -360,7 +360,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 92.9375,
         "departmentAllocations": [
             {
                 "department": "CG",
@@ -417,7 +417,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 992.59375,
         "departmentAllocations": [
             {
                 "department": "Animation",
@@ -459,7 +459,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 402.625,
         "departmentAllocations": [
             {
                 "department": "Art",
@@ -501,7 +501,7 @@
         "endDate": null,
         "inhousePortion": 100,
         "outsourcePortion": 0,
-        "allocatedMandays": 100,
+        "allocatedMandays": 16.9375,
         "departmentAllocations": [
             {
                 "department": "Art",
