@@ -8,3 +8,5 @@ services:
     restart: unless-stopped
     volumes:
       - ./src/data:/app/src/data
+    environment:
+      - NEXT_PUBLIC_APP_ENV=production

@@ -9,79 +9,52 @@ import { Button } from '@/components/ui/button';
 import DepartmentAllocationTable from '@/components/admin-control/department-allocation-table';
 import type { Project, DepartmentAllocation } from '@/types/project';
 import { toast } from '@/hooks/use-toast';
+import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
 
-// Import raw JSON data for both stages
-import rawProjectsData from '@/data/projects.json';
-import rawDevProjectsData from '@/data/projects_dev.json'; // Separate dev data
-
-// Function to process raw project data (convert date strings, ensure allocations)
-const processProjectsData = (rawData: any[]): Project[] => {
-  return rawData.map(project => ({
-    ...project,
-    startDate: project.startDate ? new Date(project.startDate) : null,
-    endDate: project.endDate ? new Date(project.endDate) : null,
-    departmentAllocations: project.departmentAllocations ?? [], // Default to empty array
-    // Ensure other fields exist or are defaulted
-    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`,
-    name: project.name ?? 'Unnamed Project',
-    department: project.department ?? [],
-    kpiScore: project.kpiScore ?? 0,
-    completion: project.completion ?? 0,
-    mandays: project.mandays ?? null,
-    allocatedMandays: project.allocatedMandays ?? null,
-    inhousePortion: project.inhousePortion ?? null,
-    outsourcePortion: project.outsourcePortion ?? null,
-  }));
-};
-
-// Mock list of available departments (replace with dynamic loading if needed)
-const AVAILABLE_DEPARTMENTS = ["Engineering", "Marketing", "Design", "Sales", "QA Team", "Dev Team", "Operations"];
-
-interface ProjectAllocationPageProps {
-  params: { projectId: string };
-}
-
-const ProjectAllocationPage: FC<ProjectAllocationPageProps> = ({ params }) => {
+const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) => {
   const { projectId } = params;
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Determine data source based on environment
-  const dataSource = process.env.NEXT_PUBLIC_APP_ENV === 'development' ? 'inline' : 'json';
-
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    let allProjectsData: Project[];
-
-    try {
-        if (dataSource === 'json') {
-          console.log(`Fetching project ${projectId} allocations from JSON data source`);
-          allProjectsData = processProjectsData(rawProjectsData);
-        } else {
-          console.log(`Fetching project ${projectId} allocations from inline DEVELOPMENT data source (projects_dev.json)`);
-          allProjectsData = processProjectsData(rawDevProjectsData);
-        }
-
+    let isMounted = true;
+    
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Use the adapter to get projects in the expected format
+        const allProjectsData = adaptProcessedDataToProjects();
         const foundProject = allProjectsData.find(p => p.id === projectId);
-        if (foundProject) {
-          // Ensure departmentAllocations is an array
+        
+        if (foundProject && isMounted) {
           setProject({
             ...foundProject,
             departmentAllocations: foundProject.departmentAllocations ?? []
           });
-        } else {
-          setError(`Project with ID "${projectId}" not found in ${dataSource} data.`);
+        } else if (isMounted) {
+          setError(`Project with ID "${projectId}" not found.`);
         }
-    } catch (err) {
+      } catch (err) {
         console.error("Error loading project data:", err);
-        setError("Failed to load project data.");
-    } finally {
-        setLoading(false);
-    }
-
-  }, [projectId, dataSource]);
+        if (isMounted) {
+          setError("Failed to load project data.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+    
+    loadData();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [projectId]);
 
   const handleUpdateAllocations = (updatedAllocations: DepartmentAllocation[]) => {
     if (!project) return;

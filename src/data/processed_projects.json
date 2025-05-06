@@ -1,0 +1,516 @@
+[
+    {
+        "id": "twh",
+        "name": "twh",
+        "department": [
+            "Animation",
+            "Art",
+            "CFX",
+            "CG",
+            "Composite",
+            "Content Development",
+            "Effect",
+            "Grooming",
+            "Lighting",
+            "Model",
+            "Pipeline",
+            "Production Management",
+            "Rig",
+            "Technical Development",
+            "Texture",
+            "resign/freelance"
+        ],
+        "kpiScore": 0.002216308326740051,
+        "completion": 65.88863234279896,
+        "mandays": 4178.7375,
+        "startDate": "2024-05-01",
+        "endDate": "2024-09-30",
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 200,
+        "departmentAllocations": [
+            {
+                "department": "Animation",
+                "allocatedMandays": 1375.60625
+            },
+            {
+                "department": "Art",
+                "allocatedMandays": 72.625
+            },
+            {
+                "department": "CFX",
+                "allocatedMandays": 255.6875
+            },
+            {
+                "department": "CG",
+                "allocatedMandays": 144.0
+            },
+            {
+                "department": "Composite",
+                "allocatedMandays": 15.3125
+            },
+            {
+                "department": "Content Development",
+                "allocatedMandays": 43.5
+            },
+            {
+                "department": "Effect",
+                "allocatedMandays": 248.125
+            },
+            {
+                "department": "Grooming",
+                "allocatedMandays": 66.0
+            },
+            {
+                "department": "Lighting",
+                "allocatedMandays": 304.5
+            },
+            {
+                "department": "Model",
+                "allocatedMandays": 165.875
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 124.85
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 235.25
+            },
+            {
+                "department": "Rig",
+                "allocatedMandays": 24.625
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 206.43125
+            },
+            {
+                "department": "Texture",
+                "allocatedMandays": 306.175
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 590.175
+            }
+        ]
+    },
+    {
+        "id": "furious",
+        "name": "furious",
+        "department": [
+            "CG",
+            "Composite",
+            "Effect",
+            "Lighting",
+            "Model",
+            "Pipeline",
+            "Production Management",
+            "Rig",
+            "Technical Development",
+            "Texture",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 10.274973863835282,
+        "mandays": 786.70625,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 786.70625,
+        "departmentAllocations": [
+            {
+                "department": "CG",
+                "allocatedMandays": 66.25
+            },
+            {
+                "department": "Composite",
+                "allocatedMandays": 182.1875
+            },
+            {
+                "department": "Effect",
+                "allocatedMandays": 6.0
+            },
+            {
+                "department": "Lighting",
+                "allocatedMandays": 173.625
+            },
+            {
+                "department": "Model",
+                "allocatedMandays": 16.66875
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 2.91875
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 132.00625
+            },
+            {
+                "department": "Rig",
+                "allocatedMandays": 1.9375
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 28.3875
+            },
+            {
+                "department": "Texture",
+                "allocatedMandays": 23.725
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 153.0
+            }
+        ]
+    },
+    {
+        "id": "dtyt",
+        "name": "dtyt",
+        "department": [
+            "Animation",
+            "Art",
+            "CFX",
+            "Effect",
+            "Grooming",
+            "Lighting",
+            "Model",
+            "Pipeline",
+            "Production Management",
+            "Rig",
+            "Technical Development",
+            "Texture",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 34.04118650047,
+        "mandays": 3051.6025,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 3051.6025,
+        "departmentAllocations": [
+            {
+                "department": "Animation",
+                "allocatedMandays": 1814.7125
+            },
+            {
+                "department": "Art",
+                "allocatedMandays": 7.5
+            },
+            {
+                "department": "CFX",
+                "allocatedMandays": 32.0625
+            },
+            {
+                "department": "Effect",
+                "allocatedMandays": 138.19375
+            },
+            {
+                "department": "Grooming",
+                "allocatedMandays": 9.2125
+            },
+            {
+                "department": "Lighting",
+                "allocatedMandays": 239.5875
+            },
+            {
+                "department": "Model",
+                "allocatedMandays": 142.25
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 32.4625
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 298.4375
+            },
+            {
+                "department": "Rig",
+                "allocatedMandays": 31.38
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 148.39375
+            },
+            {
+                "department": "Texture",
+                "allocatedMandays": 73.16
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 84.25
+            }
+        ]
+    },
+    {
+        "id": "coton",
+        "name": "coton",
+        "department": [
+            "Content Development",
+            "Grooming",
+            "Technical Development",
+            "Texture"
+        ],
+        "kpiScore": 0,
+        "completion": 83.80434782608697,
+        "mandays": 14.375,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 14.375,
+        "departmentAllocations": [
+            {
+                "department": "Content Development",
+                "allocatedMandays": 2.25
+            },
+            {
+                "department": "Grooming",
+                "allocatedMandays": 1.0
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 10.0
+            },
+            {
+                "department": "Texture",
+                "allocatedMandays": 1.125
+            }
+        ]
+    },
+    {
+        "id": "tmk",
+        "name": "tmk",
+        "department": [
+            "CFX",
+            "Lighting",
+            "Model",
+            "Pipeline",
+            "Production Management",
+            "Rig",
+            "Technical Development",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 36.494715475607336,
+        "mandays": 281.75,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 281.75,
+        "departmentAllocations": [
+            {
+                "department": "CFX",
+                "allocatedMandays": 0.625
+            },
+            {
+                "department": "Lighting",
+                "allocatedMandays": 47.625
+            },
+            {
+                "department": "Model",
+                "allocatedMandays": 104.65
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 23.35
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 79.75
+            },
+            {
+                "department": "Rig",
+                "allocatedMandays": 4.5625
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 1.25
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 19.9375
+            }
+        ]
+    },
+    {
+        "id": "elm",
+        "name": "elm",
+        "department": [
+            "CG",
+            "Composite",
+            "Lighting",
+            "Model",
+            "Pipeline",
+            "Production Management",
+            "Technical Development",
+            "Texture",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 2.8208272708376634,
+        "mandays": 92.9375,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 92.9375,
+        "departmentAllocations": [
+            {
+                "department": "CG",
+                "allocatedMandays": 1.375
+            },
+            {
+                "department": "Composite",
+                "allocatedMandays": 43.1
+            },
+            {
+                "department": "Lighting",
+                "allocatedMandays": 2.0
+            },
+            {
+                "department": "Model",
+                "allocatedMandays": 3.1125
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 5.3
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 28.4375
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 7.6125
+            },
+            {
+                "department": "Texture",
+                "allocatedMandays": 1.0
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 1.0
+            }
+        ]
+    },
+    {
+        "id": "x6",
+        "name": "x6",
+        "department": [
+            "Animation",
+            "Pipeline",
+            "Production Management",
+            "Technical Development",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 98.64710862203697,
+        "mandays": 992.59375,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 992.59375,
+        "departmentAllocations": [
+            {
+                "department": "Animation",
+                "allocatedMandays": 836.49375
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 3.13125
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 101.25
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 39.34375
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 12.375
+            }
+        ]
+    },
+    {
+        "id": "smm",
+        "name": "smm",
+        "department": [
+            "Art",
+            "Content Development",
+            "Pipeline",
+            "Production Management",
+            "Technical Development",
+            "resign/freelance"
+        ],
+        "kpiScore": 0,
+        "completion": 32.77323379261129,
+        "mandays": 402.625,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 402.625,
+        "departmentAllocations": [
+            {
+                "department": "Art",
+                "allocatedMandays": 193.80625
+            },
+            {
+                "department": "Content Development",
+                "allocatedMandays": 35.9125
+            },
+            {
+                "department": "Pipeline",
+                "allocatedMandays": 6.53125
+            },
+            {
+                "department": "Production Management",
+                "allocatedMandays": 107.8125
+            },
+            {
+                "department": "Technical Development",
+                "allocatedMandays": 0.375
+            },
+            {
+                "department": "resign/freelance",
+                "allocatedMandays": 58.1875
+            }
+        ]
+    },
+    {
+        "id": "ffire",
+        "name": "ffire",
+        "department": [
+            "Art",
+            "Content Development"
+        ],
+        "kpiScore": 0,
+        "completion": 0.0,
+        "mandays": 16.9375,
+        "startDate": null,
+        "endDate": null,
+        "inhousePortion": 100,
+        "outsourcePortion": 0,
+        "allocatedMandays": 16.9375,
+        "departmentAllocations": [
+            {
+                "department": "Art",
+                "allocatedMandays": 15.1875
+            },
+            {
+                "department": "Content Development",
+                "allocatedMandays": 1.75
+            }
+        ]
+    }
+]

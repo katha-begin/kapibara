@@ -14,207 +14,84 @@ import { calculateMandayPercentage } from '@/lib/project-utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-// Import raw JSON data for staging/fallback
-import rawProjectsData from '@/data/projects.json';
-import rawDevProjectsData from '@/data/projects_dev.json'; // Import separate dev data
-import rawProcessedProjectsData from '@/data/processed_data.json';
+import type { Project, ProjectWeeklyProgress, WeeklyDepartmentProgressData } from '@/types/project';
+import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
+import rawProcessedData from '@/data/processed_data.json';
 
-// Function to process raw project data (convert date strings, ensure allocations)
-const processProjectsData = (rawData: any[]): Project[] => {
-  return rawData.map(project => ({
-    ...project,
-    startDate: project.startDate ? new Date(project.startDate) : null,
-    endDate: project.endDate ? new Date(project.endDate) : null,
-    departmentAllocations: project.departmentAllocations ?? [], // Default to empty array
-    // Ensure other fields exist or are defaulted
-    id: project.id ?? `proj-${Math.random().toString(36).substring(2, 9)}`,
-    name: project.name ?? 'Unnamed Project',
-    department: project.department ?? [],
-    kpiScore: project.kpiScore ?? 0,
-    completion: project.completion ?? 0,
-    mandays: project.mandays ?? null,
-    allocatedMandays: project.allocatedMandays ?? null,
-    inhousePortion: project.inhousePortion ?? null,
-    outsourcePortion: project.outsourcePortion ?? null,
-  }));
-};
-
-
-// Combined data fetching logic (simulates API/JSON/Inline)
+// Function to fetch project data and weekly progress from processed_data.json
 const fetchProjectData = (
-    projectId: string,
-    dataSource: 'inline' | 'json' // Add dataSource parameter
-): { project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } => {
-
-  let allProjectsData: Project[];
-  if (dataSource === 'json') {
-    console.log(`Fetching project ${projectId} from JSON data source`);
-    allProjectsData = processProjectsData(rawProjectsData);
-  } else if (process.env.NEXT_PUBLIC_APP_ENV === 'production') {
-    console.log(`Fetching project ${projectId} from PRODUCTION data source (processed_data.json)`);
-    allProjectsData = processProjectsData(rawProcessedProjectsData);
-  } else {
-    console.log(`Fetching project ${projectId} from inline DEVELOPMENT data source (projects_dev.json)`);
-    allProjectsData = processProjectsData(rawDevProjectsData); // Load from dev JSON
-  }
-
-  const project = allProjectsData.find(p => p.id === projectId) ?? null;
-
-  // --- Weekly Progress Simulation Logic (remains mostly the same) ---
-  // (This logic should ideally be done on the backend if using a real API)
-  const weeklyProgress: ProjectWeeklyProgress[] = [];
-  const weeklyDepartmentIncrements: WeeklyDepartmentProgressData[] = [];
-
-  if (project && project.startDate && project.endDate && project.mandays !== null && project.completion !== null) {
-    let currentDate = new Date(project.startDate);
-    let week = 1;
-    let accumulatedMandaysOverall = 0;
-    let currentCompletion = 0;
-    const actualProjectCompletion = project.completion; // Use non-null value
-
-    // Initialize accumulator based on departmentAllocations or project.department
-    const departmentsInProject = project.departmentAllocations && project.departmentAllocations.length > 0
-        ? project.departmentAllocations.map(da => da.department)
-        : project.department;
-    let currentDeptMandaysAccumulator: Record<string, number> = {};
-    departmentsInProject.forEach(dept => { currentDeptMandaysAccumulator[dept] = 0; });
-
-
-    while (currentDate <= project.endDate && currentDate <= new Date()) {
-        let weeklyMandaysOverall = Math.max(0, Math.random() * (project.allocatedMandays ? project.allocatedMandays / 20 : 10));
-
-        // Cap weekly mandays if approaching total mandays prematurely
-        if (project.mandays && accumulatedMandaysOverall + weeklyMandaysOverall > project.mandays && new Date() <= project.endDate && project.completion < 100) {
-             weeklyMandaysOverall = Math.max(0, project.mandays - accumulatedMandaysOverall); // Cap to remaining mandays
-        }
-        accumulatedMandaysOverall += weeklyMandaysOverall;
-        const roundedAccumulatedMandays = Math.round(accumulatedMandaysOverall);
-
-
-        const remainingCompletion = actualProjectCompletion - currentCompletion;
-        let weeklyCompletionIncrement = Math.random() * 7; // Simulate some weekly progress
-
-        // Ensure weekly completion increment doesn't overshoot the final actual completion
-        if (currentCompletion + weeklyCompletionIncrement > actualProjectCompletion) {
-             weeklyCompletionIncrement = Math.max(0, actualProjectCompletion - currentCompletion);
-        }
-        weeklyCompletionIncrement = Math.max(0, weeklyCompletionIncrement); // Ensure non-negative
-
-        currentCompletion += weeklyCompletionIncrement;
-        // Ensure currentCompletion does not exceed actualProjectCompletion due to floating point issues
-        currentCompletion = Math.min(currentCompletion, actualProjectCompletion);
-        const roundedCurrentCompletion = Math.round(currentCompletion);
-
-        const mandayPercentage = calculateMandayPercentage(roundedAccumulatedMandays, project.allocatedMandays);
-
-        weeklyProgress.push({
-            week: week,
-            weekEnding: new Date(currentDate),
-            completionPercentage: roundedCurrentCompletion,
-            accumulatedMandays: roundedAccumulatedMandays,
-            mandayPercentage: mandayPercentage,
-        });
-
-        // Simulate weekly department manday increments
-        const weeklyDeptIncrementData: WeeklyDepartmentProgressData = { weekEnding: format(currentDate, 'MMM d') };
-        let distributedWeeklyMandays = 0;
-
-        // Distribute weekly mandays somewhat realistically (proportional to allocation?)
-        departmentsInProject.forEach((dept, index) => {
-            let deptWeeklyMandaysIncrement = 0;
-            const deptAllocation = project.departmentAllocations?.find(da => da.department === dept);
-            const deptMandayTarget = deptAllocation?.allocatedMandays ?? (project.allocatedMandays ?? 0) / departmentsInProject.length; // Fallback to equal share of overall allocation
-
-            if (index === departmentsInProject.length - 1) {
-                deptWeeklyMandaysIncrement = Math.max(0, weeklyMandaysOverall - distributedWeeklyMandays);
-            } else {
-                const baseShare = weeklyMandaysOverall / departmentsInProject.length;
-                const variation = baseShare * (Math.random() - 0.3); // +/- 30% variation
-                deptWeeklyMandaysIncrement = Math.max(0, baseShare + variation);
-                deptWeeklyMandaysIncrement = Math.min(deptWeeklyMandaysIncrement, weeklyMandaysOverall - distributedWeeklyMandays);
+  projectId: string,
+): { 
+  project: Project | null; 
+  weeklyProgress: ProjectWeeklyProgress[]; 
+  weeklyDepartmentProgress: WeeklyDepartmentProgressData[] 
+} => {
+  try {
+    // Get project from processed_projects.json
+    const allProjectsData = getProjects();
+    const project = allProjectsData.find(p => p.id === projectId) ?? null;
+    
+    // Initialize weekly progress arrays
+    const weeklyProgress: ProjectWeeklyProgress[] = [];
+    const weeklyDepartmentProgress: WeeklyDepartmentProgressData[] = [];
+    
+    // Get weekly data from processed_data.json
+    if (rawProcessedData && Array.isArray(rawProcessedData.projects)) {
+      // Find the project in the raw processed data to get weekly data
+      const rawProject = rawProcessedData.projects.find(
+        p => (p.project_id === projectId) || (p.project_name === projectId)
+      );
+      
+      // If we found the project in the raw data, extract its weekly data
+      if (rawProject && Array.isArray(rawProject.weekly_data)) {
+        // Convert raw weekly data to our expected format
+        rawProject.weekly_data.forEach((weekData, index) => {
+          // Only include weeks with data
+          if (weekData) {
+            try {
+              const weekDate = new Date(weekData.week_end_date);
+              
+              // Add to weekly progress
+              weeklyProgress.push({
+                week: index + 1,
+                date: weekDate,
+                kpiScore: weekData.kpis_ratio || 0,
+                completion: weekData.completion_rate || 0,
+                mandays: weekData.cumulative_actual_mandays || 0
+              });
+              
+              // Process department mandays for this week
+              if (Array.isArray(weekData.department_mandays)) {
+                const deptData: Record<string, number> = {};
+                
+                // First collect all department mandays
+                weekData.department_mandays.forEach(dept => {
+                  if (dept && dept.Department) {
+                    deptData[dept.Department] = dept.mandays || 0;
+                  }
+                });
+                
+                // Then create a weekly department progress entry
+                if (Object.keys(deptData).length > 0) {
+                  weeklyDepartmentProgress.push({
+                    weekEnding: weekData.week_end_date,
+                    ...deptData
+                  });
+                }
+              }
+            } catch (err) {
+              console.error("Error processing week data:", err);
             }
-            const roundedIncrement = Math.round(deptWeeklyMandaysIncrement);
-            weeklyDeptIncrementData[dept] = roundedIncrement;
-            distributedWeeklyMandays += roundedIncrement;
-            currentDeptMandaysAccumulator[dept] = (currentDeptMandaysAccumulator[dept] || 0) + roundedIncrement;
+          }
         });
-
-        // Adjust last department if rounding caused mismatch
-         if (Math.abs(distributedWeeklyMandays - Math.round(weeklyMandaysOverall)) > 0.5 && departmentsInProject.length > 0) {
-             const lastDept = departmentsInProject[departmentsInProject.length - 1];
-             const diff = Math.round(weeklyMandaysOverall - distributedWeeklyMandays);
-             weeklyDeptIncrementData[lastDept] = Math.max(0, (weeklyDeptIncrementData[lastDept] as number || 0) + diff);
-             currentDeptMandaysAccumulator[lastDept] = Math.max(0, (currentDeptMandaysAccumulator[lastDept] || 0) + diff);
-         }
-
-
-        weeklyDepartmentIncrements.push(weeklyDeptIncrementData);
-
-        currentDate.setDate(currentDate.getDate() + 7);
-        week++;
-        if(week > 104) break;
+      }
     }
-
-    const lastWeekOverall = weeklyProgress.length > 0 ? weeklyProgress[weeklyProgress.length - 1] : null;
-    const isProjectCompleteOrPastDue = (project.endDate && new Date() > project.endDate) || (project.completion >= 100);
-
-    // --- Ensure final data matches project totals if project ended/is past due ---
-    if (isProjectCompleteOrPastDue && lastWeekOverall) {
-        lastWeekOverall.completionPercentage = project.completion;
-        lastWeekOverall.accumulatedMandays = project.mandays;
-        lastWeekOverall.mandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
-
-        // Adjust final department increments based on ACTUAL mandays consumed per department (if we had that data)
-        // Since we only have *allocated* mandays per department, this simulation part is tricky.
-        // For now, we'll adjust the last simulated week to *try* and match the *allocated* amounts
-        // This is imperfect as actual consumption might differ significantly.
-        if(project.departmentAllocations && weeklyDepartmentIncrements.length > 0) {
-             const lastDeptWeek = weeklyDepartmentIncrements[weeklyDepartmentIncrements.length -1];
-             let simulatedTotalMandaysPerDeptBeforeLastWeek: Record<string, number> = {};
-             departmentsInProject.forEach(dept => { simulatedTotalMandaysPerDeptBeforeLastWeek[dept] = 0; });
-
-             weeklyDepartmentIncrements.slice(0, -1).forEach(weekData => {
-                 departmentsInProject.forEach(dept => {
-                     simulatedTotalMandaysPerDeptBeforeLastWeek[dept] += (weekData[dept] as number || 0);
-                 });
-             });
-
-             // Set the last week's increment to make the total match the *allocated* amount (approximation)
-             project.departmentAllocations.forEach(alloc => {
-                 const requiredLastWeekIncrement = Math.max(0, alloc.allocatedMandays - (simulatedTotalMandaysPerDeptBeforeLastWeek[alloc.department] || 0) );
-                 lastDeptWeek[alloc.department] = requiredLastWeekIncrement;
-             });
-        }
-
-    } else if (lastWeekOverall && lastWeekOverall.completionPercentage > project.completion) {
-         lastWeekOverall.completionPercentage = project.completion;
-         // Don't force mandays to match allocated if project is still ongoing
-    } else if (!lastWeekOverall && project.startDate && project.startDate <= new Date()) {
-        // Handle case where project started but loop didn't run (e.g., end date = start date)
-        const finalMandayPercentage = calculateMandayPercentage(project.mandays, project.allocatedMandays);
-        weeklyProgress.push({
-            week: 1,
-            weekEnding: project.startDate,
-            completionPercentage: project.completion,
-            accumulatedMandays: project.mandays,
-            mandayPercentage: finalMandayPercentage,
-        });
-
-        const singleDeptIncrement: WeeklyDepartmentProgressData = { weekEnding: format(project.startDate, 'MMM d') };
-        // Base initial increments on allocated mandays (approximation)
-        project.departmentAllocations?.forEach(alloc => {
-            // This assumes initial mandays somehow relate to allocation - might need better data
-            singleDeptIncrement[alloc.department] = Math.round(alloc.allocatedMandays * (project.mandays / (project.allocatedMandays||1)));
-        });
-        if (Object.keys(singleDeptIncrement).length > 1) {
-            weeklyDepartmentIncrements.push(singleDeptIncrement);
-        }
-    }
-
-
+    
+    return { project, weeklyProgress, weeklyDepartmentProgress };
+  } catch (err) {
+    console.error("Error fetching or processing project data:", err);
+    return { project: null, weeklyProgress: [], weeklyDepartmentProgress: [] };
   }
-
-  return { project, weeklyProgress, weeklyDepartmentProgress: weeklyDepartmentIncrements };
 };
 
 

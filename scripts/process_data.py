@@ -1,14 +1,19 @@
 import pandas as pd
 import json
 from datetime import datetime, timedelta
+import os
 
 # Define file paths
-TICKET_DATA_PATH = 'src/data/kracker_data_2024_2025.csv'
-TIMESHEET_DATA_PATH = 'src/data/time_record_2024_2025.csv'
-STATIC_DATA_PATH = 'src/data/static_data.json'
-PROJECTS_ADMIN_PATH = 'src/data/projects_admin.json'
-STUDIO_CONFIG_PATH = 'src/data/studio_config.json'
-PROCESSED_DATA_PATH = 'src/data/processed_data.json'
+TICKET_DATA_PATH = '../src/data/kracker_data_2024_2025.csv'
+TIMESHEET_DATA_PATH = '../src/data/time_record_2024_2025.csv'
+STATIC_DATA_PATH = '../src/data/static_data.json'
+PROJECTS_ADMIN_PATH = '../src/data/projects_admin.json'
+STUDIO_CONFIG_PATH = '../src/data/studio_config.json'
+
+# Output paths
+PROCESSED_DATA_PATH = '../src/data/processed_data.json'
+PROCESSED_PROJECTS_PATH = '../src/data/processed_projects.json'
+PROCESSED_USERKPIS_PATH = '../src/data/processed_userKpis.json'
 
 # Manday definition (hours per manday)
 HOURS_PER_MANDAY = 8
@@ -27,7 +32,10 @@ def calculate_working_days(start_date, end_date, working_day_dates):
 
 def process_data():
     """Processes raw data to generate project and user KPIs with weekly snapshots."""
-
+    
+    # Define default values
+    DEFAULT_HOURS_PER_MANDAY = 8
+    
     # Read input files
     try:
         # Try different delimiters and encoding options
@@ -108,13 +116,13 @@ def process_data():
     # Extract configuration from static data
     default_status_weights = static_data.get('default', {})
     config = static_data.get('config', {
-        'hours_per_manday': 8, 
+        'hours_per_manday': DEFAULT_HOURS_PER_MANDAY, 
         'default_project': 'default',
         'working_days': 195
     })
 
-    # Use the hours_per_manday from config if available, otherwise use the constant
-    HOURS_PER_MANDAY = config.get('hours_per_manday', HOURS_PER_MANDAY)
+    # Use the hours_per_manday from config
+    HOURS_PER_MANDAY = config.get('hours_per_manday', DEFAULT_HOURS_PER_MANDAY)
     DEFAULT_PROJECT = config.get('default_project', 'default')
     WORKING_DAYS = config.get('working_days', 195)
 
@@ -176,11 +184,22 @@ def process_data():
     end_week = max_date + timedelta(days=(6 - max_date.weekday()))
     weeks = pd.date_range(start=start_week, end=end_week, freq='W-MON') # Weekly snapshots ending on Sunday
 
+    # Create the three output structures
     processed_data = {'projects': [], 'users': []}
+    processed_projects = []
+    processed_userkpis = []
 
     # --- Process Project Data ---
     for project_name in all_projects:
+        # Get project admin info if available
+        project_admin_info = projects_admin_map.get(project_name, {})
+        
+        # Use admin project ID if available, otherwise use project_name
+        project_id = project_admin_info.get('id', project_name)
+        
+        # 1. For processed_data.json (detailed weekly data)
         project_data = {
+            'project_id': project_id,  # Add project_id that matches the frontend expected format
             'project_name': project_name,
             'weekly_data': [],
             'latest_summary': {} # To store the final weekly summary
@@ -268,6 +287,44 @@ def process_data():
             project_data['latest_summary'] = project_data['weekly_data'][-1]
 
         processed_data['projects'].append(project_data)
+        
+        # 2. For processed_projects.json (matches projects_dev.json structure)
+        # Extract department allocations from the latest data
+        department_allocations = []
+        if project_data['latest_summary'] and 'department_mandays' in project_data['latest_summary']:
+            for dept in project_data['latest_summary']['department_mandays']:
+                department_allocations.append({
+                    "department": dept['Department'],
+                    "allocatedMandays": dept['mandays']
+                })
+        
+        # Extract departments list
+        departments = [da['department'] for da in department_allocations]
+        
+        # Calculate total allocated mandays
+        total_allocated_mandays = sum(da['allocatedMandays'] for da in department_allocations)
+        
+        # Get start and end dates from admin info if available
+        start_date = project_admin_info.get('startDate', None)
+        end_date = project_admin_info.get('endDate', None)
+        
+        # Create project entry for processed_projects.json
+        project_entry = {
+            "id": project_id,
+            "name": project_name,
+            "department": departments if departments else ["Unassigned"],
+            "kpiScore": project_data['latest_summary'].get('kpis_ratio', 0),
+            "completion": project_data['latest_summary'].get('completion_rate', 0),
+            "mandays": project_data['latest_summary'].get('cumulative_actual_mandays', 0),
+            "startDate": start_date,
+            "endDate": end_date,
+            "inhousePortion": project_admin_info.get('inhousePortion', 100),
+            "outsourcePortion": project_admin_info.get('outsourcePortion', 0),
+            "allocatedMandays": project_admin_info.get('allocatedMandays', total_allocated_mandays),
+            "departmentAllocations": department_allocations
+        }
+        
+        processed_projects.append(project_entry)
 
 
     # --- Process User Data ---
@@ -334,15 +391,62 @@ def process_data():
         # Add the latest weekly data to the annual summary for convenience if needed
         if user_data['weekly_data']:
              user_data['annual_summary']['latest_weekly_data'] = user_data['weekly_data'][-1]
-
-
+        
         processed_data['users'].append(user_data)
+        
+        # 2. For processed_userKpis.json (matches userKpis_dev.json structure)
+        # Get user's department from timesheet if available
+        user_department = "Unassigned"
+        user_timesheet = timesheet_df[timesheet_df['USERNAME'] == username]
+        if not user_timesheet.empty and 'Department' in user_timesheet.columns:
+            departments = user_timesheet['Department'].unique()
+            if len(departments) > 0:
+                user_department = departments[0]
+        
+        # Get projects this user is assigned to
+        user_projects = []
+        for project in processed_projects:
+            project_tickets = ticket_df[(ticket_df['project_name'] == project['name']) & 
+                                       (ticket_df['assignee'] == username)]
+            if not project_tickets.empty:
+                user_projects.append(project['name'])
+        
+        # Get latest timeliness and utilization from annual summary
+        timeliness = 0
+        utilization = 0
+        if 'annual_summary' in user_data and 'latest_weekly_data' in user_data['annual_summary']:
+            latest = user_data['annual_summary']['latest_weekly_data']
+            timeliness = latest.get('user_timeliness_score', 0)
+            utilization = latest.get('user_utilization', 0)
+        
+        # Create user entry for processed_userKpis.json
+        user_entry = {
+            "id": username,
+            "name": username,  # Use username as name unless you have actual names
+            "department": user_department,
+            "timeliness": timeliness,
+            "utilization": utilization,
+            "contribution": user_data['annual_summary'].get('contribution', 0),
+            "development": 0,  # This might need to be calculated if available
+            "projects": user_projects
+        }
+        
+        processed_userkpis.append(user_entry)
 
-    # Write output JSON file
+    # Write output JSON files
     with open(PROCESSED_DATA_PATH, 'w') as f:
         json.dump(processed_data, f, indent=4)
+    
+    with open(PROCESSED_PROJECTS_PATH, 'w') as f:
+        json.dump(processed_projects, f, indent=4)
+    
+    with open(PROCESSED_USERKPIS_PATH, 'w') as f:
+        json.dump(processed_userkpis, f, indent=4)
 
-    print(f"Data processing complete. Output saved to {PROCESSED_DATA_PATH}")
+    print(f"Data processing complete. Output saved to:")
+    print(f"- {PROCESSED_DATA_PATH}")
+    print(f"- {PROCESSED_PROJECTS_PATH}")
+    print(f"- {PROCESSED_USERKPIS_PATH}")
 
 if __name__ == "__main__":
     process_data()
