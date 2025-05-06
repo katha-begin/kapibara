@@ -2991,8 +2991,8 @@
         "projects": []
     },
     {
-        "id": NaN,
-        "name": NaN,
+        "id": "NaN",
+        "name": "NaN",
         "department": "Unassigned",
         "timeliness": 0,
         "utilization": 0,

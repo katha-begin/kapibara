@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Dashboard from "@/components/dashboard/dashboard";
 import type { Project } from "@/types/project";
-import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
+import { getProjects } from '@/lib/data-adapters';
 
 export default function HomePage() {
   const [projectsData, setProjectsData] = useState<Project[]>([]);
@@ -17,7 +17,7 @@ export default function HomePage() {
       setLoading(true);
       try {
         // Use the adapter to get projects in the expected format
-        const data = adaptProcessedDataToProjects();
+        const data = await getProjects();
         if (isMounted) {
           setProjectsData(data);
         }

@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import ProjectEditTable from '@/components/admin-control/project-edit-table';
 import type { Project } from '@/types/project';
-import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
+import { getProjects } from '@/lib/data-adapters';
 
 const AdminControlPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -18,7 +18,7 @@ const AdminControlPage = () => {
       
       try {
         // Use the adapter to get projects in the expected format
-        const data = adaptProcessedDataToProjects();
+        const data = await getProjects();
         if (isMounted) {
           setProjects(data);
         }
@@ -63,7 +63,7 @@ const AdminControlPage = () => {
     <div className="flex flex-col p-4 md:p-6">
         <header className="mb-6">
           <h1 className="text-2xl font-semibold text-primary">Admin Control - Projects</h1>
-          <p className="text-muted-foreground">Edit project details below. Click project name to manage department allocations. (Data source: {dataSource})</p>
+          <p className="text-muted-foreground">Edit project details below. Click project name to manage department allocations.</p>
         </header>
         <ProjectEditTable projects={projects} onUpdateProject={handleUpdateProject} />
     </div>

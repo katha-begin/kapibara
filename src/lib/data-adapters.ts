@@ -22,17 +22,26 @@ function ensureArray<T>(value: any): T[] {
 /**
  * Gets project data from processed_projects.json or falls back to projects.json
  */
-export function getProjects(): Project[] {
+export function getProjects(): Project[]{
   try {
     // First try to use processed_projects.json
     const processedProjects = ensureArray(rawProcessedProjects);
-    if (processedProjects.length > 0) {
-      console.log("Using processed_projects.json with", processedProjects.length, "projects");
-      return processedProjects;
-    }
-    
-    // Fall back to static data
-    console.warn("No projects found in processed_projects.json, falling back to projects.json");
+    const projects = processedProjects.length > 0
+        ? processedProjects
+        : process.env.NEXT_PUBLIC_APP_ENV === 'development'
+          ? ensureArray(rawDevProjectsData)
+          : ensureArray(rawProjectsData);
+
+    // Parse start and end dates
+    projects.forEach(project => {
+      if (typeof project.startDate === 'string') {
+        project.startDate = new Date(project.startDate);
+      }
+      if (typeof project.endDate === 'string') {
+        project.endDate = new Date(project.endDate);
+      }
+    });
+
     return process.env.NEXT_PUBLIC_APP_ENV === 'development' 
       ? ensureArray(rawDevProjectsData)
       : ensureArray(rawProjectsData);

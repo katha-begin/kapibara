@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 import UserKpiFilters from '@/components/user-kpis/user-kpi-filters';
 import UserKpiTable from '@/components/user-kpis/user-kpi-table';
 import type { UserKpiData } from '@/types/user-kpi';
-import { adaptProcessedDataToUsers } from '@/lib/data-adapters';
+import { getUserKpis } from '@/lib/data-adapters';
 
 const UserKpiPage = () => {
   const [userKpisData, setUserKpisData] = useState<UserKpiData[]>([]);
@@ -20,8 +20,7 @@ const UserKpiPage = () => {
       setLoading(true);
       
       try {
-        // Use the adapter to get users in the expected format
-        const data = adaptProcessedDataToUsers();
+        const data = await getUserKpis();
         if (isMounted) {
           setUserKpisData(data);
         }

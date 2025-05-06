@@ -1,15 +1,16 @@
+"use client";
 
-'use client';
+import type { FC } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import DepartmentAllocationTable from "@/components/admin-control/department-allocation-table";
+import type { Project, DepartmentAllocation } from "@/types/project";
+import { toast } from "@/hooks/use-toast";
+import { getProjects } from "@/lib/data-adapters";
+import React from "react";
 
-import type { FC } from 'react';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import DepartmentAllocationTable from '@/components/admin-control/department-allocation-table';
-import type { Project, DepartmentAllocation } from '@/types/project';
-import { toast } from '@/hooks/use-toast';
-import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
 
 const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) => {
   const { projectId } = params;
@@ -18,24 +19,27 @@ const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) =>
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-    
+    let isMounted = true;  
     const loadData = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
-        // Use the adapter to get projects in the expected format
-        const allProjectsData = adaptProcessedDataToProjects();
-        const foundProject = allProjectsData.find(p => p.id === projectId);
-        
+        const allProjectsData = await getProjects();
+        const foundProject = allProjectsData.find((p) => p.id === React.use(params).projectId);
+
         if (foundProject && isMounted) {
           setProject({
             ...foundProject,
-            departmentAllocations: foundProject.departmentAllocations ?? []
+            departmentAllocations: foundProject.departmentAllocations ?? [],
           });
         } else if (isMounted) {
           setError(`Project with ID "${projectId}" not found.`);
+        }
+      } catch (err: any) {
+        console.error("Error loading project data:", err);
+        if (isMounted) {
+          setError("Failed to load project data.");
         }
       } catch (err) {
         console.error("Error loading project data:", err);
@@ -48,11 +52,11 @@ const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) =>
         }
       }
     };
-    
+
     loadData();
-    
+
     return () => {
-      isMounted = false;
+      isMounted =false;
     };
   }, [projectId]);
 
@@ -61,14 +65,14 @@ const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) =>
 
     const updatedProject = { ...project, departmentAllocations: updatedAllocations };
     setProject(updatedProject);
-
     // In a real app, you would make an API call here to save the changes
     console.log("Updated Allocations (in-memory):", updatedAllocations);
     toast({
       title: "Department Allocations Updated",
       description: `Manday allocations for ${project.name} saved.`,
     });
-
+    
+    
     // TODO: Persist changes to JSON or backend API
     // Example (Conceptual - Needs API/Server Action):
     // fetch(`/api/projects/${projectId}`, {
@@ -98,7 +102,7 @@ const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) =>
   }
 
   if (!project) {
-     // Should be caught by error state, but as a fallback
+    // Should be caught by error state, but as a fallback
     return <div className="p-6">Project data not available.</div>;
   }
 
@@ -107,14 +111,13 @@ const ProjectAllocationPage = ({ params }: { params: { projectId: string } }) =>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-primary">
           Department Manday Allocation: <span className="font-normal">{project.name}</span>
-          <span className="text-sm ml-2 text-muted-foreground">(Data: {dataSource})</span>
         </h1>
         <Link href="/admin-control" passHref>
           <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Admin Control
           </Button>
         </Link>
-      </div>
+      </div>  
 
       <DepartmentAllocationTable
         initialAllocations={project.departmentAllocations || []} // Pass current allocations

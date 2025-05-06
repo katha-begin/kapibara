@@ -12,13 +12,13 @@ import WeeklyDepartmentProgressChart from '@/components/project-analytics/weekly
 import type { Project, ProjectWeeklyProgress, DepartmentAllocation, WeeklyDepartmentProgressData } from '@/types/project'; // Import DepartmentAllocation
 import { calculateMandayPercentage } from '@/lib/project-utils';
 import { Button } from '@/components/ui/button';
+import { getProjects } from '@/lib/data-adapters';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import type { Project, ProjectWeeklyProgress, WeeklyDepartmentProgressData } from '@/types/project';
-import { adaptProcessedDataToProjects } from '@/lib/data-adapters';
 import rawProcessedData from '@/data/processed_data.json';
 
 // Function to fetch project data and weekly progress from processed_data.json
+
 const fetchProjectData = (
   projectId: string,
 ): { 
@@ -100,7 +100,7 @@ interface ProjectAnalyticsPageProps {
 }
 
 const ProjectAnalyticsPage: FC<ProjectAnalyticsPageProps> = ({ params }) => {
-  const { projectId } = params; // Direct access is fine in latest Next.js client components
+  const projectId = use(params).projectId; // Direct access is fine in latest Next.js client components
 
   const [projectData, setProjectData] = useState<{ project: Project | null; weeklyProgress: ProjectWeeklyProgress[]; weeklyDepartmentProgress: WeeklyDepartmentProgressData[] } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
